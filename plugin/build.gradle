@@ -74,4 +74,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: '2.17.0'
     // The "unirest-java" library, version 3.13.10, provides streamlined HTTP communication capabilities for Java applications, simplifying API interactions and network requests.
     implementation group: 'com.konghq', name: 'unirest-java', version: '3.13.10'
+    // The "json-path" library, version 2.9.0, facilitates easy manipulation and querying of JSON data structures in Java applications,
+    // offering powerful tools for navigating and extracting data from JSON documents.
+    implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
 }
