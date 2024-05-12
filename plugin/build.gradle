@@ -77,4 +77,6 @@ dependencies {
     // The "json-path" library, version 2.9.0, facilitates easy manipulation and querying of JSON data structures in Java applications,
     // offering powerful tools for navigating and extracting data from JSON documents.
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
+    // The "validation-api" library, version 2.0.1.Final, provides tools for validating Java objects according to defined constraints.
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 }
