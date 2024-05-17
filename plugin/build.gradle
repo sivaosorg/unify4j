@@ -54,8 +54,14 @@ tasks.jar {
 dependencies {
     // Use the awesome Spock testing and specification framework
     testImplementation libs.spock.core
+    // Incorporate JUnit Jupiter API version 4.13.2 for unit testing,
+    // enabling developers to write and execute tests using the JUnit testing framework.
+    testImplementation 'junit:junit:4.13.2'
     // Use JUnit Platform launcher for test runtime
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Use SLF4J (Simple Logging Facade for Java) API version 1.7.30 for flexible logging abstraction,
+    // allowing the application to bind with various logging frameworks at runtime.
+    testImplementation 'org.slf4j:slf4j-api:1.7.30'
     // The "logback-classic" library, version 1.4.12, is a robust logging framework for Java applications,
     // offering flexible and customizable logging functionalities to efficiently manage and analyze application logs.
     implementation 'ch.qos.logback:logback-classic:1.4.12'
