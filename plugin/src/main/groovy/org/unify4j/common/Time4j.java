@@ -2,12 +2,17 @@ package org.unify4j.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unify4j.text.TimeFormatText;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.*;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class Time4j {
@@ -386,5 +391,388 @@ public class Time4j {
      */
     public static LocalTime addHours(LocalTime time, int hours) {
         return time.plusHours(hours);
+    }
+
+    /**
+     * Adds the specified number of minutes to the given time.
+     * This function creates a new LocalTime object by adding the specified number of minutes to the provided time.
+     *
+     * @param time    The original time to which minutes are added.
+     * @param minutes The number of minutes to add to the time. Can be positive or negative.
+     * @return A new LocalTime object representing the original time plus the specified number of minutes.
+     */
+    public static LocalTime addMinutes(LocalTime time, int minutes) {
+        return time.plusMinutes(minutes);
+    }
+
+    /**
+     * Adds the specified number of seconds to the given time.
+     * This function creates a new LocalTime object by adding the specified number of seconds to the provided time.
+     *
+     * @param time    The original time to which seconds are added.
+     * @param seconds The number of seconds to add to the time. Can be positive or negative.
+     * @return A new LocalTime object representing the original time plus the specified number of seconds.
+     */
+    public static LocalTime addSeconds(LocalTime time, int seconds) {
+        return time.plusSeconds(seconds);
+    }
+
+    /**
+     * Adds the specified number of seconds to the given date.
+     * This function creates a new Date object by adding the specified number of seconds to the provided date.
+     *
+     * @param date    The original date to which seconds are added.
+     * @param seconds The number of seconds to add to the date. Can be positive or negative.
+     * @return A new Date object representing the original date plus the specified number of seconds,
+     * or the original date if the input date is null or if the number of seconds is zero.
+     */
+    public static Date addSeconds(Date date, int seconds) {
+        if (seconds == 0 || date == null) {
+            return date;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.SECOND, seconds);
+        return calendar.getTime();
+    }
+
+    /**
+     * Subtracts the specified number of seconds from the given date.
+     * This function creates a new Date object by subtracting the specified number of seconds from the provided date.
+     *
+     * @param date    The original date from which seconds are subtracted.
+     * @param seconds The number of seconds to subtract from the date. Must be a non-positive integer.
+     * @return A new Date object representing the original date minus the specified number of seconds,
+     * or the original date if the input date is null or if the number of seconds is zero.
+     */
+    public static Date minusSeconds(Date date, int seconds) {
+        if (seconds > 0) {
+            seconds *= -1;
+        }
+        return addSeconds(date, seconds);
+    }
+
+    /**
+     * Adds the specified number of minutes to the given date.
+     * This function creates a new Date object by adding the specified number of minutes to the provided date.
+     *
+     * @param date    The original date to which minutes are added.
+     * @param minutes The number of minutes to add to the date. Can be positive or negative.
+     * @return A new Date object representing the original date plus the specified number of minutes,
+     * or the original date if the input date is null or if the number of minutes is zero.
+     */
+    public static Date addMinutes(Date date, int minutes) {
+        if (minutes == 0 || date == null) {
+            return date;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minutes);
+        return calendar.getTime();
+    }
+
+    /**
+     * Subtracts the specified number of minutes from the given date.
+     * This function creates a new Date object by subtracting the specified number of minutes from the provided date.
+     *
+     * @param date    The original date from which minutes are subtracted.
+     * @param minutes The number of minutes to subtract from the date. Must be a non-positive integer.
+     * @return A new Date object representing the original date minus the specified number of minutes,
+     * or the original date if the input date is null or if the number of minutes is zero.
+     */
+    public static Date minusMinutes(Date date, int minutes) {
+        if (minutes > 0) {
+            minutes *= -1;
+        }
+        return addMinutes(date, minutes);
+    }
+
+    /**
+     * Adds the specified number of hours to the given date.
+     * This function creates a new Date object by adding the specified number of hours to the provided date.
+     *
+     * @param date  The original date to which hours are added.
+     * @param hours The number of hours to add to the date. Can be positive or negative.
+     * @return A new Date object representing the original date plus the specified number of hours,
+     * or the original date if the input date is null or if the number of hours is zero.
+     */
+    public static Date addHours(Date date, int hours) {
+        if (hours == 0 || date == null) {
+            return date;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR, hours);
+        return calendar.getTime();
+    }
+
+    /**
+     * Subtracts the specified number of hours from the given date.
+     * This function creates a new Date object by subtracting the specified number of hours from the provided date.
+     *
+     * @param date  The original date from which hours are subtracted.
+     * @param hours The number of hours to subtract from the date. Must be a non-positive integer.
+     * @return A new Date object representing the original date minus the specified number of hours,
+     * or the original date if the input date is null or if the number of hours is zero.
+     */
+    public static Date minusHours(Date date, int hours) {
+        if (hours > 0) {
+            hours *= -1;
+        }
+        return addHours(date, hours);
+    }
+
+    /**
+     * Adds the specified number of days to the given date.
+     * This function creates a new Date object by adding the specified number of days to the provided date.
+     *
+     * @param date The original date to which days are added.
+     * @param days The number of days to add to the date. Can be positive or negative.
+     * @return A new Date object representing the original date plus the specified number of days,
+     * or the original date if the input date is null or if the number of days is zero.
+     */
+    public static Date addDays(Date date, int days) {
+        if (days == 0 || date == null) {
+            return date;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, days);
+        return calendar.getTime();
+    }
+
+    /**
+     * Subtracts the specified number of days from the given date.
+     * This function creates a new Date object by subtracting the specified number of days from the provided date.
+     *
+     * @param date The original date from which days are subtracted.
+     * @param days The number of days to subtract from the date. Must be a non-positive integer.
+     * @return A new Date object representing the original date minus the specified number of days,
+     * or the original date if the input date is null or if the number of days is zero.
+     */
+    public static Date minusDays(Date date, int days) {
+        if (days > 0) {
+            days *= -1;
+        }
+        return addDays(date, days);
+    }
+
+    /**
+     * Converts the given date to a string representation in UTC time zone.
+     * This function formats the provided date using the RFC 1123 format with UTC time zone,
+     * and returns the formatted string.
+     *
+     * @param date The date to be converted to a string representation in UTC time zone.
+     * @return A string representing the provided date in UTC time zone,
+     * or an empty string if the input date is null.
+     */
+    public static String getUTCText(Date date) {
+        if (date == null) {
+            return "";
+        }
+        DateFormat rfc1123Format = new SimpleDateFormat(TimeFormatText.BIBLIOGRAPHY_LEGACY_EPOCH_PATTERN, Locale.getDefault());
+        rfc1123Format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return rfc1123Format.format(date);
+    }
+
+    /**
+     * Converts the given LocalDateTime object to UTC (Coordinated Universal Time).
+     * This function adjusts the provided LocalDateTime object to the UTC time zone.
+     *
+     * @param local The LocalDateTime object to be converted to UTC.
+     * @return A new LocalDateTime object representing the same date and time in UTC,
+     * or the original LocalDateTime object if it is null.
+     */
+    public static LocalDateTime getUTC(LocalDateTime local) {
+        return local.with(ZoneOffset.UTC);
+    }
+
+    /**
+     * Retrieves the current date and time in UTC (Coordinated Universal Time).
+     * This function returns a LocalDateTime object representing the current date and time
+     * adjusted to the UTC time zone.
+     *
+     * @return A LocalDateTime object representing the current date and time in UTC.
+     */
+    public static LocalDateTime getCurrentUTC() {
+        return getUTC(LocalDateTime.now());
+    }
+
+    /**
+     * Converts a LocalDateTime object to a Date object.
+     * This function converts the provided LocalDateTime object to a Date object,
+     * preserving the date and time information.
+     *
+     * @param local The LocalDateTime object to be converted to a Date object.
+     * @return A Date object representing the same date and time as the provided LocalDateTime object,
+     * converted to the default time zone of the system.
+     */
+    public static Date transform(LocalDateTime local) {
+        return Date.from(local.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * Converts a LocalDate object to a Date object.
+     * This function creates a new Date object by converting the provided LocalDate object to a Date object,
+     * using the start of the day in the default time zone of the system.
+     *
+     * @param local The LocalDate object to be converted to a Date object.
+     * @return A Date object representing the start of the day of the provided LocalDate,
+     * converted to the default time zone of the system.
+     */
+    public static Date transform(LocalDate local) {
+        if (local == null) {
+            return null;
+        }
+        return Date.from(local.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * Converts a java.util.Date object to a java.sql.Date object.
+     * This function creates a new java.sql.Date object from the provided java.util.Date object,
+     * preserving only the date information (day, month, year) and discarding the time information.
+     *
+     * @param date The java.util.Date object to be converted to a java.sql.Date object.
+     * @return A java.sql.Date object representing the same date as the provided java.util.Date object,
+     * with the time portion set to midnight (00:00:00).
+     * Returns null if the input date is null.
+     */
+    public static java.sql.Date transformDateSql(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return new java.sql.Date(date.getTime());
+    }
+
+    /**
+     * Converts a Calendar object to a LocalDateTime object.
+     * This function creates a new LocalDateTime object from the provided Calendar object,
+     * preserving the date and time information.
+     *
+     * @param calendar The Calendar object to be converted to a LocalDateTime object.
+     * @return A LocalDateTime object representing the same date and time as the provided Calendar object,
+     * in the default time zone of the system.
+     */
+    public static LocalDateTime transform(Calendar calendar) {
+        return LocalDateTime.ofInstant(calendar.toInstant(), ZoneId.systemDefault());
+    }
+
+    /**
+     * Converts a java.util.Date object to a LocalDate object.
+     * This function creates a new LocalDate object from the provided java.util.Date object,
+     * preserving only the date information (day, month, year) and discarding the time information.
+     *
+     * @param date The java.util.Date object to be converted to a LocalDate object.
+     * @return A LocalDate object representing the same date as the provided java.util.Date object,
+     * Returns null if the input date is null.
+     */
+    public static LocalDate transformLocal(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return transform(date).toLocalDate();
+    }
+
+    /**
+     * Converts a java.util.Date object to a LocalDateTime object.
+     * This function creates a new LocalDateTime object from the provided java.util.Date object,
+     * preserving both the date and time information.
+     *
+     * @param date The java.util.Date object to be converted to a LocalDateTime object.
+     * @return A LocalDateTime object representing the same date and time as the provided java.util.Date object,
+     * in the default time zone of the system.
+     */
+    public static LocalDateTime transform(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
+
+    /**
+     * Converts a LocalDate object to a Date object with a specified time zone.
+     * This function creates a new Date object from the provided LocalDate object,
+     * preserving only the date information (day, month, year) and discarding the time information.
+     * The time zone for the conversion is specified by the given ZoneId.
+     *
+     * @param local The LocalDate object to be converted to a Date object.
+     * @param zone  The ZoneId representing the time zone to use for the conversion.
+     * @return A Date object representing the same date as the provided LocalDate object,
+     * converted to the specified time zone.
+     */
+    public static Date transform(LocalDate local, ZoneId zone) {
+        return Date.from(local.atStartOfDay().atZone(zone).toInstant());
+    }
+
+    /**
+     * Converts a java.util.Date object to a Timestamp object.
+     * This function creates a new Timestamp object from the provided java.util.Date object,
+     * preserving both the date and time information.
+     *
+     * @param date The java.util.Date object to be converted to a Timestamp object.
+     * @return A Timestamp object representing the same date and time as the provided java.util.Date object,
+     * Returns null if the input date is null.
+     */
+    public static Timestamp transformTimestamp(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return new Timestamp(date.getTime());
+    }
+
+    /**
+     * Checks if a given LocalDateTime is overdue, compared to the current date and time.
+     * This function determines if the provided LocalDateTime is earlier than the current date and time,
+     * indicating that it is overdue.
+     *
+     * @param due The LocalDateTime to be checked for being overdue.
+     * @return true if the provided LocalDateTime is earlier than the current date and time (overdue),
+     * false otherwise. Returns false if the input due date is null.
+     */
+    public static boolean isOverdue(LocalDateTime due) {
+        if (due == null) {
+            return false;
+        }
+        return due.isBefore(LocalDateTime.now());
+    }
+
+    /**
+     * Checks if a given Date is overdue, compared to the current date and time.
+     * This function determines if the provided LocalDateTime is earlier than the current date and time,
+     * indicating that it is overdue.
+     *
+     * @param due The LocalDateTime to be checked for being overdue.
+     * @return true if the provided Date is earlier than the current date and time (overdue),
+     * false otherwise. Returns false if the input due date is null.
+     */
+    public static boolean isOverdue(Date due) {
+        return isOverdue(transform(due));
+    }
+
+    /**
+     * Checks if a given LocalDateTime represents a time that has not passed yet, compared to the current date and time.
+     * This function determines if the provided LocalDateTime is equal to or later than the current date and time,
+     * indicating that it is on time or has not passed yet.
+     *
+     * @param on The LocalDateTime to be checked for being on time.
+     * @return true if the provided LocalDateTime is equal to or later than the current date and time (on time or not yet passed),
+     * false otherwise. Returns false if the input LocalDateTime is null.
+     */
+    public static boolean isOnTime(LocalDateTime on) {
+        if (on == null) {
+            return false;
+        }
+        return LocalDateTime.now().isAfter(on) || LocalDateTime.now().isEqual(on);
+    }
+
+    /**
+     * Checks if a given Date object represents a time that has not passed yet, compared to the current date and time.
+     * This function determines if the provided Date object is equal to or later than the current date and time,
+     * indicating that it is on time or has not passed yet.
+     * The input Date object is first converted to a LocalDateTime object for comparison.
+     *
+     * @param on The Date object to be checked for being on time.
+     * @return true if the provided Date object represents a time equal to or later than the current date and time (on time or not yet passed),
+     * false otherwise. Returns false if the input Date object is null.
+     */
+    public static boolean isOnTime(Date on) {
+        return isOnTime(transform(on));
     }
 }
