@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -24,7 +25,7 @@ public class Request4j {
      * @param params A map containing query parameters to be appended to the URL.
      * @return The URL string with appended query parameters.
      */
-    public static String appendQueryParams(String url, Map<String, Object> params) {
+    public static String appendQueryParams(String url, Map<String, Object> params) throws UnsupportedEncodingException {
         if (Collection4j.isEmptyMap(params) || String4j.isEmpty(url)) {
             return url;
         }
@@ -38,8 +39,8 @@ public class Request4j {
                 builder.append('&');
             }
             String value = String.valueOf(params.get(param));
-            builder.append(URLEncoder.encode(param, StandardCharsets.UTF_8)).append('=');
-            builder.append(URLEncoder.encode(value, StandardCharsets.UTF_8));
+            builder.append(URLEncoder.encode(param, StandardCharsets.UTF_8.displayName())).append('=');
+            builder.append(URLEncoder.encode(value, StandardCharsets.UTF_8.displayName()));
         }
         return builder.toString();
     }
