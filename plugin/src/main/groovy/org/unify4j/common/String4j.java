@@ -3,6 +3,7 @@ package org.unify4j.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -734,5 +735,29 @@ public class String4j {
         }
         string = trimWhitespace(string);
         return string.replaceAll("\\s+", symbol);
+    }
+
+    /**
+     * Strips diacritical marks (accents) from the given string.
+     * This function normalizes the input string to decomposed form using Normalizer,
+     * then removes all combining diacritical marks.
+     *
+     * @param str The string from which diacritical marks are to be stripped.
+     * @return The input string with diacritical marks removed, or null if the input string is null.
+     */
+    public static String stripAccents(String str) {
+        return str == null ? null : Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
+
+    /**
+     * Removes non-ASCII characters (including diacritical marks) from the given string.
+     * This function normalizes the input string to decomposed form using Normalizer,
+     * then removes all characters that are not in the ASCII character set.
+     *
+     * @param str The string from which non-ASCII characters are to be removed.
+     * @return The input string with non-ASCII characters removed.
+     */
+    public static String unAccents(String str) {
+        return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 }
