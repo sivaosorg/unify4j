@@ -27,6 +27,7 @@ public class WrapBuilder<T> implements Serializable {
 
     public WrapBuilder<T> setStatusCode(int statusCode) {
         this.statusCode = statusCode;
+        this.headers = HttpStatusBuilder.valueOf(statusCode);
         return this;
     }
 
@@ -59,6 +60,10 @@ public class WrapBuilder<T> implements Serializable {
         return this;
     }
 
+    public WrapBuilder<T> setErrors(Throwable errors) {
+        return this.setErrors(errors.getMessage());
+    }
+
     public WrapBuilder<T> setHeaders(HttpResponse headers) {
         this.headers = headers;
         return this;
@@ -69,8 +74,18 @@ public class WrapBuilder<T> implements Serializable {
         return this;
     }
 
+    public WrapBuilder<T> setMeta(MetaBuilder builder) {
+        this.meta = builder.build();
+        return this;
+    }
+
     public WrapBuilder<T> setPagination(PaginationResponse pagination) {
         this.pagination = pagination;
+        return this;
+    }
+
+    public WrapBuilder<T> setPagination(PaginationBuilder builder) {
+        this.pagination = builder.build();
         return this;
     }
 

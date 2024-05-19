@@ -6,6 +6,7 @@ import org.unify4j.text.TimeFormatText;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
@@ -774,5 +775,358 @@ public class Time4j {
      */
     public static boolean isOnTime(Date on) {
         return isOnTime(transform(on));
+    }
+
+    /**
+     * Adds a specified number of days to a given LocalDate object.
+     * If the number of days is less than or equal to zero, or if the LocalDate object is null,
+     * the original LocalDate object is returned.
+     *
+     * @param local The LocalDate object to which days will be added.
+     * @param days  The number of days to add.
+     * @return A new LocalDate object with the specified number of days added, or the original LocalDate if
+     * the input number of days is less than or equal to zero or the LocalDate is null.
+     */
+    public static LocalDate addDays(LocalDate local, int days) {
+        if (days <= 0 || local == null) {
+            return local;
+        }
+        return local.plusDays(days);
+    }
+
+    /**
+     * Subtracts a specified number of days from a given LocalDate object.
+     * If the number of days is less than or equal to zero, or if the LocalDate object is null,
+     * the original LocalDate object is returned.
+     *
+     * @param local The LocalDate object from which days will be subtracted.
+     * @param days  The number of days to subtract.
+     * @return A new LocalDate object with the specified number of days subtracted, or the original LocalDate if
+     * the input number of days is less than or equal to zero or the LocalDate is null.
+     */
+    public static LocalDate minusDays(LocalDate local, int days) {
+        if (days <= 0 || local == null) {
+            return local;
+        }
+        return local.minusDays(days);
+    }
+
+    /**
+     * Adds a specified number of years to a given LocalDate object.
+     * If the number of years is less than or equal to zero, or if the LocalDate object is null,
+     * the original LocalDate object is returned.
+     *
+     * @param local The LocalDate object to which years will be added.
+     * @param years The number of years to add.
+     * @return A new LocalDate object with the specified number of years added, or the original LocalDate if
+     * the input number of years is less than or equal to zero or the LocalDate is null.
+     */
+    public static LocalDate addYears(LocalDate local, int years) {
+        if (years <= 0 || local == null) {
+            return local;
+        }
+        return local.plusYears(years);
+    }
+
+    /**
+     * Subtracts a specified number of years from a given LocalDate object.
+     * If the number of years is less than or equal to zero, or if the LocalDate object is null,
+     * the original LocalDate object is returned.
+     *
+     * @param local The LocalDate object from which years will be subtracted.
+     * @param years The number of years to subtract.
+     * @return A new LocalDate object with the specified number of years subtracted, or the original LocalDate if
+     * the input number of years is less than or equal to zero or the LocalDate is null.
+     */
+    public static LocalDate minusYears(LocalDate local, int years) {
+        if (years <= 0 || local == null) {
+            return local;
+        }
+        return local.minusYears(years);
+    }
+
+    /**
+     * Adds a specified number of weeks to a given LocalDate object.
+     * If the number of weeks is less than or equal to zero, or if the LocalDate object is null,
+     * the original LocalDate object is returned.
+     *
+     * @param local The LocalDate object to which weeks will be added.
+     * @param weeks The number of weeks to add.
+     * @return A new LocalDate object with the specified number of weeks added, or the original LocalDate if
+     * the input number of weeks is less than or equal to zero or the LocalDate is null.
+     */
+    public static LocalDate addWeeks(LocalDate local, int weeks) {
+        if (weeks <= 0 || local == null) {
+            return local;
+        }
+        return local.plusWeeks(weeks);
+    }
+
+    /**
+     * Subtracts a specified number of weeks from a given LocalDate object.
+     * If the number of weeks is less than or equal to zero, or if the LocalDate object is null,
+     * the original LocalDate object is returned.
+     *
+     * @param local The LocalDate object from which weeks will be subtracted.
+     * @param weeks The number of weeks to subtract.
+     * @return A new LocalDate object with the specified number of weeks subtracted, or the original LocalDate if
+     * the input number of weeks is less than or equal to zero or the LocalDate is null.
+     */
+    public static LocalDate minusWeeks(LocalDate local, int weeks) {
+        if (weeks <= 0 || local == null) {
+            return local;
+        }
+        return local.minusWeeks(weeks);
+    }
+
+    /**
+     * Adds a specified number of months to a given LocalDate object.
+     * If the number of months is less than or equal to zero, or if the LocalDate object is null,
+     * the original LocalDate object is returned.
+     *
+     * @param local  The LocalDate object to which months will be added.
+     * @param months The number of months to add.
+     * @return A new LocalDate object with the specified number of months added, or the original LocalDate if
+     * the input number of months is less than or equal to zero or the LocalDate is null.
+     */
+    public static LocalDate addMonths(LocalDate local, int months) {
+        if (months <= 0 || local == null) {
+            return local;
+        }
+        return local.plusMonths(months);
+    }
+
+    /**
+     * Subtracts a specified number of months from a given LocalDate object.
+     * If the number of months is less than or equal to zero, or if the LocalDate object is null,
+     * the original LocalDate object is returned.
+     *
+     * @param local  The LocalDate object from which months will be subtracted.
+     * @param months The number of months to subtract.
+     * @return A new LocalDate object with the specified number of months subtracted, or the original LocalDate if
+     * the input number of months is less than or equal to zero or the LocalDate is null.
+     */
+    public static LocalDate minusMonths(LocalDate local, int months) {
+        if (months <= 0 || local == null) {
+            return local;
+        }
+        return local.minusMonths(months);
+    }
+
+    /**
+     * Converts a given Date object to the beginning of the day (00:00:00) of the same date.
+     * The function first transforms the Date object into a LocalDate, then sets the time to the start of the day,
+     * and finally converts it back to a Date object.
+     *
+     * @param date The Date object to be transformed.
+     * @return A Date object representing the beginning of the day of the provided date, or the original date if null.
+     */
+    public static Date ofBeginDay(Date date) {
+        LocalDate local = transformLocal(date);
+        LocalDateTime time = local.atStartOfDay();
+        return transform(time);
+    }
+
+    /**
+     * Converts a given Date object to the end of the day (23:59:59) of the same date.
+     * The function first transforms the Date object into a LocalDate, then sets the time to the end of the day,
+     * and finally converts it back to a Date object.
+     *
+     * @param date The Date object to be transformed.
+     * @return A Date object representing the end of the day of the provided date, or the original date if null.
+     */
+    public static Date ofEndDay(Date date) {
+        LocalDate local = transformLocal(date);
+        LocalDateTime startOfDay = local.atTime(23, 59, 59);
+        return transform(startOfDay);
+    }
+
+    /**
+     * Parses a date string into a Date object using the specified format. If the format is not provided,
+     * it defaults to a predefined pattern. If parsing fails, it attempts to parse using a secondary format.
+     *
+     * @param date   The date string to be parsed.
+     * @param format The format to be used for parsing the date string. If null or empty, a default pattern is used.
+     * @return A Date object representing the parsed date string, or null if parsing fails.
+     */
+    public static Date format(String date, String format) {
+        try {
+            if (String4j.isEmpty(date)) {
+                return null;
+            }
+            if (String4j.isEmpty(format)) {
+                return new SimpleDateFormat(TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN).parse(date);
+            }
+            return new SimpleDateFormat(format).parse(date);
+        } catch (ParseException e) {
+            try {
+                return new SimpleDateFormat(TimeFormatText.SHORT_BIBLIOGRAPHY_EPOCH_PATTERN).parse(date);
+            } catch (ParseException ee) {
+                logger.error("Parsing time got an exception: {} by date: {} and format: {}", ee.getMessage(), date, format, ee);
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Formats a Date object into a string representation using the specified format.
+     *
+     * @param date   The Date object to be formatted.
+     * @param format The format string used to format the date.
+     * @return A string representation of the formatted date.
+     * @throws IllegalArgumentException if the format is null or invalid.
+     */
+    public static String format(Date date, String format) {
+        if (date == null || String4j.isEmpty(format)) {
+            return "";
+        }
+        return new SimpleDateFormat(format).format(date);
+    }
+
+    /**
+     * Formats a Date object into a string representation using a default format pattern.
+     * The default pattern used is "yyyy-MM-dd HH:mm:ss".
+     *
+     * @param date The Date object to be formatted.
+     * @return A string representation of the formatted date using the default pattern.
+     * @throws IllegalArgumentException if the date is null.
+     */
+    public static String format(Date date) {
+        return format(date, TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN);
+    }
+
+    /**
+     * Parses a date with the specified year, month, and day using the system default time zone.
+     *
+     * @param year  The year to set.
+     * @param month The month to set (1-based, January is 1, December is 12).
+     * @param date  The day of the month to set.
+     * @return A Date object representing the specified date at the start of the day.
+     */
+    public static Date parse(int year, int month, int date) {
+        return parse(year, month, date, ZoneId.systemDefault());
+    }
+
+    /**
+     * Parses a date with the specified year, month, and day using the provided time zone.
+     *
+     * @param year  The year to set.
+     * @param month The month to set (1-based, January is 1, December is 12).
+     * @param date  The day of the month to set.
+     * @param zone  The time zone to use for parsing.
+     * @return A Date object representing the specified date at the start of the day in the given time zone.
+     */
+    public static Date parse(int year, int month, int date, ZoneId zone) {
+        return parse(year, month, date, 0, 0, zone);
+    }
+
+    /**
+     * Parses a date with the specified year, month, day, hour, and minute using the system default time zone.
+     *
+     * @param year  The year to set.
+     * @param month The month to set (1-based, January is 1, December is 12).
+     * @param date  The day of the month to set.
+     * @param hour  The hour to set.
+     * @param min   The minute to set.
+     * @return A Date object representing the specified date and time.
+     */
+    public static Date parse(int year, int month, int date, int hour, int min) {
+        return parse(year, month, date, hour, min, ZoneId.systemDefault());
+    }
+
+    /**
+     * Parses a date with the specified year, month, day, hour, and minute using the provided time zone.
+     *
+     * @param year  The year to set.
+     * @param month The month to set (1-based, January is 1, December is 12).
+     * @param date  The day of the month to set.
+     * @param hour  The hour to set.
+     * @param min   The minute to set.
+     * @param zone  The time zone to use for parsing.
+     * @return A Date object representing the specified date and time in the given time zone.
+     */
+    public static Date parse(int year, int month, int date, int hour, int min, ZoneId zone) {
+        return Date.from(ZonedDateTime.of(year, month, date, hour, min, 0, 0, zone).toInstant());
+    }
+
+    /**
+     * Parses a date with the specified year, month, day, hour, minute, and second using the system default time zone.
+     *
+     * @param year   The year to set.
+     * @param month  The month to set (0-based, January is 0, December is 11).
+     * @param day    The day of the month to set.
+     * @param hour   The hour to set.
+     * @param minute The minute to set.
+     * @param second The second to set.
+     * @return A Date object representing the specified date and time.
+     */
+    public static Date parse(int year, int month, int day, int hour, int minute, int second) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, second);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * Checks if the given date is within the specified date range.
+     * <p>
+     * This function determines if the provided date falls within the range specified
+     * by the 'from' and 'to' dates, inclusive.
+     *
+     * @param date The date to check.
+     * @param from The start date of the range.
+     * @param to   The end date of the range.
+     * @return true if the date is within the range (inclusive), false otherwise.
+     * Returns false if any of the input dates are null.
+     */
+    public static boolean isWithinRange(Date date, Date from, Date to) {
+        if (date == null || from == null || to == null) {
+            return false;
+        }
+        return !(date.before(from) || date.after(to));
+    }
+
+    /**
+     * Provides a human-readable string representing the time elapsed since the given date.
+     * <p>
+     * This function calculates the duration between the provided date and the current date,
+     * and returns a string describing this duration in a human-readable format such as "just now",
+     * "X minutes ago", "X hours ago", etc.
+     *
+     * @param date The date from which the elapsed time is calculated.
+     * @return A string describing the elapsed time in a human-readable format.
+     */
+    public static String since(Date date) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime then = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        Duration duration = Duration.between(then, now);
+        long seconds = duration.getSeconds();
+        long minutes = duration.toMinutes();
+        long hours = duration.toHours();
+        long days = duration.toDays();
+        long weeks = days / 7;
+        long months = days / 30;
+        long years = days / 365;
+
+        if (seconds < 60) {
+            return "just now";
+        } else if (minutes < 60) {
+            return minutes + " minute" + (minutes > 1 ? "s" : "") + " ago";
+        } else if (hours < 24) {
+            return hours + " hour" + (hours > 1 ? "s" : "") + " ago";
+        } else if (days < 7) {
+            return days + " day" + (days > 1 ? "s" : "") + " ago";
+        } else if (weeks < 4) {
+            return weeks + " week" + (weeks > 1 ? "s" : "") + " ago";
+        } else if (months < 12) {
+            return months + " month" + (months > 1 ? "s" : "") + " ago";
+        } else {
+            return years + " year" + (years > 1 ? "s" : "") + " ago";
+        }
     }
 }
