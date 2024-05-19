@@ -3,7 +3,10 @@ package org.unify4j.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class Transform4j {
     protected static final Logger logger = LoggerFactory.getLogger(Transform4j.class);
@@ -41,10 +44,20 @@ public class Transform4j {
      * If the collection is not empty, it converts the collection to an array of strings using the toArray method.
      * The returned array contains the string representations of the elements in the collection.
      */
-    public static String[] fromColl2StringArray(Collection<?> collection) {
+    public static String[] fromColl2Array(Collection<?> collection) {
         if (!Collection4j.isEmpty(collection)) {
             return collection.stream().map(Object::toString).toArray(String[]::new);
         }
         return null;
+    }
+
+    /**
+     * Converts an array of strings into a List of strings.
+     *
+     * @param strings The array of strings to convert.
+     * @return A List containing the strings from the input array.
+     */
+    public static List<String> fromArray2Coll(String[] strings) {
+        return new ArrayList<>(Arrays.asList(strings));
     }
 }

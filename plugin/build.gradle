@@ -85,4 +85,8 @@ dependencies {
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.9.0'
     // The "validation-api" library, version 2.0.1.Final, provides tools for validating Java objects according to defined constraints.
     implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    // The Servlet API is used for creating web applications in Java.
+    // Including it as compileOnly means that it's necessary for compiling your code (as it might include annotations or classes used during compilation),
+    // but it shouldn't be packaged into the final artifact (JAR, WAR, etc.) because servlet containers, like Tomcat or Jetty, usually provide this API at runtime.
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
 }
