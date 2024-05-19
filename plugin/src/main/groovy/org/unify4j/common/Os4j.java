@@ -134,4 +134,18 @@ public class Os4j {
             return new String(chars, 0, dst);
         }
     }
+
+    /**
+     * Fetch value from environment variable and if not set, then fetch from
+     * System properties.  If neither available, return null.
+     *
+     * @param var String key of variable to return
+     */
+    public static String getExternalVariable(String var) {
+        String value = System.getProperty(var);
+        if (String4j.isEmpty(value)) {
+            value = System.getenv(var);
+        }
+        return String4j.isEmpty(value) ? null : value;
+    }
 }

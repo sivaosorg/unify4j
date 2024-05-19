@@ -760,4 +760,44 @@ public class String4j {
     public static String unAccents(String str) {
         return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
+
+    /**
+     * Checks if a CharSequence is empty (""), null or whitespace only.
+     *
+     * @param cs the CharSequence to check, may be null
+     * @return {@code true} if the CharSequence is null, empty or whitespace only
+     */
+    public static boolean isWhitespace(CharSequence cs) {
+        int strLen = length(cs);
+        if (strLen == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if a String is not empty (""), not null and not whitespace only.
+     *
+     * @param s the CharSequence to check, may be null
+     * @return {@code true} if the CharSequence is
+     * not empty and not null and not whitespace only
+     */
+    public static boolean hasContent(String s) {
+        return !isWhitespace(s);
+    }
+
+    /**
+     * Gets a CharSequence length or {@code 0} if the CharSequence is {@code null}.
+     *
+     * @param cs a CharSequence or {@code null}
+     * @return CharSequence length or {@code 0} if the CharSequence is {@code null}.
+     */
+    public static int length(CharSequence cs) {
+        return cs == null ? 0 : cs.length();
+    }
 }
