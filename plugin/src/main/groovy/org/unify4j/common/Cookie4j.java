@@ -2,14 +2,16 @@ package org.unify4j.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unify4j.model.request.CookieRequest;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Cookie4j {
@@ -212,5 +214,268 @@ public class Cookie4j {
             return false;
         }
         return isAvailableCookie((HttpServletRequest) request);
+    }
+
+    /**
+     * Retrieves the value of a specified cookie from the HttpServletRequest.
+     *
+     * @param request The HttpServletRequest containing cookies.
+     * @param name    The name of the cookie to be retrieved.
+     * @return An Optional containing the cookie value if found, otherwise an empty Optional.
+     */
+    public static Optional<String> getCookie(HttpServletRequest request, String name) {
+        if (request == null || String4j.isEmpty(name) || Object4j.isEmpty(request.getCookies())) {
+            return Optional.empty();
+        }
+        name = String4j.trimWhitespace(name).toLowerCase();
+        String tmp = name;
+        return Arrays.stream(request.getCookies()).filter(cookie -> tmp.equalsIgnoreCase(cookie.getName())).map(Cookie::getValue).findFirst();
+    }
+
+    /**
+     * Retrieves the value of a specified cookie from the ServletRequest.
+     *
+     * @param request The ServletRequest containing cookies.
+     * @param name    The name of the cookie to be retrieved.
+     * @return An Optional containing the cookie value if found, otherwise an empty Optional.
+     */
+    public static Optional<String> getCookie(ServletRequest request, String name) {
+        if (!(request instanceof HttpServletRequest)) {
+            return Optional.empty();
+        }
+        return getCookie((HttpServletRequest) request, name);
+    }
+
+    /**
+     * Retrieves the value of a specified cookie from the HttpServletRequest.
+     *
+     * @param request The HttpServletRequest containing cookies.
+     * @param cookie  The Cookie object whose value is to be retrieved.
+     * @return An Optional containing the cookie value if found, otherwise an empty Optional.
+     */
+    public static Optional<String> getCookie(HttpServletRequest request, Cookie cookie) {
+        return getCookie(request, cookie.getName());
+    }
+
+    /**
+     * Retrieves the value of a specified cookie from the ServletRequest.
+     *
+     * @param request The ServletRequest containing cookies.
+     * @param cookie  The Cookie object whose value is to be retrieved.
+     * @return An Optional containing the cookie value if found, otherwise an empty Optional.
+     */
+    public static Optional<String> getCookie(ServletRequest request, Cookie cookie) {
+        if (!(request instanceof HttpServletRequest)) {
+            return Optional.empty();
+        }
+        return getCookie((HttpServletRequest) request, cookie);
+    }
+
+    /**
+     * Adds a specified cookie to the HttpServletResponse.
+     *
+     * @param response The HttpServletResponse to which the cookie is added.
+     * @param cookie   The Cookie object to be added.
+     */
+    public static void setCookie(HttpServletResponse response, Cookie cookie) {
+        response.addCookie(cookie);
+    }
+
+    /**
+     * Adds a specified cookie to the ServletResponse.
+     *
+     * @param response The ServletResponse to which the cookie is added.
+     * @param cookie   The Cookie object to be added.
+     */
+    public static void setCookie(ServletResponse response, Cookie cookie) {
+        if (!(response instanceof HttpServletResponse)) {
+            return;
+        }
+        setCookie((HttpServletResponse) response, cookie);
+    }
+
+    /**
+     * Adds a list of cookies to the HttpServletResponse.
+     *
+     * @param response The HttpServletResponse to which the cookies are added.
+     * @param cookies  A List of Cookie objects to be added.
+     */
+    public static void setCookies(HttpServletResponse response, List<Cookie> cookies) {
+        if (Collection4j.isEmpty(cookies)) {
+            return;
+        }
+        cookies.forEach(cookie -> setCookie(response, cookie));
+    }
+
+    /**
+     * Adds a list of cookies to the ServletResponse.
+     *
+     * @param response The ServletResponse to which the cookies are added.
+     * @param cookies  A List of Cookie objects to be added.
+     */
+    public static void setCookies(ServletResponse response, List<Cookie> cookies) {
+        if (!(response instanceof HttpServletResponse)) {
+            return;
+        }
+        setCookies((HttpServletResponse) response, cookies);
+    }
+
+    /**
+     * Deletes a specified cookie from the HttpServletResponse.
+     *
+     * @param response The HttpServletResponse from which the cookie is deleted.
+     * @param cookie   The Cookie object to be deleted.
+     */
+    public static void deleteCookie(HttpServletResponse response, Cookie cookie) {
+        cookie.setMaxAge(0);
+        setCookie(response, cookie);
+    }
+
+    /**
+     * Deletes a specified cookie from the ServletResponse.
+     *
+     * @param response The ServletResponse from which the cookie is deleted.
+     * @param cookie   The Cookie object to be deleted.
+     */
+    public static void deleteCookie(ServletResponse response, Cookie cookie) {
+        if (!(response instanceof HttpServletResponse)) {
+            return;
+        }
+        deleteCookie((HttpServletResponse) response, cookie);
+    }
+
+    /**
+     * Deletes a specified cookie from the HttpServletResponse by name.
+     *
+     * @param response The HttpServletResponse from which the cookie is deleted.
+     * @param name     The name of the cookie to be deleted.
+     */
+    public static void deleteCookie(HttpServletResponse response, String name) {
+        Cookie cookie = new Cookie(name, null);
+        cookie.setMaxAge(0);
+        setCookie(response, cookie);
+    }
+
+    /**
+     * Deletes a specified cookie from the ServletResponse by name.
+     *
+     * @param response The ServletResponse from which the cookie is deleted.
+     * @param name     The name of the cookie to be deleted.
+     */
+    public static void deleteCookie(ServletResponse response, String name) {
+        if (!(response instanceof HttpServletResponse)) {
+            return;
+        }
+        deleteCookie((HttpServletResponse) response, name);
+    }
+
+    /**
+     * Deletes a list of cookies from the HttpServletResponse by name.
+     *
+     * @param response The HttpServletResponse from which the cookies are deleted.
+     * @param cookies  A List of cookie names to be deleted.
+     */
+    public static void deleteCookies(HttpServletResponse response, List<String> cookies) {
+        if (Collection4j.isEmpty(cookies)) {
+            return;
+        }
+        cookies.forEach(cookie -> deleteCookie(response, cookie));
+    }
+
+    /**
+     * Deletes a list of cookies from the ServletResponse by name.
+     *
+     * @param response The ServletResponse from which the cookies are deleted.
+     * @param cookies  A List of cookie names to be deleted.
+     */
+    public static void deleteCookies(ServletResponse response, List<String> cookies) {
+        if (!(response instanceof HttpServletResponse)) {
+            return;
+        }
+        deleteCookies((HttpServletResponse) response, cookies);
+    }
+
+    /**
+     * Deletes a list of Cookie objects from the HttpServletResponse.
+     *
+     * @param response The HttpServletResponse from which the cookies are deleted.
+     * @param cookies  A List of Cookie objects to be deleted.
+     */
+    public static void delete_cookies(HttpServletResponse response, List<Cookie> cookies) {
+        if (Collection4j.isEmpty(cookies)) {
+            return;
+        }
+        cookies.forEach(cookie -> deleteCookie(response, cookie));
+    }
+
+    /**
+     * Deletes a list of Cookie objects from the ServletResponse.
+     *
+     * @param response The ServletResponse from which the cookies are deleted.
+     * @param cookies  A List of Cookie objects to be deleted.
+     */
+    public static void delete_cookies(ServletResponse response, List<Cookie> cookies) {
+        if (!(response instanceof HttpServletResponse)) {
+            return;
+        }
+        delete_cookies((HttpServletResponse) response, cookies);
+    }
+
+    /**
+     * Creates a Cookie object from a CookieRequest.
+     *
+     * @param request The CookieRequest object containing cookie details.
+     * @return A Cookie object created based on the provided CookieRequest.
+     */
+    public static Cookie createCookie(CookieRequest request) {
+        Cookie cookie = new Cookie(request.getName(), request.getValue());
+        cookie.setMaxAge((int) request.getExpiredAt().getSeconds());
+        return cookie;
+    }
+
+    /**
+     * Creates a list of Cookie objects from a list of CookieRequest objects.
+     *
+     * @param cookies The list of CookieRequest objects containing cookie details.
+     * @return A List of Cookie objects created based on the provided CookieRequest objects.
+     */
+    public static List<Cookie> createCookies(List<CookieRequest> cookies) {
+        if (Collection4j.isEmpty(cookies)) {
+            return Collections.emptyList();
+        }
+        return cookies.stream().map(Cookie4j::createCookie).collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieves a Cookie object from the HttpServletRequest by its name, if it exists.
+     *
+     * @param request The HttpServletRequest containing cookies.
+     * @param name    The name of the cookie to be retrieved.
+     * @return An Optional containing the Cookie object if found, otherwise an empty Optional.
+     */
+    public static Optional<Cookie> getCookieValidity(HttpServletRequest request, String name) {
+        List<Cookie> cookies = getCollections(request);
+        if (Collection4j.isEmpty(cookies)) {
+            return Optional.empty();
+        }
+        return cookies.stream().filter(c -> c.getName().equalsIgnoreCase(name)).findFirst();
+    }
+
+    /**
+     * Checks if a specified cookie in the HttpServletRequest is expired.
+     *
+     * @param request The HttpServletRequest containing cookies.
+     * @param name    The name of the cookie to be checked.
+     * @return True if the cookie is expired or does not exist, false otherwise.
+     */
+    public static boolean isExpired(HttpServletRequest request, String name) {
+        // Get the cookie with the specified name, if it exists
+        Optional<Cookie> cookie = getCookieValidity(request, name);
+        // If the cookie exists, check if its max age is greater than the current time in seconds
+        if (cookie.isPresent()) {
+            Duration now = Duration.between(LocalTime.NOON, LocalTime.MAX);
+            return cookie.get().getMaxAge() > now.getSeconds();
+        }
+        return true;
     }
 }
