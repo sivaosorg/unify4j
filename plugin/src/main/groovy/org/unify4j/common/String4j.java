@@ -17,7 +17,6 @@ public class String4j {
      * @param cs the CharSequence to check
      * @return true if the CharSequence is null or empty, false otherwise
      */
-    @SuppressWarnings({"SizeReplaceableByIsEmpty"})
     public static boolean isEmpty(CharSequence cs) {
         return cs == null || cs.length() == 0;
     }

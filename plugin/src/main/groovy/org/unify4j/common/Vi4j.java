@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.*;
+import java.util.Map;
 import java.util.Set;
 
 public class Vi4j {
@@ -155,5 +156,79 @@ public class Vi4j {
      */
     public static <T> void validate(T request) {
         validate(request, defaultFactory());
+    }
+
+    /**
+     * Throws an IllegalArgumentException if the provided value is null.
+     *
+     * @param value   The object to check for null.
+     * @param message The message to include in the exception if the value is null.
+     * @throws IllegalArgumentException if the value is null.
+     */
+    public static void throwIfNull(Object value, String message) {
+        if (value == null) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Throws an IllegalArgumentException if the provided string is null or empty.
+     *
+     * @param value   The string to check for null or emptiness.
+     * @param message The message to include in the exception if the string is null or empty.
+     * @throws IllegalArgumentException if the string is null or empty.
+     */
+    public static void throwIfNullOrEmpty(String value, String message) {
+        if (String4j.isEmpty(value)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Throws an IllegalArgumentException if the class with the provided fully qualified name is not found using the specified class loader.
+     *
+     * @param fullyQualifiedClassName The fully qualified name of the class to check.
+     * @param loader                  The class loader to use for loading the class.
+     * @throws IllegalArgumentException if the fully qualified class name is null or empty, the loader is null, or the class is not found.
+     */
+    public static void throwIfClassNotFound(String fullyQualifiedClassName, ClassLoader loader) {
+        throwIfNullOrEmpty(fullyQualifiedClassName, "fully qualified class name cannot be null or empty");
+        throwIfNull(loader, "loader cannot be null");
+
+        Class<?> clazz = Class4j.forName(fullyQualifiedClassName, loader); // Assuming ClassUtils has a forName method
+        if (clazz == null) {
+            throw new IllegalArgumentException("Unknown class: " + fullyQualifiedClassName + " was not found.");
+        }
+    }
+
+    /**
+     * Throws an IllegalArgumentException if the specified key already exists in the provided map.
+     *
+     * @param <K>     The type of keys in the map.
+     * @param <V>     The type of values in the map.
+     * @param map     The map to check for the presence of the key.
+     * @param key     The key to check for existence in the map.
+     * @param message The message to include in the exception if the key already exists in the map.
+     * @throws IllegalArgumentException if the map or key is null, or if the key already exists in the map.
+     */
+    public static <K, V> void throwIfKeyExists(Map<K, V> map, K key, String message) {
+        throwIfNull(map, "map cannot be null");
+        throwIfNull(key, "key cannot be null");
+        if (map.containsKey(key)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Throws an IllegalArgumentException if the provided logic condition is false.
+     *
+     * @param logic   The boolean condition to evaluate.
+     * @param message The message to include in the exception if the condition is false.
+     * @throws IllegalArgumentException if the logic condition is false.
+     */
+    public static void throwIfFalse(boolean logic, String message) {
+        if (!logic) {
+            throw new IllegalArgumentException(message);
+        }
     }
 }
