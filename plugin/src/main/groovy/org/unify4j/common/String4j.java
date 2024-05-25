@@ -3,13 +3,17 @@ package org.unify4j.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
 import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class String4j {
-
     protected static final Logger logger = LoggerFactory.getLogger(String4j.class);
+    protected static char[] hexes = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    public static String FOLDER_SEPARATOR = "/";
+    public static String EMPTY = "";
 
     /**
      * Checks if the provided CharSequence is null or empty.
@@ -306,7 +310,7 @@ public class String4j {
      * If both conditions are satisfied, the method returns {@code true}.
      * Otherwise, it returns {@code false}.
      */
-    @SuppressWarnings({"SizeReplaceableByIsEmpty"})
+    @SuppressWarnings({"SizeReplaceableByIsEmpty", "BooleanMethodIsAlwaysInverted"})
     public static boolean hasLength(String str) {
         return (str != null && str.length() > 0);
     }
@@ -813,5 +817,313 @@ public class String4j {
             return input;
         }
         return input.replaceAll("^\\[|]$", "");
+    }
+
+    /**
+     * Green implementation of regionMatches.
+     *
+     * @param cs         the {@link CharSequence} to be processed
+     * @param ignoreCase whether to be case-insensitive
+     * @param thisStart  the index to start on the {@code cs} CharSequence
+     * @param substring  the {@link CharSequence} to be looked for
+     * @param start      the index to start on the {@code substring} CharSequence
+     * @param length     character length of the region
+     * @return whether the region matched
+     */
+    @SuppressWarnings({"SameParameterValue"})
+    static boolean regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length) {
+        Vi4j.throwIfNull(cs, "cs to be processed cannot be null");
+        Vi4j.throwIfNull(substring, "substring cannot be null");
+        if (cs instanceof String && substring instanceof String) {
+            return ((String) cs).regionMatches(ignoreCase, thisStart, (String) substring, start, length);
+        }
+        int index1 = thisStart;
+        int index2 = start;
+        int tmp = length;
+        // Extract these first, so we detect NPEs the same as the java.lang.String version
+        int srcLen = cs.length() - thisStart;
+        int otherLen = substring.length() - start;
+        if (thisStart < 0 || start < 0 || length < 0) {
+            return false;
+        }
+        // Check that the regions are long enough
+        if (srcLen < length || otherLen < length) {
+            return false;
+        }
+        while (tmp-- > 0) {
+            char c1 = cs.charAt(index1++);
+            char c2 = substring.charAt(index2++);
+            if (c1 == c2) {
+                continue;
+            }
+            if (!ignoreCase) {
+                return false;
+            }
+            char u1 = Character.toUpperCase(c1);
+            char u2 = Character.toUpperCase(c2);
+            if (u1 != u2 && Character.toLowerCase(u1) != Character.toLowerCase(u2)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Compares two CharSequences, returning {@code true} if they represent
+     * equal sequences of characters.
+     *
+     * <p>{@code null}s are handled without exceptions. Two {@code null}
+     * references are considered to be equal. The comparison is <strong>case-sensitive</strong>.</p>
+     *
+     * @param cs1 the first CharSequence, may be {@code null}
+     * @param cs2 the second CharSequence, may be {@code null}
+     * @return {@code true} if the CharSequences are equal (case-sensitive), or both {@code null}
+     * @see #equalsIgnoreCase(CharSequence, CharSequence)
+     */
+    public static boolean equals(CharSequence cs1, CharSequence cs2) {
+        if (cs1 == cs2) {
+            return true;
+        }
+        if (cs1 == null || cs2 == null) {
+            return false;
+        }
+        if (cs1.length() != cs2.length()) {
+            return false;
+        }
+        if (cs1 instanceof String && cs2 instanceof String) {
+            return cs1.equals(cs2);
+        }
+        // Step-wise comparison
+        int length = cs1.length();
+        for (int i = 0; i < length; i++) {
+            if (cs1.charAt(i) != cs2.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @see String4j#equals(CharSequence, CharSequence)
+     */
+    public static boolean equals(String s1, String s2) {
+        return equals((CharSequence) s1, (CharSequence) s2);
+    }
+
+    /**
+     * Compares two CharSequences, returning {@code true} if they represent
+     * equal sequences of characters, ignoring case.
+     *
+     * <p>{@code null}s are handled without exceptions. Two {@code null}
+     * references are considered equal. The comparison is <strong>case insensitive</strong>.</p>
+     *
+     * @param cs1 the first CharSequence, may be {@code null}
+     * @param cs2 the second CharSequence, may be {@code null}
+     * @return {@code true} if the CharSequences are equal (case-insensitive), or both {@code null}
+     * @see #equals(CharSequence, CharSequence)
+     */
+    public static boolean equalsIgnoreCase(CharSequence cs1, CharSequence cs2) {
+        if (cs1 == cs2) {
+            return true;
+        }
+        if (cs1 == null || cs2 == null) {
+            return false;
+        }
+        if (cs1.length() != cs2.length()) {
+            return false;
+        }
+        return regionMatches(cs1, true, 0, cs2, 0, cs1.length());
+    }
+
+    /**
+     * @see String4j#equalsIgnoreCase(CharSequence, CharSequence)
+     */
+    public static boolean equalsIgnoreCase(String s1, String s2) {
+        return equalsIgnoreCase((CharSequence) s1, (CharSequence) s2);
+    }
+
+    /**
+     * Compares two strings after removing leading and trailing whitespace from both.
+     *
+     * @param s1 The first string to compare. It can be null.
+     * @param s2 The second string to compare. It can be null.
+     * @return true if the trimmed versions of the strings are equal, false otherwise. If both strings are null, true is returned.
+     */
+    public static boolean equalsWithTrim(String s1, String s2) {
+        if (s1 == null || s2 == null) {
+            return Objects.equals(s1, s2);
+        }
+        return s1.trim().equals(s2.trim());
+    }
+
+    /**
+     * Compares two strings after removing leading and trailing whitespace from both, ignoring case differences.
+     *
+     * @param s1 The first string to compare. It can be null.
+     * @param s2 The second string to compare. It can be null.
+     * @return true if the trimmed versions of the strings are equal ignoring case differences, false otherwise.
+     * If both strings are null, true is returned.
+     */
+    public static boolean equalsIgnoreCaseWithTrim(String s1, String s2) {
+        if (s1 == null || s2 == null) {
+            return Objects.equals(s1, s2);
+        }
+        return s1.trim().equalsIgnoreCase(s2.trim());
+    }
+
+    /**
+     * Decodes a hexadecimal string into a byte array.
+     *
+     * @param s The hexadecimal string to decode. It should contain only hexadecimal characters [0-9a-fA-F].
+     *          If the length of the string is odd, the function returns null.
+     * @return A byte array representing the decoded hexadecimal string.
+     * Each pair of hexadecimal characters in the input string corresponds to one byte in the output array.
+     * If the input string is null or empty, the function returns an empty byte array.
+     */
+    public static byte[] decode(String s) {
+        int len = s.length();
+        // If the length of the string is odd, return null as it cannot be properly decoded.
+        if (len % 2 != 0) {
+            return null;
+        }
+        // Initialize a byte array to hold the decoded bytes.
+        byte[] bytes = new byte[len / 2];
+        int position = 0; // Position to insert decoded bytes into the byte array.
+        // Iterate over the characters of the input string in pairs, decoding them into bytes.
+        for (int i = 0; i < len; i += 2) {
+            // Decode the current pair of characters into bytes.
+            byte hi = (byte) Character.digit(s.charAt(i), 16);
+            byte lo = (byte) Character.digit(s.charAt(i + 1), 16);
+            // Combine the hi and lo bytes to form the decoded byte.
+            bytes[position++] = (byte) (hi * 16 + lo);
+        }
+        return bytes;
+    }
+
+    /**
+     * Convert a byte array into a printable format containing a
+     * String of hex digit characters (two per byte).
+     *
+     * @param bytes array representation
+     */
+    public static String encode(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length << 1);
+        for (byte b : bytes) {
+            sb.append(toDigit(b >> 4));
+            sb.append(toDigit(b & 0x0f));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Counts the number of occurrences of the specified 'token' within the given 'content'.
+     *
+     * @param content The CharSequence in which to search for occurrences of the token.
+     * @param token   The CharSequence representing the token whose occurrences are to be counted.
+     * @return The number of times the token occurs within the content.
+     * Returns 0 if either the content or the token is null, or if the content is an empty string,
+     * or if the token is an empty string.
+     */
+    public static int count(CharSequence content, CharSequence token) {
+        // If either the content or the token is null, return 0.
+        if (content == null || token == null) {
+            return 0;
+        }
+        String source = content.toString();
+        // If the source string is empty, return 0.
+        if (isEmpty(source)) {
+            return 0;
+        }
+        String sub = token.toString();
+        // If the token string is empty, return 0.
+        if (isEmpty(sub)) {
+            return 0;
+        }
+        int answer = 0; // Initialize the counter for token occurrences.
+        int idx = 0; // Initialize the index for searching within the source string.
+        // Loop through the source string to find occurrences of the token.
+        while (true) {
+            idx = source.indexOf(sub, idx); // Find the next occurrence of the token.
+            // If no further occurrences are found, return the count of token occurrences.
+            if (idx < answer) {
+                return answer;
+            }
+            ++answer; // Increment the count of token occurrences.
+            ++idx; // Move the search index to the next position after the current occurrence.
+        }
+    }
+
+    public static int count(String s, char c) {
+        return count(s, EMPTY + c);
+    }
+
+    /**
+     * Convert the specified value (0 ... 15) to the corresponding hex digit.
+     *
+     * @param value to be converted
+     * @return '0'...'F' in char format.
+     */
+    public static char toDigit(int value) {
+        return hexes[value & 0x0f];
+    }
+
+    /**
+     * Convert a String into a byte[] with a particular encoding.
+     * Preferable used when the encoding is one of the guaranteed Java types,
+     * and you don't want to have to catch the UnsupportedEncodingException
+     * required by Java
+     *
+     * @param s        string to encode into bytes
+     * @param encoding encoding to use
+     */
+    public static byte[] getBytes(String s, String encoding) {
+        try {
+            return isEmpty(s) ? null : s.getBytes(encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException(String.format("Encoding (%s) is not supported by your JVM", encoding), e);
+        }
+    }
+
+    /**
+     * Converts a byte array into a String using a specified encoding.
+     * This method is preferable when the encoding is one of the guaranteed Java types,
+     * and you want to avoid handling the UnsupportedEncodingException manually.
+     *
+     * @param bytes    The byte array to encode into a string.
+     * @param encoding The character encoding to use for the conversion.
+     * @return The resulting String decoded from the byte array using the specified encoding.
+     * Returns null if the input byte array is null.
+     * @throws IllegalArgumentException If the specified encoding is not supported by the JVM.
+     */
+    public static String createString(byte[] bytes, String encoding) {
+        try {
+            return bytes == null ? null : new String(bytes, encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException(String.format("Encoding (%s) is not supported by your JVM", encoding), e);
+        }
+    }
+
+    /**
+     * Converts a byte array into a UTF-8 encoded String.
+     * This method is preferable when the encoding is one of the guaranteed Java types,
+     * and you want to avoid handling the UnsupportedEncodingException manually.
+     *
+     * @param bytes The byte array to be decoded into a UTF-8 string.
+     * @return The resulting UTF-8 encoded String decoded from the byte array.
+     * Returns null if the input byte array is null.
+     */
+    public static String createUtf8String(byte[] bytes) {
+        return createString(bytes, "UTF-8");
+    }
+
+    /**
+     * Converts a String into a byte array encoded by UTF-8.
+     *
+     * @param s The string to be encoded into bytes using UTF-8 encoding.
+     * @return The byte array representing the UTF-8 encoded bytes of the input string.
+     * Returns null if the input string is null.
+     */
+    public static byte[] getUTF8Bytes(String s) {
+        return getBytes(s, "UTF-8");
     }
 }

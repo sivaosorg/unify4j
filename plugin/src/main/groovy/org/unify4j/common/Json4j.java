@@ -352,4 +352,21 @@ public class Json4j {
         }
         return json2Target(response.getBody().toString(), Map.class);
     }
+
+    /**
+     * Reads the value at the specified JSONPath expression from the JSON string.
+     *
+     * @param json the JSON string to read from
+     * @param path the JSONPath expression to use for reading
+     * @param <T>  the type of the value to read
+     * @return the value at the specified JSONPath expression
+     */
+    public static <T> List<T> readCollIf(String json, String path) {
+        List<Object> values = readIf(json, path);
+        if (Collection4j.isEmpty(values)) {
+            return Collections.emptyList();
+        }
+        return instance.convertValue(values, new TypeReference<List<T>>() {
+        });
+    }
 }
