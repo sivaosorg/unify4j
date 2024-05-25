@@ -31,7 +31,9 @@ public class Cookie4j {
         return Arrays.stream(request.getCookies()).collect(Collectors.toMap(Cookie::getName, // Use cookie's name as the map key
                 Cookie::getValue, // Use cookie's value as the map value
                 (cookie1, cookie2) -> { // Merge function for handling duplicate keys
-                    logger.info("cookie duplicated key found by cookie-1: {} and cookie-2: {}", cookie1, cookie2);
+                    if (logger.isInfoEnabled()) {
+                        logger.info("cookie duplicated key found by cookie-1: {} and cookie-2: {}", cookie1, cookie2);
+                    }
                     return cookie1; // Keep the value of the first cookie in case of a duplicate key
                 }));
     }

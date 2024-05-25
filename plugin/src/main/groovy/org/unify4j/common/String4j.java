@@ -799,4 +799,19 @@ public class String4j {
     public static int length(CharSequence cs) {
         return cs == null ? 0 : cs.length();
     }
+
+    /**
+     * Removes the leading and trailing brackets from a string, if present.
+     * This function checks if the input string is empty or null using the String4j utility,
+     * and then uses a regular expression to replace any brackets at the start or end of the string.
+     *
+     * @param input the string from which brackets are to be removed
+     * @return the input string with leading and trailing brackets removed, or the original string if it is empty or null
+     */
+    public static String removeBrackets(String input) {
+        if (String4j.isEmpty(input)) {
+            return input;
+        }
+        return input.replaceAll("^\\[|]$", "");
+    }
 }

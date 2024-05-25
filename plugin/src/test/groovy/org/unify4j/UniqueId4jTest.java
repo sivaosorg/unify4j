@@ -16,7 +16,7 @@ import static java.lang.System.currentTimeMillis;
 import static org.junit.Assert.assertEquals;
 import static org.unify4j.common.UniqueId4j.*;
 
-public class UniqueIdTest {
+public class UniqueId4jTest {
     protected static final int bucketSize = 200000;
 
     @Test

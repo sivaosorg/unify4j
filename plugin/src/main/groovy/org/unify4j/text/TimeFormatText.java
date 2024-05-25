@@ -16,13 +16,13 @@ public class TimeFormatText {
     public static final String MEDIUM_EPOCH_PATTERN = "MMM d, y, h:mm:ss a";
 
     /**
-     * Format: June 15, 2019 at 10:54:25 PM GMT+5
+     * Format: June 15, 2019, at 10:54:25 PM GMT+5
      * Description: Long pattern for date and time including full month name, day, year, hour, minutes, seconds, AM/PM indicator, and timezone.
      */
     public static final String LONG_EPOCH_PATTERN = "MMMM d, y, h:mm:ss a z";
 
     /**
-     * Format: Saturday, June 15, 2019 at 10:54:25 PM GMT+05:30
+     * Format: Saturday, June 15, 2019, at 10:54:25 PM GMT+05:30
      * Description: Completed pattern for date and time including day of the week, full month name, day, year, hour, minutes, seconds, AM/PM indicator, and timezone.
      */
     public static final String COMPLETED_EPOCH_PATTERN = "EEEE, MMMM d, y, h:mm:ss a zzzz";
@@ -40,13 +40,13 @@ public class TimeFormatText {
     public static final String MEDIUM_DATE_EPOCH_PATTERN = "MMM d, y";
 
     /**
-     * Format: June 15, 2019
+     * Format: June 15, 2019,
      * Description: Long pattern for date only including full month name, day, and year.
      */
     public static final String LONG_DATE_EPOCH_PATTERN = "MMMM d, y";
 
     /**
-     * Format: Saturday, June 15, 2019
+     * Format: Saturday, June 15, 2019,
      * Description: Completed pattern for date only including day of the week, full month name, day, and year.
      */
     public static final String COMPLETED_DATE_EPOCH_PATTERN = "EEEE, MMMM d, y";

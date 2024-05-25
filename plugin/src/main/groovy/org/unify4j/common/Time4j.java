@@ -20,6 +20,21 @@ public class Time4j {
     protected static final Logger logger = LoggerFactory.getLogger(Time4j.class);
 
     /**
+     * Converts a fractional second string representation to nanoseconds.
+     * Parses the given fractionalSecondText to a double, representing a fraction of a second.
+     * Multiplies the fractional value by 1,000,000,000 (nanoseconds in a second) and returns the result
+     * as a long integer, representing the equivalent nanoseconds.
+     *
+     * @param fractionalSecondText The string representation of the fractional part of a second.
+     * @return The equivalent nanoseconds of the given fractional second.
+     */
+    public static long fromFractionToNanos(String fractionalSecondText) {
+        double fractionalSecond = Double.parseDouble(fractionalSecondText);
+        // Multiply the fractional value by 1,000,000,000 (nanoseconds in a second) and cast it to a long.
+        return (long) (fractionalSecond * 1_000_000_000);
+    }
+
+    /**
      * Converts milliseconds to seconds.
      *
      * @param milliseconds the number of milliseconds to convert
@@ -1102,8 +1117,23 @@ public class Time4j {
      * @return A string describing the elapsed time in a human-readable format.
      */
     public static String since(Date date) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime then = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        return since(new Date(), date);
+    }
+
+    /**
+     * Provides a human-readable string representing the time elapsed since the given date.
+     * <p>
+     * This function calculates the duration between the provided date and the current date,
+     * and returns a string describing this duration in a human-readable format such as "just now",
+     * "X minutes ago", "X hours ago", etc.
+     *
+     * @param source The reference date to calculate the duration from. Typically, this would be the current date.
+     * @param target The date from which the elapsed time is calculated.
+     * @return A string describing the elapsed time in a human-readable format.
+     */
+    public static String since(Date source, Date target) {
+        LocalDateTime now = transform(source);
+        LocalDateTime then = LocalDateTime.ofInstant(target.toInstant(), ZoneId.systemDefault());
         Duration duration = Duration.between(then, now);
         long seconds = duration.getSeconds();
         long minutes = duration.toMinutes();
@@ -1112,7 +1142,6 @@ public class Time4j {
         long weeks = days / 7;
         long months = days / 30;
         long years = days / 365;
-
         if (seconds < 60) {
             return "just now";
         } else if (minutes < 60) {
@@ -1127,6 +1156,43 @@ public class Time4j {
             return months + " month" + (months > 1 ? "s" : "") + " ago";
         } else {
             return years + " year" + (years > 1 ? "s" : "") + " ago";
+        }
+    }
+
+    /**
+     * Retrieves the ZoneId corresponding to the given time zone identifier.
+     * If the provided time zone identifier is empty or null, the system default ZoneId is returned.
+     * If the time zone identifier starts with a plus (+) or minus (-) sign, it is treated as an offset
+     * and converted to a ZoneId using the GMT time zone.
+     * If the time zone identifier is a valid time zone identifier, it is converted to a ZoneId directly.
+     * If the time zone identifier is not valid or cannot be recognized, an attempt is made to retrieve
+     * the corresponding TimeZone instance, and its ZoneId is returned. If the TimeZone instance has
+     * a raw offset of 0 (indicating an unknown or invalid time zone), an exception is thrown.
+     *
+     * @param tz The time zone identifier string.
+     * @return The corresponding ZoneId for the given time zone identifier.
+     * @throws IllegalArgumentException if the time zone identifier is invalid or cannot be recognized.
+     */
+    public static ZoneId parseTimeZone(String tz) {
+        if (String4j.isEmpty(tz)) {
+            return ZoneId.systemDefault();
+        }
+        if (tz.startsWith("-") || tz.startsWith("+")) {
+            ZoneOffset offset = ZoneOffset.of(tz); // If the time zone identifier starts with '+' or '-', treat it as an offset and convert it to a ZoneId.
+            return ZoneId.ofOffset("GMT", offset);
+        } else {
+            try {
+                return ZoneId.of(tz); // Attempt to parse the time zone identifier directly as a ZoneId.
+            } catch (Exception e) {
+                // If the time zone identifier is not recognized as a valid ZoneId, attempt to retrieve the corresponding TimeZone.
+                TimeZone timezone = TimeZone.getTimeZone(tz);
+                if (timezone.getRawOffset() == 0) {
+                    // If the retrieved TimeZone has a raw offset of 0, indicating an unknown or invalid time zone, throw an exception.
+                    throw e;
+                }
+                // Otherwise, convert the retrieved TimeZone to a ZoneId and return it.
+                return timezone.toZoneId();
+            }
         }
     }
 }
