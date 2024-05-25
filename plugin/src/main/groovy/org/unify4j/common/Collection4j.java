@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 
 public class Collection4j {
     protected static final Logger logger = LoggerFactory.getLogger(Collection4j.class);
+    private static final Set<?> unmodifiableEmptySet = Collections.unmodifiableSet(new HashSet<>());
+    private static final List<?> unmodifiableEmptyList = Collections.unmodifiableList(new ArrayList<>());
 
     /**
      * Checks if the provided collection is null or empty.
@@ -578,6 +580,52 @@ public class Collection4j {
      */
     public static <E> boolean isConsistOf(E[] array, int index) {
         return !Object4j.isEmpty(array) && index >= 0 && index < array.length;
+    }
+
+    /**
+     * Creates an immutable list containing the specified elements.
+     * This method is preferable when creating immutable lists in Java versions
+     * where Set.of() is not available (e.g., JDK versions before 11).
+     * It returns an empty immutable list if no elements are provided or if the input array is null.
+     *
+     * @param items The elements to be included in the immutable list.
+     * @param <T>   The type of elements in the list.
+     * @return An immutable list containing the specified elements.
+     * Returns an empty immutable list if no elements are provided or if the input array is null.
+     */
+    @SuppressWarnings({"unchecked"})
+    @SafeVarargs
+    public static <T> List<T> listOf(T... items) {
+        if (items == null || items.length == 0) {
+            return (List<T>) unmodifiableEmptyList;
+        }
+        List<T> list = new ArrayList<>();
+        Collections.addAll(list, items);
+        return Collections.unmodifiableList(list);
+    }
+
+    /**
+     * Creates an immutable set containing the specified elements.
+     * This method is preferable when creating immutable sets in Java versions
+     * where Set.of() is not available (e.g., JDK versions before 11).
+     * It returns an empty immutable set if no elements are provided or if the input array is null.
+     * <p>
+     * Note: For JDK 11 and above, consider using Set.of() instead.
+     *
+     * @param items The elements to be included in the immutable set.
+     * @param <T>   The type of elements in the set.
+     * @return An immutable set containing the specified elements.
+     * Returns an empty immutable set if no elements are provided or if the input array is null.
+     */
+    @SuppressWarnings({"unchecked"})
+    @SafeVarargs
+    public static <T> Set<T> setOf(T... items) {
+        if (items == null || items.length == 0) {
+            return (Set<T>) unmodifiableEmptySet;
+        }
+        Set<T> set = new LinkedHashSet<>();
+        Collections.addAll(set, items);
+        return Collections.unmodifiableSet(set);
     }
 
     /**

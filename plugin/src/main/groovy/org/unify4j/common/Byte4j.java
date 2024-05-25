@@ -38,19 +38,19 @@ public class Byte4j {
         StringBuilder sb = new StringBuilder(bytes.length << 1);
         // Loop through each byte and convert it to two hexadecimal characters
         for (byte aByte : bytes) {
-            sb.append(convertDigit(aByte >> 4));
-            sb.append(convertDigit(aByte & 0x0f));
+            sb.append(toDigit(aByte >> 4));
+            sb.append(toDigit(aByte & 0x0f));
         }
         return sb.toString();
     }
 
     /**
-     * Converts a value (0 .. 15) to the corresponding hexadecimal digit.
+     * Converts a value (0 ... 15) to the corresponding hexadecimal digit.
      *
      * @param value the value to convert
-     * @return the corresponding hexadecimal character ('0'..'F')
+     * @return the corresponding hexadecimal character ('0'...'F')
      */
-    private static char convertDigit(final int value) {
+    private static char toDigit(final int value) {
         return hexes[value & 0x0f];
     }
 
