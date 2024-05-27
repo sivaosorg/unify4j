@@ -306,7 +306,7 @@ public class Numeric4j {
             }
         }
         if (hasDecimalPoint || hasExponent) {
-            if (mantissaSize < 17 && (exponentValue.length() == 0 || Math.abs(Integer.parseInt(exponentValue.toString())) < 308)) {
+            if (mantissaSize < 17 && (String4j.isEmpty(exponentValue) || Math.abs(Integer.parseInt(exponentValue.toString())) < 308)) {
                 return Double.parseDouble(numStr);
             } else {
                 return new BigDecimal(numStr);
