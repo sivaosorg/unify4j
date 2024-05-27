@@ -1,12 +1,14 @@
 package org.unify4j.model.builder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.unify4j.common.Collection4j;
 import org.unify4j.model.response.HttpResponse;
 import org.unify4j.model.response.MetaResponse;
 import org.unify4j.model.response.PaginationResponse;
 import org.unify4j.model.response.WrapResponse;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -54,6 +56,21 @@ public class HttpWrapBuilder<T> implements Serializable {
 
     public HttpWrapBuilder<T> customFields(Map<String, ?> fields) {
         this.build().getMeta().setCustomFields(fields);
+        return this;
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public HttpWrapBuilder<T> customFields(String key, Object value) {
+        Map<String, Object> customFields = (Map<String, Object>) this.build().getMeta().getCustomFields();
+        if (Collection4j.isEmptyMap(customFields)) {
+            customFields = new HashMap<>();
+        }
+        customFields.put(key, value);
+        return this.customFields(customFields);
+    }
+
+    public HttpWrapBuilder<T> meta(MetaBuilder builder) {
+        this.builder().setMeta(builder.build());
         return this;
     }
 
