@@ -629,6 +629,27 @@ public class Collection4j {
     }
 
     /**
+     * Converts a collection of items to a string with a specified delimiter between elements.
+     *
+     * @param collections the collection of items to be converted to a string
+     * @param delimiter   the delimiter to separate the items in the resulting string
+     * @return a string representation of the collection with the specified delimiter
+     */
+    public static String toString(Collection<?> collections, String delimiter) {
+        if (isEmpty(collections)) {
+            return "";
+        }
+        // Use a default delimiter of "," if the provided delimiter is empty or null
+        delimiter = String4j.isEmpty(delimiter) ? "," : delimiter;
+        StringBuilder builder = new StringBuilder();
+        for (Object item : collections) {
+            builder.append(delimiter);
+            builder.append(item.toString());
+        }
+        return builder.substring(delimiter.length());
+    }
+
+    /**
      * Throws UnsupportedOperationException if the list is not of type ArrayList.
      *
      * @param list the list to check
