@@ -7,6 +7,7 @@ import org.unify4j.common.Json4j;
 import org.unify4j.model.builder.HttpStatusBuilder;
 
 import java.io.Serializable;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -31,6 +32,10 @@ public class WrapResponse<T> implements Serializable {
     private MetaResponse meta;
     @JsonProperty("pagination")
     private PaginationResponse pagination;
+    @JsonProperty("path")
+    private String path; // optional
+    @JsonProperty("debug")
+    private List<BaseOutlineResponse> debug; // optional
 
     public int getStatusCode() {
         return statusCode;
@@ -104,8 +109,28 @@ public class WrapResponse<T> implements Serializable {
         return this.statusCode >= HttpStatusBuilder.OK.getCode() && this.statusCode < HttpStatusBuilder.MULTIPLE_CHOICES.getCode();
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public List<BaseOutlineResponse> getDebug() {
+        return debug;
+    }
+
+    public void setDebug(List<BaseOutlineResponse> debug) {
+        this.debug = debug;
+    }
+
     @Override
     public String toString() {
-        return String.format("Wrap response { status_code: %d, message: %s, total: %d, data: %s, errors: %s, headers: %s, meta: %s, pagination: %s }", statusCode, message, total, Json4j.toJson(data), Json4j.toJson(errors), Json4j.toJson(headers), Json4j.toJson(meta), Json4j.toJson(pagination));
+        return String.format("Wrap response { status_code: %d, message: %s, total: %d, data: %s, errors: %s, headers: %s, meta: %s, pagination: %s, path: %s, debug: %s }",
+                statusCode, message, total, Json4j.toJson(data),
+                Json4j.toJson(errors), Json4j.toJson(headers),
+                Json4j.toJson(meta), Json4j.toJson(pagination),
+                path, Json4j.toJson(debug));
     }
 }

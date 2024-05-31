@@ -2,13 +2,11 @@ package org.unify4j.model.builder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.unify4j.common.Collection4j;
-import org.unify4j.model.response.HttpResponse;
-import org.unify4j.model.response.MetaResponse;
-import org.unify4j.model.response.PaginationResponse;
-import org.unify4j.model.response.WrapResponse;
+import org.unify4j.model.response.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -120,6 +118,78 @@ public class HttpWrapBuilder<T> implements Serializable {
 
     public HttpWrapBuilder<T> pagination(PaginationBuilder builder) {
         this.builder().setPagination(builder.build());
+        return this;
+    }
+
+    /**
+     * Sets the path for the wrap builder.
+     *
+     * @param path the path value to be set
+     * @return the HttpWrapBuilder instance for method chaining
+     */
+    public HttpWrapBuilder<T> path(String path) {
+        this.builder().setPath(path);
+        return this;
+    }
+
+    /**
+     * Sets the debug list for the wrap builder.
+     *
+     * @param debug the list of debug values to be set
+     * @return the HttpWrapBuilder instance for method chaining
+     */
+    public HttpWrapBuilder<T> debug(List<BaseOutlineResponse> debug) {
+        this.builder().setDebug(debug);
+        return this;
+    }
+
+    /**
+     * Sets the values list for the wrap builder using varargs.
+     *
+     * @param values the varargs array of values to be set
+     * @return the HttpWrapBuilder instance for method chaining
+     */
+    public HttpWrapBuilder<T> debug(BaseOutlineResponse... values) {
+        this.builder().appendDebug(values);
+        return this;
+    }
+
+    /**
+     * Adds debug information constructed from object, field, rejectedValue, and message.
+     *
+     * @param object        the object associated with the debug information
+     * @param field         the field associated with the debug information
+     * @param rejectedValue the rejected value associated with the debug information
+     * @param message       the message associated with the debug information
+     * @return the HttpWrapBuilder instance for method chaining
+     */
+    public HttpWrapBuilder<T> debug(String object, String field, Object rejectedValue, String message) {
+        return this.debug(
+                new VerificationOutlineBuilder()
+                        .setObject(object)
+                        .setField(field)
+                        .setRejectedValue(rejectedValue)
+                        .setMessage(message)
+                        .build());
+    }
+
+    /**
+     * Adds debug information constructed from object and message.
+     *
+     * @param object  the object associated with the debug information
+     * @param message the message associated with the debug information
+     * @return the HttpWrapBuilder instance for method chaining
+     */
+    public HttpWrapBuilder<T> debug(String object, String message) {
+        return this.debug(
+                new VerificationOutlineBuilder()
+                        .setObject(object)
+                        .setMessage(message)
+                        .build());
+    }
+
+    public HttpWrapBuilder<T> debug(VerificationOutlineBuilder builder) {
+        this.builder().appendDebug(builder);
         return this;
     }
 
