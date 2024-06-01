@@ -1,8 +1,6 @@
 package org.unify4j.model.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import org.unify4j.common.Json4j;
 import org.unify4j.model.builder.HttpStatusBuilder;
 
@@ -16,6 +14,7 @@ public class WrapResponse<T> implements Serializable {
         super();
     }
 
+    @JsonAlias({"code", "http_code", "status_http_code"})
     @JsonProperty("status_code")
     private int statusCode;
     @JsonProperty("message")
@@ -101,10 +100,12 @@ public class WrapResponse<T> implements Serializable {
         this.pagination = pagination;
     }
 
+    @JsonIgnore
     public boolean isError() {
         return this.errors != null;
     }
 
+    @JsonIgnore
     public boolean isSuccess() {
         return this.statusCode >= HttpStatusBuilder.OK.getCode() && this.statusCode < HttpStatusBuilder.MULTIPLE_CHOICES.getCode();
     }
