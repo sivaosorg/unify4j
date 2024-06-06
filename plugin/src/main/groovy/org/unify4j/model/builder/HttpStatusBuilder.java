@@ -19,6 +19,10 @@ import java.util.List;
 public class HttpStatusBuilder {
     protected static List<HttpResponse> statuses;
 
+    /**
+     * @param statusCode - the status code
+     * @return new HTTP wrapper response, class {@link HttpResponse}
+     */
     public static HttpResponse valueOf(int statusCode) {
         if (Collection4j.isEmpty(statuses)) {
             statuses = Arrays.asList(
@@ -94,6 +98,58 @@ public class HttpStatusBuilder {
             );
         }
         return statuses.stream().filter(e -> e.getCode() == statusCode).findFirst().orElse(new HttpResponse(-1, "unknown", "unknown", "out of HTTP status version"));
+    }
+
+    /**
+     * Checks if the given HTTP status code indicates a successful response.
+     * <p>
+     * A successful response is indicated by status codes in the range 200 to 299.
+     * This includes statuses like 200 OK, 201 Created, 204 No Content, etc.
+     *
+     * @param code the HTTP status code to check
+     * @return true if the code is between 200 and 299 (inclusive), false otherwise
+     */
+    public static boolean isSuccess(int code) {
+        return (200 <= code) && (code <= 299);
+    }
+
+    /**
+     * Checks if the given HTTP status code indicates a redirection response.
+     * <p>
+     * A redirection response is indicated by status codes in the range 300 to 399.
+     * This includes statuses like 301 Moved Permanently, 302 Found, 304 Not Modified, etc.
+     *
+     * @param code the HTTP status code to check
+     * @return true if the code is between 300 and 399 (inclusive), false otherwise
+     */
+    public static boolean isRedirection(int code) {
+        return (300 <= code) && (code <= 399);
+    }
+
+    /**
+     * Checks if the given HTTP status code indicates a client error response.
+     * <p>
+     * A client error response is indicated by status codes in the range 400 to 499.
+     * This includes statuses like 400 Bad Request, 401 Unauthorized, 404 Not Found, etc.
+     *
+     * @param code the HTTP status code to check
+     * @return true if the code is between 400 and 499 (inclusive), false otherwise
+     */
+    public static boolean isClientError(int code) {
+        return (400 <= code) && (code <= 499);
+    }
+
+    /**
+     * Checks if the given HTTP status code indicates a server error response.
+     * <p>
+     * A server error response is indicated by status codes in the range 500 to 599.
+     * This includes statuses like 500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable, etc.
+     *
+     * @param code the HTTP status code to check
+     * @return true if the code is between 500 and 599 (inclusive), false otherwise
+     */
+    public static boolean isServerError(int code) {
+        return (500 <= code) && (code <= 599);
     }
 
     // 1xx Informational responses

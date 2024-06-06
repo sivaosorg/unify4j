@@ -102,12 +102,14 @@ public class WrapResponse<T> implements Serializable {
 
     @JsonIgnore
     public boolean isError() {
-        return this.errors != null;
+        return this.errors != null ||
+                HttpStatusBuilder.isClientError(this.statusCode) ||
+                HttpStatusBuilder.isServerError(this.statusCode);
     }
 
     @JsonIgnore
     public boolean isSuccess() {
-        return this.statusCode >= HttpStatusBuilder.OK.getCode() && this.statusCode < HttpStatusBuilder.MULTIPLE_CHOICES.getCode();
+        return HttpStatusBuilder.isSuccess(this.statusCode);
     }
 
     public String getPath() {
