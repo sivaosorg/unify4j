@@ -1,4 +1,4 @@
-package org.unify4j.model.process;
+package org.unify4j.model.stream;
 
 import org.unify4j.common.IO4j;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class StreamProcess implements Runnable {
+public class RunnableStream implements Runnable {
     private final InputStream stream;
     private String result;
 
@@ -16,7 +16,7 @@ public class StreamProcess implements Runnable {
      *
      * @param is InputStream object to be processed.
      */
-    public StreamProcess(InputStream is) {
+    public RunnableStream(InputStream is) {
         this.stream = is;
     }
 

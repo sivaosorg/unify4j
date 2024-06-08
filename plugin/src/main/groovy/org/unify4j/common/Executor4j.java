@@ -2,7 +2,7 @@ package org.unify4j.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.unify4j.model.process.StreamProcess;
+import org.unify4j.model.stream.RunnableStream;
 
 import java.io.File;
 
@@ -166,9 +166,9 @@ public class Executor4j {
      * @throws InterruptedException if any thread has interrupted the current thread.
      */
     private int execute(Process process) throws InterruptedException {
-        StreamProcess errors = new StreamProcess(process.getErrorStream());
+        RunnableStream errors = new RunnableStream(process.getErrorStream());
         Thread errorGobbler = new Thread(errors);
-        StreamProcess out = new StreamProcess(process.getInputStream());
+        RunnableStream out = new RunnableStream(process.getInputStream());
         Thread outputGobbler = new Thread(out);
         errorGobbler.start();
         outputGobbler.start();
