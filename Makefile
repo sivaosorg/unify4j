@@ -16,3 +16,9 @@ test:
 
 groovy:
 	./gradlew build
+
+tree:
+	# Create logs directory if not exists
+	mkdir -p logs
+	# Generate project structure and save it to logs/project_structure.txt
+	tree -I ".gradle|.idea|build|logs" > ./logs/project_structure.txt
