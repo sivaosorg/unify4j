@@ -5,6 +5,7 @@ LOG_DIR=logs
 .PHONY: build test jar clean
 
 build:
+	clear
 	rm -rf $(BUILD_DIR)
 	./gradlew jar
 
