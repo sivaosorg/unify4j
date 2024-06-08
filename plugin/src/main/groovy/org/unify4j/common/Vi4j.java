@@ -244,4 +244,30 @@ public class Vi4j {
             throw new IllegalArgumentException(message);
         }
     }
+
+    /**
+     * Throws an IllegalStateException if the provided logic condition is true.
+     *
+     * @param logic   The boolean condition to evaluate.
+     * @param message The message to include in the exception if the condition is true.
+     * @throws IllegalStateException if the logic condition is true.
+     */
+    public static void throwStateIfTrue(boolean logic, String message) {
+        if (logic) {
+            throw new IllegalStateException(message);
+        }
+    }
+
+    /**
+     * Throws an IllegalStateException if the provided logic condition is false.
+     *
+     * @param logic   The boolean condition to evaluate.
+     * @param message The message to include in the exception if the condition is false.
+     * @throws IllegalStateException if the logic condition is false.
+     */
+    public static void throwStateIfFalse(boolean logic, String message) {
+        if (!logic) {
+            throw new IllegalStateException(message);
+        }
+    }
 }
