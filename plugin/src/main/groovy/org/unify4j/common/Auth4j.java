@@ -3,7 +3,7 @@ package org.unify4j.common;
 import org.unify4j.model.builder.HttpWrapBuilder;
 import org.unify4j.model.c.HttpHeaders;
 import org.unify4j.model.enums.AuthType;
-import org.unify4j.model.onlyrd.AbstractAuthClass;
+import org.unify4j.model.rd.AbstractAuthClass;
 import org.unify4j.model.response.WrapResponse;
 
 import java.util.Base64;

@@ -2,9 +2,11 @@ package org.unify4j.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unify4j.model.c.Pair;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -647,6 +649,29 @@ public class Collection4j {
             builder.append(item.toString());
         }
         return builder.substring(delimiter.length());
+    }
+
+    /**
+     * Creates an unmodifiable map from an array of Pair objects.
+     * <p>
+     * This method takes a variable number of Pair objects and constructs
+     * a thread-safe map (using ConcurrentHashMap) from these pairs. The
+     * resulting map is then wrapped with Collections.unmodifiableMap to
+     * ensure it cannot be modified after creation.
+     *
+     * @param <KeyT>   the type of keys maintained by the returned map
+     * @param <ValueT> the type of mapped values
+     * @param pairs    an array of Pair objects from which the map will be created
+     * @return an unmodifiable map containing the key-value pairs from the pairs array
+     * @throws NullPointerException if any of the keys or values in the pairs are null
+     */
+    @SafeVarargs
+    public static <KeyT, ValueT> Map<KeyT, ValueT> mapOf(Pair<KeyT, ValueT>... pairs) {
+        Map<KeyT, ValueT> map = new ConcurrentHashMap<>(pairs.length);
+        for (Pair<KeyT, ValueT> pair : pairs) {
+            map.put(pair.getKey(), pair.getValue());
+        }
+        return Collections.unmodifiableMap(map);
     }
 
     /**
