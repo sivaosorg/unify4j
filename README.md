@@ -2,7 +2,8 @@
 
 ## Introduction
 
-unify4J: Java 1.8 skeleton library offering a rich toolkit of utility functions for collections, strings, date/time, JSON, maps, and more.
+unify4J: Java 1.8 skeleton library offering a rich toolkit of utility functions for collections, strings, date/time,
+JSON, maps, and more.
 
 ## Features
 
@@ -55,11 +56,18 @@ make jar
 
 ### Upgrading version
 
-- file `gradle.properties`
+- file `gradle.yml`
 
-```sh
-ng.name=unify4j
-ng.version=v1.0.0
+```yaml
+ng:
+  name: unify4j
+  version: v1.0.0
+  enabled_link: false # enable compression and attachment of the external libraries
+  jars:
+    - enabled: false # enable compression and attachment of the external libraries
+      source: "" # lib Jar
+    - enabled: false
+      source: ""
 ```
 
 ## Integration
@@ -68,17 +76,4 @@ ng.version=v1.0.0
 
 ```gradle
 implementation files('libs/unify4j-v1.0.0.jar') // filename based on ng.name and ng.version
-```
-
-2. Edit file `main Spring Boot application` (optional)
-
-```java
-
-@SpringBootApplication
-@ComponentScan(basePackages = {"org.unify4j"}) // root name of package wizard4j
-public class ApiApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ApiApplication.class, args);
-    }
-}
 ```
