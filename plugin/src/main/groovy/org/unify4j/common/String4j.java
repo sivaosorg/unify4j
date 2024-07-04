@@ -1126,4 +1126,31 @@ public class String4j {
     public static byte[] getUTF8Bytes(String s) {
         return getBytes(s, "UTF-8");
     }
+
+    /**
+     * Repeats the given string a specified number of times.
+     *
+     * @param s   the string to be repeated
+     * @param cnt the number of times to repeat the string
+     * @return a new string consisting of the original string repeated the specified number of times,
+     * or the original string if it is empty
+     * @throws IllegalArgumentException if the repeat count is negative
+     *                                  <p>
+     *                                  This method suppresses the "StringRepeatCanBeUsed" warning as it manually implements the repeat logic
+     *                                  to maintain compatibility with Java versions prior to 11 where the String::repeat method is not available.
+     */
+    @SuppressWarnings({"StringRepeatCanBeUsed"})
+    public static String repeat(String s, int cnt) {
+        if (isEmpty(s)) {
+            return s;
+        }
+        if (cnt < 0) {
+            throw new IllegalArgumentException("Repeat count must be non-negative");
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < cnt; i++) {
+            builder.append(s);
+        }
+        return builder.toString();
+    }
 }
