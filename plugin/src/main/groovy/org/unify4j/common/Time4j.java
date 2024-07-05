@@ -2,6 +2,7 @@ package org.unify4j.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unify4j.model.enums.TimezoneType;
 import org.unify4j.text.TimeFormatText;
 
 import java.sql.Timestamp;
@@ -1008,6 +1009,64 @@ public class Time4j {
      */
     public static String format(Date date) {
         return format(date, TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN);
+    }
+
+    /**
+     * Formats a Date object into a string representation using the specified timezone.
+     *
+     * @param date     The Date object to be formatted.
+     * @param timezone The timezone.
+     * @param format   The format string used to format the date.
+     * @return A string representation of the formatted date with the specified timezone.
+     * @throws IllegalArgumentException if the format is null or invalid.
+     */
+    public static String format(Date date, TimeZone timezone, String format) {
+        if (date == null || timezone == null || String4j.isEmpty(format)) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        sdf.setTimeZone(timezone);
+        return sdf.format(date);
+    }
+
+    /**
+     * Formats a Date object into a string representation using the specified timezone.
+     *
+     * @param date     The Date object to be formatted.
+     * @param timezone The timezone enum type from TimezoneText enum.
+     * @param format   The format string used to format the date.
+     * @return A string representation of the formatted date with the specified timezone.
+     * @throws IllegalArgumentException if the format is null or invalid.
+     */
+    public static String format(Date date, TimezoneType timezone, String format) {
+        if (date == null || timezone == null || String4j.isEmpty(format)) {
+            return "";
+        }
+        return format(date, TimeZone.getTimeZone(timezone.getTimeZoneId()), format);
+    }
+
+    /**
+     * Formats a Date object into a string representation using the specified timezone.
+     *
+     * @param date     The Date object to be formatted.
+     * @param timezone The timezone.
+     * @return A string representation of the formatted date with the specified timezone.
+     * @throws IllegalArgumentException if the format is null or invalid.
+     */
+    public static String format(Date date, TimeZone timezone) {
+        return format(date, timezone, TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN);
+    }
+
+    /**
+     * Formats a Date object into a string representation using the specified timezone.
+     *
+     * @param date     The Date object to be formatted.
+     * @param timezone The timezone.
+     * @return A string representation of the formatted date with the specified timezone.
+     * @throws IllegalArgumentException if the format is null or invalid.
+     */
+    public static String format(Date date, TimezoneType timezone) {
+        return format(date, timezone, TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN);
     }
 
     /**
