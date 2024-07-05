@@ -12,8 +12,7 @@ import java.util.Objects;
 public class String4j {
     protected static final Logger logger = LoggerFactory.getLogger(String4j.class);
     protected static char[] hexes = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-    public static String FOLDER_SEPARATOR = "/";
-    public static String EMPTY = "";
+    protected static String EMPTY = "";
 
     /**
      * Checks if the provided CharSequence is null or empty.
@@ -21,6 +20,7 @@ public class String4j {
      * @param cs the CharSequence to check
      * @return true if the CharSequence is null or empty, false otherwise
      */
+    @SuppressWarnings({"SizeReplaceableByIsEmpty"})
     public static boolean isEmpty(CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
