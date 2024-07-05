@@ -1,16 +1,18 @@
 package org.unify4j.common;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.CompletionHandler;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.stream.Stream;
 
 public class Os4j {
     protected final static char SOLIDUS_CHAR = '/';
@@ -423,5 +425,413 @@ public class Os4j {
      */
     public static Path writeFileAsyncHandlerIfNeeded(String filename, String event, int allocate, StandardOpenOption... options) throws Exception {
         return writeFileAsyncHandlerIfNeeded(toPath(filename), event, allocate, options);
+    }
+
+    /**
+     * Creates a new directory at the specified path.
+     *
+     * @param filename The path at which to create the new directory. Must not be empty.
+     * @return The path to the newly created directory.
+     * @throws IllegalArgumentException If the provided directory path is empty.
+     * @throws IOException              If an I/O error occurs or the directory cannot be created.
+     */
+    public static Path createDirectory(Path filename) throws IOException {
+        if (filename == null) {
+            throw new IllegalArgumentException("The directory path must not be empty.");
+        }
+        if (exists(filename)) {
+            return filename;
+        }
+        return Files.createDirectory(filename);
+    }
+
+    /**
+     * Creates a new directory at the specified path.
+     *
+     * @param filename The path at which to create the new directory. Must not be empty.
+     * @return The path to the newly created directory.
+     * @throws IllegalArgumentException If the provided directory path is empty.
+     * @throws IOException              If an I/O error occurs or the directory cannot be created.
+     */
+    public static Path createDirectory(String filename) throws IOException {
+        return createDirectory(toPath(filename));
+    }
+
+    /**
+     * Checks if the given path points to a directory.
+     *
+     * @param filename The path to check.
+     * @return true if the path points to a directory, false otherwise.
+     * @throws IOException If an I/O error occurs while checking the directory status.
+     */
+    public static boolean checkIfDirectory(Path filename) throws IOException {
+        return Files.isDirectory(filename);
+    }
+
+    /**
+     * Checks if the given path points to a directory.
+     *
+     * @param filename The path to check.
+     * @return true if the path points to a directory, false otherwise.
+     * @throws IOException If an I/O error occurs while checking the directory status.
+     */
+    public static boolean checkIfDirectory(String filename) throws IOException {
+        return checkIfDirectory(toPath(filename));
+    }
+
+    /**
+     * Checks if the given path points to a regular file.
+     *
+     * @param filename The path to check.
+     * @return true if the path points to a regular file, false otherwise.
+     * @throws IOException If an I/O error occurs while checking the file status.
+     */
+    public static boolean checkIfRegularFile(Path filename) throws IOException {
+        return Files.isRegularFile(filename);
+    }
+
+    /**
+     * Checks if the given path points to a regular file.
+     *
+     * @param filename The path to check.
+     * @return true if the path points to a regular file, false otherwise.
+     * @throws IOException If an I/O error occurs while checking the file status.
+     */
+    public static boolean checkIfRegularFile(String filename) throws IOException {
+        return checkIfRegularFile(toPath(filename));
+    }
+
+    /**
+     * Writes the given byte array to a file at the specified path.
+     * If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file.
+     * @param data     The byte array to write to the file.
+     * @param append   If true, data will be written to the end of the file; otherwise, it will overwrite the file.
+     * @throws IOException              If an I/O error occurs while writing to the file.
+     * @throws IllegalArgumentException If filename is null.
+     */
+    public static void writeBytesToFile(Path filename, byte[] data, boolean append) throws IOException {
+        if (filename == null) {
+            throw new IllegalArgumentException("writeBytesToFile: filename is required");
+        }
+        filename = createFileIfNeeded(filename);
+        try (FileOutputStream stream = new FileOutputStream(filename.toFile(), append)) {
+            stream.write(data);
+        }
+    }
+
+    /**
+     * Writes the given byte array to a file at the specified path.
+     * If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file.
+     * @param data     The byte array to write to the file.
+     * @throws IOException              If an I/O error occurs while writing to the file.
+     * @throws IllegalArgumentException If filename is null.
+     */
+    public static void writeBytesToFile(Path filename, byte[] data) throws IOException {
+        writeBytesToFile(filename, data, false);
+    }
+
+    /**
+     * Writes the given byte array to a file at the specified path.
+     * If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file.
+     * @param data     The byte array to write to the file.
+     * @param append   If true, data will be written to the end of the file; otherwise, it will overwrite the file.
+     * @throws IOException              If an I/O error occurs while writing to the file.
+     * @throws IllegalArgumentException If filename is null.
+     */
+    public static void writeBytesToFile(String filename, byte[] data, boolean append) throws IOException {
+        writeBytesToFile(toPath(filename), data, append);
+    }
+
+    /**
+     * Writes the given byte array to a file at the specified path.
+     * If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file.
+     * @param data     The byte array to write to the file.
+     * @throws IOException              If an I/O error occurs while writing to the file.
+     * @throws IllegalArgumentException If filename is null.
+     */
+    public static void writeBytesToFile(String filename, byte[] data) throws IOException {
+        writeBytesToFile(toPath(filename), data, false);
+    }
+
+    /**
+     * Writes the given byte array to a file at the specified path using NIO.
+     * If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file.
+     * @param data     The byte array to write to the file.
+     * @throws IOException              If an I/O error occurs while writing to the file.
+     * @throws IllegalArgumentException If filePath is null.
+     */
+    public static void writeBytesNioToFile(Path filename, byte[] data) throws IOException {
+        if (filename == null) {
+            return;
+        }
+        filename = createFileIfNeeded(filename);
+        Files.write(filename, data);
+    }
+
+    /**
+     * Writes the given byte array to a file at the specified path using NIO.
+     * If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file.
+     * @param data     The byte array to write to the file.
+     * @throws IOException              If an I/O error occurs while writing to the file.
+     * @throws IllegalArgumentException If filePath is null.
+     */
+    public static void writeBytesNioToFile(String filename, byte[] data) throws IOException {
+        writeBytesNioToFile(toPath(filename), data);
+    }
+
+    /**
+     * Asynchronously reads from a file into a ByteBuffer using a Future. If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file to read from.
+     * @param allocate The size of the ByteBuffer to allocate for reading.
+     * @param options  Options specifying how the file is opened.
+     * @return A ReaderAsync object containing the file path and the data read from the file.
+     * @throws IllegalArgumentException If bufferSize is less than 0.
+     * @throws RuntimeException         If an error occurs during the asynchronous read operation.
+     * @throws IOException              If an I/O error occurs.
+     */
+    public static ReaderAsync readFileAsyncFutureIfNeeded(Path filename, int allocate, StandardOpenOption... options) throws Exception {
+        if (allocate < 0) {
+            throw new IllegalArgumentException("readFileAsyncFutureIfNeeded, Allocate must be positive number");
+        }
+        filename = createFileIfNeeded(filename);
+        ByteBuffer buffer = ByteBuffer.allocate(allocate);
+        ReaderAsync f = new ReaderAsync();
+
+        try (AsynchronousFileChannel channel = AsynchronousFileChannel.open(filename, options)) {
+            Future<Integer> future = channel.read(buffer, 0);
+            while (!future.isDone()) {
+                System.out.println("Waiting for async read operation...");
+            }
+            // limit is set to the current position
+            // and position is set to zero
+            buffer.flip();
+            f.setData(String4j.trimWhitespace(new String(buffer.array(), 0, buffer.limit())));
+            buffer.clear();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        f.setFilename(filename);
+        return f;
+    }
+
+    /**
+     * Asynchronously reads from a file into a ByteBuffer using a Future. If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file to read from.
+     * @param allocate The size of the ByteBuffer to allocate for reading.
+     * @param options  Options specifying how the file is opened.
+     * @return A ReaderAsync object containing the file path and the data read from the file.
+     * @throws IllegalArgumentException If bufferSize is less than 0.
+     * @throws RuntimeException         If an error occurs during the asynchronous read operation.
+     * @throws IOException              If an I/O error occurs.
+     */
+    public static ReaderAsync readFileAsyncFutureIfNeeded(String filename, int allocate, StandardOpenOption... options) throws Exception {
+        return readFileAsyncFutureIfNeeded(toPath(filename), allocate, options);
+    }
+
+    /**
+     * Reads a file line by line and invokes a callback for each line read. If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file to read.
+     * @param callback The callback to be invoked for each line read.
+     * @throws IOException If an I/O error occurs.
+     */
+    public static void readFileEachLinesIfNeeded(Path filename, ReaderAsyncCallback callback) throws IOException {
+        filename = createFileIfNeeded(filename);
+        try (RandomAccessFile random = new RandomAccessFile(filename.toFile(), "r")) {
+            String line;
+            while ((line = random.readLine()) != null) {
+                callback.line(line);
+            }
+        }
+    }
+
+    /**
+     * Reads a file line by line and invokes a callback for each line read. If the file does not exist, it will be created.
+     *
+     * @param filename The path to the file to read.
+     * @param callback The callback to be invoked for each line read.
+     * @throws IOException If an I/O error occurs.
+     */
+    public static void readFileEachLinesIfNeeded(String filename, ReaderAsyncCallback callback) throws IOException {
+        readFileEachLinesIfNeeded(toPath(filename), callback);
+    }
+
+    /**
+     * Traverses the file tree rooted at the given path and invokes a callback for each file and directory encountered.
+     *
+     * @param filename The root path of the file tree to traverse.
+     * @param callback The callback to be invoked for each file and directory encountered.
+     * @throws IOException If an I/O error occurs.
+     */
+    public static void visitor(Path filename, ReaderHierarchiesCallback callback) throws IOException {
+        if (!exists(filename) || callback == null) {
+            return;
+        }
+        Files.walkFileTree(filename, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                if (Files.isDirectory(file)) {
+                    callback.directory(file);
+                }
+                if (Files.isRegularFile(file)) {
+                    callback.file(file);
+                    callback.attributes(attrs);
+                }
+                callback.select(file, attrs);
+                return FileVisitResult.CONTINUE;
+            }
+        });
+    }
+
+    /**
+     * Traverses the file tree rooted at the given path and invokes a callback for each file and directory encountered.
+     *
+     * @param filename The root path of the file tree to traverse.
+     * @param callback The callback to be invoked for each file and directory encountered.
+     * @throws IOException If an I/O error occurs.
+     */
+    public static void visitor(String filename, ReaderHierarchiesCallback callback) throws IOException {
+        visitor(toPath(filename), callback);
+    }
+
+    /**
+     * Traverses the file tree rooted at the given path up to a specified depth and invokes a callback for each file and directory encountered.
+     *
+     * @param filename The root path of the file tree to traverse.
+     * @param level    The maximum depth to traverse.
+     * @param callback The callback to be invoked for each file and directory encountered.
+     * @throws IOException If an I/O error occurs.
+     */
+    @SuppressWarnings({"ReplaceInefficientStreamCount"})
+    public static void visitor(Path filename, int level, ReaderHierarchiesCallback callback) throws IOException {
+        if (level < 0) {
+            throw new IllegalArgumentException("level must be a positive number");
+        }
+        try (Stream<Path> stream = Files.walk(filename, level)) {
+            if (stream.count() == 0) {
+                return;
+            }
+            // Recreate the stream as it has already been consumed by the count() method
+            try (Stream<Path> walk = Files.walk(filename, level)) {
+                walk.forEach(file -> {
+                    if (Files.isDirectory(file)) {
+                        callback.directory(file);
+                    }
+                    if (Files.isRegularFile(file)) {
+                        callback.file(file);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Traverses the file tree rooted at the given path up to a specified depth and invokes a callback for each file and directory encountered.
+     *
+     * @param filename The root path of the file tree to traverse.
+     * @param level    The maximum depth to traverse.
+     * @param callback The callback to be invoked for each file and directory encountered.
+     * @throws IOException If an I/O error occurs.
+     */
+    public static void visitor(String filename, int level, ReaderHierarchiesCallback callback) throws IOException {
+        visitor(toPath(filename), level, callback);
+    }
+
+    /**
+     * Converts a size in bytes to a human-readable string using appropriate size units (B, KB, MB, GB, etc.).
+     *
+     * @param bytes The size in bytes.
+     * @return A string representing the size in a more readable format.
+     */
+    @SuppressWarnings({"SpellCheckingInspection"})
+    public static String speaker(long bytes) {
+        if (bytes < 1024) {
+            return bytes + " B"; // Bytes less than 1024 are simply returned as is with "B" appended
+        }
+        int floating = (63 - Long.numberOfLeadingZeros(bytes)) / 10; // Calculate which size unit to use (KB, MB, GB, etc.)
+        // Format the byte size to one decimal place and append the appropriate unit
+        return String.format("%.1f %sB", (double) bytes / (1L << (floating * 10)), " KMGTPE".charAt(floating));
+    }
+
+    public static class ReaderAsync implements Serializable {
+        public ReaderAsync() {
+            super();
+        }
+
+        private Path filename;
+        private String data;
+
+        public ReaderAsync(Path filename, String data) {
+            this.filename = filename;
+            this.data = data;
+        }
+
+        public Path getFilename() {
+            return filename;
+        }
+
+        public void setFilename(Path filename) {
+            this.filename = filename;
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data = data;
+        }
+    }
+
+    public interface ReaderAsyncCallback {
+        void line(String line);
+    }
+
+    /**
+     * A callback interface for processing files and directories encountered during a file tree traversal.
+     */
+    public interface ReaderHierarchiesCallback {
+        /**
+         * Called for each regular file encountered.
+         *
+         * @param filename The path to the file.
+         */
+        void file(Path filename);
+
+        /**
+         * Called for each directory encountered.
+         *
+         * @param filename The path to the directory.
+         */
+        void directory(Path filename);
+
+        /**
+         * Called for each file or directory encountered.
+         *
+         * @param filename The path to the file or directory.
+         * @param basic    The basic file attributes.
+         */
+        void select(Path filename, BasicFileAttributes basic);
+
+        /**
+         * Called to provide the basic file attributes of a file or directory.
+         *
+         * @param basic The basic file attributes.
+         */
+        void attributes(BasicFileAttributes basic);
     }
 }
