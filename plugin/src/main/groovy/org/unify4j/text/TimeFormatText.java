@@ -94,6 +94,18 @@ public class TimeFormatText {
     public static final String BIBLIOGRAPHY_EPOCH_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     /**
+     * Format: 2024-07-06 00:37:34,566
+     * Description: Pattern for a bibliographic style date and time including year, month, day, hour, minutes, seconds and milliseconds.
+     */
+    public static final String BIBLIOGRAPHY_COMPLETE_EPOCH_PATTERN = "yyyy-MM-dd HH:mm:ss,SSS";
+
+    /**
+     * Format: Sat, 2024-07-06 00:37:34,566
+     * Description: Pattern for a bibliographic style date and time including the day of the week (EEE for abbreviated day name) year, month, day, hour, minutes, seconds and milliseconds.
+     */
+    public static final String EEE_BIBLIOGRAPHY_COMPLETE_EPOCH_PATTERN = "EEE, yyyy-MM-dd HH:mm:ss,SSS";
+
+    /**
      * Format: 2020-09-26
      * Description: Short pattern for a bibliographic style date only including year, month, and day.
      */
