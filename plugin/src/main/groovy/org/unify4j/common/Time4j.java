@@ -1219,6 +1219,132 @@ public class Time4j {
     }
 
     /**
+     * Provides the difference in milliseconds between the given dates.
+     *
+     * @param source The reference date to calculate the duration from. Typically, this would be the current date.
+     * @param target The date from which the elapsed time is calculated.
+     * @return The difference in milliseconds between the two dates.
+     */
+    public static long sinceMilliseconds(Date source, Date target) {
+        if (source == null || target == null) {
+            return 0;
+        }
+        LocalDateTime now = transform(source);
+        LocalDateTime then = LocalDateTime.ofInstant(target.toInstant(), ZoneId.systemDefault());
+        Duration duration = Duration.between(then, now);
+        return duration.toMillis();
+    }
+
+    /**
+     * Provides the difference in seconds between the given dates.
+     *
+     * @param source The reference date to calculate the duration from. Typically, this would be the current date.
+     * @param target The date from which the elapsed time is calculated.
+     * @return The difference in seconds between the two dates.
+     */
+    public static long sinceSeconds(Date source, Date target) {
+        if (source == null || target == null) {
+            return 0;
+        }
+        LocalDateTime now = transform(source);
+        LocalDateTime then = LocalDateTime.ofInstant(target.toInstant(), ZoneId.systemDefault());
+        Duration duration = Duration.between(then, now);
+        return duration.getSeconds();
+    }
+
+    /**
+     * Provides the difference in minutes between the given dates.
+     *
+     * @param source The reference date to calculate the duration from. Typically, this would be the current date.
+     * @param target The date from which the elapsed time is calculated.
+     * @return The difference in minutes between the two dates.
+     */
+    public static long sinceMinutes(Date source, Date target) {
+        if (source == null || target == null) {
+            return 0;
+        }
+        LocalDateTime now = transform(source);
+        LocalDateTime then = LocalDateTime.ofInstant(target.toInstant(), ZoneId.systemDefault());
+        Duration duration = Duration.between(then, now);
+        return duration.toMinutes();
+    }
+
+    /**
+     * Provides the difference in hours between the given dates.
+     *
+     * @param source The reference date to calculate the duration from. Typically, this would be the current date.
+     * @param target The date from which the elapsed time is calculated.
+     * @return The difference in hours between the two dates.
+     */
+    public static long sinceHours(Date source, Date target) {
+        if (source == null || target == null) {
+            return 0;
+        }
+        LocalDateTime now = transform(source);
+        LocalDateTime then = LocalDateTime.ofInstant(target.toInstant(), ZoneId.systemDefault());
+        Duration duration = Duration.between(then, now);
+        return duration.toHours();
+    }
+
+    /**
+     * Provides the difference in days between the given dates.
+     *
+     * @param source The reference date to calculate the duration from. Typically, this would be the current date.
+     * @param target The date from which the elapsed time is calculated.
+     * @return The difference in days between the two dates.
+     */
+    public static long sinceDays(Date source, Date target) {
+        if (source == null || target == null) {
+            return 0;
+        }
+        LocalDateTime now = transform(source);
+        LocalDateTime then = LocalDateTime.ofInstant(target.toInstant(), ZoneId.systemDefault());
+        Duration duration = Duration.between(then, now);
+        return duration.toDays();
+    }
+
+    /**
+     * Provides the difference human-readable between the given dates.
+     *
+     * @param source The reference date to calculate the duration from. Typically, this would be the current date.
+     * @param target The date from which the elapsed time is calculated.
+     * @return The difference in human-readable between the two dates.
+     */
+    public static String sinceSmallRecently(Date source, Date target) {
+        if (source == null || target == null) {
+            return "unknown";
+        }
+        long days = sinceDays(source, target);
+        if (days > 0) {
+            return String.format("%d (d)", days);
+        }
+        long hours = sinceHours(source, target);
+        if (hours > 0) {
+            return String.format("%d (h)", hours);
+        }
+        long minutes = sinceMinutes(source, target);
+        if (minutes > 0) {
+            return String.format("%d (m)", minutes);
+        }
+        long seconds = sinceSeconds(source, target);
+        if (seconds > 0) {
+            return String.format("%d (s)", seconds);
+        }
+        long mills = sinceMilliseconds(source, target);
+        return String.format("%d (ms)", mills);
+    }
+
+    /**
+     * Provides the difference human-readable between the given dates.
+     *
+     * @param target The date from which the elapsed time is calculated.
+     * @return The difference in human-readable between the two dates.
+     */
+    public static String sinceSmallRecently(Date target) {
+        return sinceSmallRecently(new Date(), target);
+    }
+
+    /**
      * Retrieves the ZoneId corresponding to the given time zone identifier.
      * If the provided time zone identifier is empty or null, the system default ZoneId is returned.
      * If the time zone identifier starts with a plus (+) or minus (-) sign, it is treated as an offset
