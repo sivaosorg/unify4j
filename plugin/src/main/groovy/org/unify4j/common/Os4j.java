@@ -1,9 +1,6 @@
 package org.unify4j.common;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.Serializable;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.CompletionHandler;
@@ -668,6 +665,39 @@ public class Os4j {
      */
     public static void readFileEachLinesIfNeeded(String filename, ReaderAsyncCallback callback) throws IOException {
         readFileEachLinesIfNeeded(toPath(filename), callback);
+    }
+
+    /**
+     * Reads the content of a specific file and keeps the format content of the file.
+     *
+     * @param filename The path to the file to read.
+     * @return The content of the file as a string.
+     * @throws IOException If an I/O error occurs.
+     */
+    public static String readFileKeepFormat(Path filename) throws IOException {
+        if (!exists(filename)) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = Files.newBufferedReader(filename)) {
+            char[] buffer = new char[8192]; // Read in chunks of 8KB
+            int i;
+            while ((i = reader.read(buffer)) != -1) {
+                builder.append(buffer, 0, i);
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Reads the content of a specific file and keeps the format content of the file.
+     *
+     * @param filename The path to the file to read.
+     * @return The content of the file as a string.
+     * @throws IOException If an I/O error occurs.
+     */
+    public static String readFileKeepFormat(String filename) throws IOException {
+        return readFileKeepFormat(toPath(filename));
     }
 
     /**
