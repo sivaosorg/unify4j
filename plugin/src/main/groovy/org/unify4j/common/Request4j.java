@@ -2,8 +2,10 @@ package org.unify4j.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unify4j.model.c.Protocol;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -117,6 +119,98 @@ public class Request4j {
             headers.put(name, value);
         }
         return headers;
+    }
+
+    /**
+     * Retrieves all parameters from the HttpServletRequest as a Map.
+     * This method iterates over the parameter names and adds them to a Map with their corresponding values.
+     *
+     * @param request the HttpServletRequest object containing the client request
+     * @return a Map containing all parameter names and values from the request
+     */
+    public static Map<String, String> getParameters(HttpServletRequest request) {
+        Map<String, String> params = new HashMap<>();
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String name = parameterNames.nextElement();
+            params.put(name, request.getParameter(name));
+        }
+        return params;
+    }
+
+    /**
+     * Retrieves the full URL from the HttpServletRequest.
+     * This method constructs the full URL from the request, including query parameters.
+     *
+     * @param request the HttpServletRequest object containing the client request
+     * @return the full URL as a String
+     */
+    public static String getFullUrl(HttpServletRequest request) {
+        StringBuilder builder = new StringBuilder(request.getRequestURL().toString());
+        String queryString = request.getQueryString();
+        if (queryString != null) {
+            builder.append('?').append(queryString);
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Retrieves the session ID from the given HttpServletRequest.
+     * <p>
+     * This method gets the current HttpSession associated with the request,
+     * and then extracts the session ID from it. If there is no current session
+     * and create is false, it returns null.
+     *
+     * @param request the HttpServletRequest from which to retrieve the session ID
+     * @return the session ID, or null if there is no current session
+     */
+    public static String getSessionId(HttpServletRequest request) {
+        if (request == null) {
+            return String.valueOf(UniqueId4j.getUniqueId19());
+        }
+        HttpSession session = request.getSession(false); // Pass false to prevent creating a new session if one does not exist
+        return (session != null) ? session.getId() : null;
+    }
+
+    /**
+     * Retrieves the requested session ID from the HttpServletRequest.
+     * This method retrieves the session ID from the request, if available.
+     *
+     * @param request the HttpServletRequest object containing the client request
+     * @return the session ID as a String, or null if no session ID is available
+     */
+    public static String getDirectSessionId(HttpServletRequest request) {
+        if (request == null) {
+            return String.valueOf(UniqueId4j.getUniqueId19());
+        }
+        return request.getRequestedSessionId();
+    }
+
+    /**
+     * Retrieves the base URL from the HttpServletRequest.
+     * This method returns the base URL of the request (protocol, server name, and port).
+     *
+     * @param request the HttpServletRequest object containing the client request
+     * @return the base URL of the request as a String
+     */
+    public static String getBaseUrl(HttpServletRequest request) {
+        if (request == null) {
+            return "";
+        }
+        StringBuilder baseUrl = new StringBuilder();
+        Protocol HTTP = Protocol.HTTP;
+        Protocol HTTPS = Protocol.HTTPS;
+        Protocol protocol = new Protocol(
+                request.getScheme(),
+                request.getScheme().toUpperCase(),
+                request.getServerName(),
+                request.getServerPort());
+        baseUrl.append(protocol.getSchemeName()).append("://").append(protocol.getDescription());
+        if ((HTTP.getSchemeName().equalsIgnoreCase(protocol.getSchemeName()) && HTTP.getDefaultPort() != protocol.getDefaultPort()) ||
+                (HTTPS.getSchemeName().equalsIgnoreCase(protocol.getSchemeName()) && HTTPS.getDefaultPort() != protocol.getDefaultPort())) {
+            baseUrl.append(":").append(protocol.getDefaultPort());
+        }
+        return baseUrl.toString();
     }
 
     /**
