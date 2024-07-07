@@ -3,6 +3,7 @@ package org.unify4j.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -11,6 +12,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,6 +100,23 @@ public class Request4j {
             logger.error("Verifying URL connection got an exception: {} by URL: {}", e.getMessage(), url, e);
             return false;
         }
+    }
+
+    /**
+     * Retrieves all headers from the given HttpServletRequest and returns them as a Map.
+     *
+     * @param request The HttpServletRequest object containing the headers.
+     * @return A Map containing all the headers as key-value pairs.
+     */
+    public static Map<String, Object> getHeaders(HttpServletRequest request) {
+        Map<String, Object> headers = new HashMap<>();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            String value = request.getHeader(name);
+            headers.put(name, value);
+        }
+        return headers;
     }
 
     /**
