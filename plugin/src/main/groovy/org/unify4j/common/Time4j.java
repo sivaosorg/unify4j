@@ -10,11 +10,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Time4j {
@@ -1067,6 +1066,58 @@ public class Time4j {
      */
     public static String format(Date date, TimezoneType timezone) {
         return format(date, timezone, TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN);
+    }
+
+    /**
+     * Converts a date-time string from a specific time zone to UTC and formats it.
+     * This method tries multiple input formats to parse the date-time string.
+     *
+     * @param dateTimeStr  The date-time string to be converted.
+     * @param sourceZoneId The time zone of the input date-time string (e.g., "Asia/Ho_Chi_Minh").
+     * @param formats      List of possible date-time formats for parsing the input string.
+     * @return The formatted date-time string in UTC with the format "yyyy-MM-dd'T'HH:mm:ss.SSSZ".
+     */
+    public static String formatToUTC(String dateTimeStr, String sourceZoneId, List<String> formats) {
+        if (String4j.isEmpty(dateTimeStr) || Collection4j.isEmpty(formats)) {
+            return "";
+        }
+        if (String4j.isEmpty(sourceZoneId)) {
+            sourceZoneId = TimezoneType.DefaultTimezoneVietnam.getTimeZoneId();
+        }
+        ZoneId zoneId = ZoneId.of(sourceZoneId);
+        LocalDateTime locality;
+
+        // Try each format to parse the input date-time string
+        for (String format : formats) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+            try {
+                locality = LocalDateTime.parse(dateTimeStr, formatter);
+                // Convert LocalDateTime to ZonedDateTime in the source time zone
+                ZonedDateTime sourceZone = locality.atZone(zoneId);
+                // Convert to UTC
+                ZonedDateTime utc = sourceZone.withZoneSameInstant(ZoneId.of("UTC"));
+                return utc.format(DateTimeFormatter.ofPattern(TimeFormatText.ISO_DATE_TIME_WITH_TIMEZONE_OFFSET));
+            } catch (DateTimeParseException e) {
+                // Continue to the next format
+                logger.error("Formatting date-time to UTC got en exception: {} by date-time: {}, source timezone: {} and format(s): {}",
+                        e.getMessage(), dateTimeStr, sourceZoneId, formats, e);
+            }
+        }
+        // If no format succeeded, throw an exception
+        throw new IllegalArgumentException("Invalid date-time format or time zone");
+    }
+
+    /**
+     * Converts a date-time string from a specific time zone to UTC and formats it.
+     * This method tries multiple input formats to parse the date-time string.
+     *
+     * @param dateTimeStr  The date-time string to be converted.
+     * @param sourceZoneId The time zone of the input date-time string (e.g., "Asia/Ho_Chi_Minh").
+     * @param formats      List of possible date-time formats for parsing the input string.
+     * @return The formatted date-time string in UTC with the format "yyyy-MM-dd'T'HH:mm:ss.SSSZ".
+     */
+    public static String formatToUTC(String dateTimeStr, String sourceZoneId, String... formats) {
+        return formatToUTC(dateTimeStr, sourceZoneId, Arrays.asList(formats));
     }
 
     /**

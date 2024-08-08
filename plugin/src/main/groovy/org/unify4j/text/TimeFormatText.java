@@ -177,5 +177,10 @@ public class TimeFormatText {
      */
     public static final String SHORT_TIME_BIBLIOGRAPHY_EPOCH_PATTERN = "HH:mm:ss";
 
+    /**
+     * Format: yyyy-MM-dd'T'HH:mm:ss.SSSZ
+     * Description: Pattern for date and time including year, month, day, hour, minutes, seconds, milliseconds, and timezone offset.
+     */
+    public static final String ISO_DATE_TIME_WITH_TIMEZONE_OFFSET = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 }
 

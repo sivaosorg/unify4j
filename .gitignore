@@ -2,9 +2,11 @@ HELP.md
 .gradle
 build/
 logs/
+plugin/src/main/groovy/org.unify4j/test/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+!**/src/main/org.unify4j/test/**
 plugin/build/
 plugin/bin/
 
