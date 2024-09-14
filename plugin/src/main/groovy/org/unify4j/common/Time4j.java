@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -1599,5 +1600,59 @@ public class Time4j {
         local = local.plusHours(hour);
         LocalDateTime roundedUpTime = local.withMinute(0).withSecond(0);
         return Time4j.transform(roundedUpTime);
+    }
+
+    /**
+     * Gets the day of the week for a given {@link Calendar} instance.
+     *
+     * @param calendar The {@link Calendar} instance.
+     * @return The full name of the day of the week (e.g., "Monday", "Tuesday").
+     */
+    public static String getDayOfWeek(Calendar calendar) {
+        if (calendar == null) {
+            return "";
+        }
+        SimpleDateFormat format = new SimpleDateFormat("EEEE");
+        return format.format(calendar.getTime());
+    }
+
+    /**
+     * Gets the day of the week for a given {@link Date} instance.
+     *
+     * @param date The {@link Date} instance.
+     * @return The full name of the day of the week (e.g., "Monday", "Tuesday").
+     */
+    public static String getDayOfWeek(Date date) {
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat format = new SimpleDateFormat("EEEE");
+        return format.format(date);
+    }
+
+    /**
+     * Returns the day of the week for a given {@link LocalDate} object.
+     *
+     * @param date The {@link LocalDate} object.
+     * @return The full name of the day of the week (e.g., "Monday", "Tuesday").
+     */
+    public static String getDayOfWeekStr(LocalDate date) {
+        if (date == null) {
+            return "";
+        }
+        return getDayOfWeek(date).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+    }
+
+    /**
+     * Returns the day of the week for a given {@link LocalDateTime} object.
+     *
+     * @param date The {@link LocalDateTime} object.
+     * @return The full name of the day of the week (e.g., "Monday", "Tuesday").
+     */
+    public static String getDayOfWeek(LocalDateTime date) {
+        if (date == null) {
+            return "";
+        }
+        return date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
 }
