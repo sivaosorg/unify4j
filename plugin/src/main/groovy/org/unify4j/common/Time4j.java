@@ -984,6 +984,80 @@ public class Time4j {
     }
 
     /**
+     * Parses a date string into a Date object using the specified format and timezone.
+     * If the format or timezone is not provided, it defaults to predefined values.
+     * If parsing fails, it attempts to parse using a secondary format.
+     *
+     * @param date     The date string to be parsed.
+     * @param format   The format to be used for parsing the date string. If null or empty, a default pattern is used.
+     * @param timezone The timezone to be applied during parsing. If null or empty, it defaults to "UTC".
+     * @return A Date object representing the parsed date string in the specified timezone, or null if parsing fails.
+     */
+    public static Date format(String date, String format, String timezone) {
+        try {
+            if (String4j.isEmpty(date)) {
+                return null;
+            }
+            // Set default format if not provided
+            if (String4j.isEmpty(format)) {
+                format = TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN;
+            }
+            // Set default timezone if not provided
+            if (String4j.isEmpty(timezone)) {
+                timezone = "UTC";
+            }
+            // Create a SimpleDateFormat object with the specified format
+            SimpleDateFormat formatter = new SimpleDateFormat(format);
+            // Set the timezone for the SimpleDateFormat object
+            formatter.setTimeZone(TimeZone.getTimeZone(timezone));
+            // Parse the date string using the format and timezone
+            return formatter.parse(date);
+        } catch (ParseException e) {
+            try {
+                // Attempt to parse with secondary format if the first attempt fails
+                SimpleDateFormat formatterSecondary = new SimpleDateFormat(TimeFormatText.SHORT_BIBLIOGRAPHY_EPOCH_PATTERN);
+                formatterSecondary.setTimeZone(TimeZone.getTimeZone(timezone)); // Apply timezone
+                return formatterSecondary.parse(date);
+            } catch (ParseException ee) {
+                logger.error("Parsing time got an exception: {} by date: {} and format: {}", ee.getMessage(), date, format, ee);
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Parses a date string into a Date object using the specified format and a custom TimezoneType.
+     * If the timezone type is null, it defaults to the string-based overload of the format function.
+     *
+     * @param date     The date string to be parsed.
+     * @param format   The format to be used for parsing the date string.
+     * @param timezone The TimezoneType object containing the desired timezone.
+     * @return A Date object representing the parsed date in the specified timezone, or null if parsing fails.
+     */
+    public static Date format(String date, String format, TimezoneType timezone) {
+        if (timezone == null) {
+            return format(date, format);
+        }
+        return format(date, format, timezone.getTimeZoneId());
+    }
+
+    /**
+     * Parses a date string into a Date object using the specified format and a TimeZone object.
+     * If the TimeZone object is null, it defaults to the string-based overload of the format function.
+     *
+     * @param date     The date string to be parsed.
+     * @param format   The format to be used for parsing the date string.
+     * @param timezone The TimeZone object containing the desired timezone.
+     * @return A Date object representing the parsed date in the specified timezone, or null if parsing fails.
+     */
+    public static Date format(String date, String format, TimeZone timezone) {
+        if (timezone == null) {
+            return format(date, format);
+        }
+        return format(date, format, timezone.getID());
+    }
+
+    /**
      * Formats a Date object into a string representation using the specified format.
      *
      * @param date   The Date object to be formatted.
@@ -1430,5 +1504,100 @@ public class Time4j {
                 return timezone.toZoneId();
             }
         }
+    }
+
+    /**
+     * Rounds down the given date string to the nearest hour.
+     * <p>
+     * This method takes a date string and a layout format as inputs. It first parses
+     * the date string using the provided layout and converts it into a Date object.
+     * Then, the date is transformed into a LocalDateTime object. The time is adjusted
+     * by setting the minutes and seconds to zero, effectively rounding the time down
+     * to the nearest hour. The transformed LocalDateTime is then converted back to a Date object.
+     * </p>
+     *
+     * @param date   The input date string that needs to be rounded down.
+     * @param layout The format pattern of the input date string (e.g., "yyyy-MM-dd HH:mm:ss").
+     * @return A Date object representing the time rounded down to the nearest hour,
+     * or null if the input date string cannot be parsed.
+     */
+    public static Date roundDownToNearestHour(String date, String layout) {
+        Date format = Time4j.format(date, layout);
+        if (format == null) {
+            return null;
+        }
+        return roundDownToNearestHour(format);
+    }
+
+    /**
+     * Rounds down the given date string to the nearest hour.
+     * <p>
+     * This method takes a date string and a layout format as inputs. It first parses
+     * the date string using the provided layout and converts it into a Date object.
+     * Then, the date is transformed into a LocalDateTime object. The time is adjusted
+     * by setting the minutes and seconds to zero, effectively rounding the time down
+     * to the nearest hour. The transformed LocalDateTime is then converted back to a Date object.
+     * </p>
+     *
+     * @param date The input date  that needs to be rounded down.
+     * @return A Date object representing the time rounded down to the nearest hour,
+     * or null if the input date string cannot be parsed.
+     */
+    public static Date roundDownToNearestHour(Date date) {
+        if (date == null) {
+            return null;
+        }
+        LocalDateTime local = Time4j.transform(date);
+        LocalDateTime roundedDownTime = local.withMinute(0).withSecond(0);
+        return Time4j.transform(roundedDownTime);
+    }
+
+    /**
+     * Rounds up the given date string to the next hour.
+     * <p>
+     * This method takes a date string and a layout format as inputs. It first parses
+     * the date string using the provided layout and converts it into a Date object.
+     * Then, the date is transformed into a LocalDateTime object. If the time has any
+     * minutes or seconds, one hour is added, effectively rounding the time up to the next hour.
+     * Finally, the minutes and seconds are set to zero to represent the full hour, and
+     * the LocalDateTime is transformed back to a Date object.
+     * </p>
+     *
+     * @param date   The input date string that needs to be rounded up.
+     * @param layout The format pattern of the input date string (e.g., "yyyy-MM-dd HH:mm:ss").
+     * @return A Date object representing the time rounded up to the next hour,
+     * or null if the input date string cannot be parsed.
+     */
+    public static Date roundUpToNextHour(String date, int hour, String layout) {
+        Date format = Time4j.format(date, layout);
+        if (format == null || hour < 0) {
+            return format;
+        }
+        return roundUpToNextHour(format, hour);
+    }
+
+    /**
+     * Rounds up the given date string to the next hour.
+     * <p>
+     * This method takes a date string and a layout format as inputs. It first parses
+     * the date string using the provided layout and converts it into a Date object.
+     * Then, the date is transformed into a LocalDateTime object. If the time has any
+     * minutes or seconds, one hour is added, effectively rounding the time up to the next hour.
+     * Finally, the minutes and seconds are set to zero to represent the full hour, and
+     * the LocalDateTime is transformed back to a Date object.
+     * </p>
+     *
+     * @param date The input date that needs to be rounded up.
+     * @return A Date object representing the time rounded up to the next hour,
+     * or null if the input date string cannot be parsed.
+     */
+    public static Date roundUpToNextHour(Date date, int hour) {
+        if (date == null || hour < 0) {
+            return date;
+        }
+        LocalDateTime local = Time4j.transform(date);
+        local = local.plusHours(hour);
+        LocalDateTime roundedUpTime = local.withMinute(0).withSecond(0);
+        return Time4j.transform(roundedUpTime);
     }
 }
