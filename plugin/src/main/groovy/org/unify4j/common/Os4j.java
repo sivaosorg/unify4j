@@ -439,7 +439,8 @@ public class Os4j {
         if (exists(filename)) {
             return filename;
         }
-        return Files.createDirectory(filename);
+        // Use createDirectories to create parent directories if they don't exist
+        return Files.createDirectories(filename);
     }
 
     /**
