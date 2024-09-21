@@ -28,6 +28,19 @@ public class Text4j {
     }
 
     /**
+     * Appends a non-empty string to the message.
+     *
+     * @param str The string to append.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendSkippedSpace(String str) {
+        if (String4j.isNotEmpty(str)) {
+            message.append(str);
+        }
+        return this;
+    }
+
+    /**
      * Appends a string repeated a specified number of times followed by a space.
      *
      * @param str    The string to repeat and append.
@@ -47,6 +60,19 @@ public class Text4j {
     public Text4j append(Object o) {
         if (o != null) {
             return this.append(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+        }
+        return this;
+    }
+
+    /**
+     * Appends a non-null object's string representation (or its JSON if not a primitive).
+     *
+     * @param o The object to append.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendSkippedSpace(Object o) {
+        if (o != null) {
+            return this.appendSkippedSpace(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
         }
         return this;
     }
