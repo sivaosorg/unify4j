@@ -182,5 +182,46 @@ public class TimeFormatText {
      * Description: Pattern for date and time including year, month, day, hour, minutes, seconds, milliseconds, and timezone offset.
      */
     public static final String ISO_DATE_TIME_WITH_TIMEZONE_OFFSET = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
-}
 
+    /**
+     * Format: dd.MM.yyyy
+     * Description: Custom pattern for date only including day, month, and year with period as separator.
+     */
+    public static final String CUSTOM_DATE_DOT_PATTERN = "dd.MM.yyyy";
+
+    /**
+     * Format: HH.mm
+     * Description: Custom short pattern for time only including hour and minutes with period as separator.
+     */
+    public static final String CUSTOM_TIME_HH_MM_DOT_PATTERN = "HH.mm";
+
+    /**
+     * Format: HH.mm.ss
+     * Description: Custom short pattern for time including hour, minutes, and seconds with period as separator.
+     */
+    public static final String CUSTOM_TIME_HH_MM_SS_DOT_PATTERN = "HH.mm.ss";
+
+    /**
+     * Format: yyyy.MM.dd
+     * Description: Custom pattern for date only including year, month, and day with period as separator.
+     */
+    public static final String CUSTOM_DATE_YEAR_FIRST_DOT_PATTERN = "yyyy.MM.dd";
+
+    /**
+     * Format: dd/MM/yyyy
+     * Description: Custom pattern for date only including day, month, and year with slashes as separator.
+     */
+    public static final String CUSTOM_DATE_DD_MM_YYYY_SLASH_PATTERN = "dd/MM/yyyy";
+
+    /**
+     * Format: yyyy/MM/dd
+     * Description: Custom pattern for date only including year, month, and day with slashes as separator.
+     */
+    public static final String CUSTOM_DATE_YYYY_MM_DD_SLASH_PATTERN = "yyyy/MM/dd";
+
+    /**
+     * Format: yyyyMMddHHmmss.SSSX
+     * Description: Compact pattern for date and time including year, month, day, hour, minutes, seconds, milliseconds, and timezone.
+     */
+    public static final String CUSTOM_DATE_TIME_COMPACT_WITH_MILLISECONDS_PATTERN = "yyyyMMddHHmmss.SSSX";
+}

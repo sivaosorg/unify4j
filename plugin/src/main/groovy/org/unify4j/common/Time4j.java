@@ -1345,6 +1345,47 @@ public class Time4j {
     }
 
     /**
+     * Formats the given epoch time into a human-readable "time ago" format.
+     * Examples:
+     * - "Just now" for times within a minute.
+     * - "X seconds ago," "X minutes ago," "X hours ago," "X days ago."
+     *
+     * @param epochMilli The epoch time in milliseconds.
+     * @return A string representing the time difference.
+     */
+    public static String since(long epochMilli) {
+        Instant now = Instant.now();
+        Instant instant = Instant.ofEpochMilli(epochMilli);
+        LocalDate _now = LocalDate.now();
+        LocalDate local = Instant.ofEpochMilli(epochMilli).atZone(ZoneId.systemDefault()).toLocalDate();
+        // Calculate duration for seconds, minutes, hours, days
+        Duration duration = Duration.between(instant, now);
+        long seconds = duration.getSeconds();
+        long minutes = duration.toMinutes();
+        long hours = duration.toHours();
+        long days = duration.toDays();
+
+        // Calculate period for months and years
+        Period period = Period.between(local, _now);
+        int months = period.getMonths();
+        int years = period.getYears();
+
+        if (seconds < 60) {
+            return seconds <= 1 ? "Just now" : seconds + " seconds ago";
+        } else if (minutes < 60) {
+            return minutes == 1 ? "1 minute ago" : minutes + " minutes ago";
+        } else if (hours < 24) {
+            return hours == 1 ? "1 hour ago" : hours + " hours ago";
+        } else if (days < 30) {
+            return days == 1 ? "1 day ago" : days + " days ago";
+        } else if (months < 12) {
+            return months == 1 ? "1 month ago" : months + " months ago";
+        } else {
+            return years == 1 ? "1 year ago" : years + " years ago";
+        }
+    }
+
+    /**
      * Provides the difference in milliseconds between the given dates.
      *
      * @param source The reference date to calculate the duration from. Typically, this would be the current date.
