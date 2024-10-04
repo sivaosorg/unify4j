@@ -1371,7 +1371,7 @@ public class Time4j {
         int years = period.getYears();
 
         if (seconds < 60) {
-            return seconds <= 1 ? "Just now" : seconds + " seconds ago";
+            return seconds <= 1 ? "just now" : seconds + " seconds ago";
         } else if (minutes < 60) {
             return minutes == 1 ? "1 minute ago" : minutes + " minutes ago";
         } else if (hours < 24) {
