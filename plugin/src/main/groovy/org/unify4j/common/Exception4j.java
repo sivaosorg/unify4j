@@ -52,4 +52,27 @@ public final class Exception4j {
                 ? trace[0].getClassName() + ":" + trace[0].getLineNumber()
                 : "Unknown";
     }
+
+    /**
+     * Retrieves the calling class name and line number from the stack trace of the current thread.
+     * This method extracts and returns a string representation of where the exception was triggered,
+     * specifically the class and line number of the caller of this method.
+     * <p>
+     * If the exception or its stack trace is null or empty, the method returns an empty
+     * string or "Unknown" as a fallback.
+     *
+     * @return A {@link String} representing the class name and line number in the format
+     * "ClassName:LineNumber", or "Unknown" if the stack trace is not available.
+     */
+    public static String getClassLine() {
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+        // Check if we have enough stack trace elements
+        if (trace.length < 3) {
+            return "Unknown";
+        }
+        // The 3rd element is the caller of this method
+        StackTraceElement caller = trace[2]; // Adjust the index if needed based on your stack
+        return caller.getClassName() + ":" + caller.getLineNumber();
+    }
+
 }
