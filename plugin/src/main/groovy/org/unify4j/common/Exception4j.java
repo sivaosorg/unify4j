@@ -29,4 +29,27 @@ public final class Exception4j {
         }
         return e;
     }
+
+    /**
+     * Retrieves the class name and line number from the stack trace of the provided
+     * exception. This method is used to extract and return a string representation of
+     * where the exception occurred, specifically the class and line number of the first
+     * element in the stack trace.
+     * <p>
+     * If the exception or its stack trace is null or empty, the method returns an empty
+     * string or "Unknown" as a fallback.
+     *
+     * @param e The {@link Exception} from which to extract the stack trace information.
+     * @return A {@link String} representing the class name and line number in the format
+     * "ClassName:LineNumber", or "Unknown" if the stack trace is not available.
+     */
+    public static String getClassLine(Exception e) {
+        if (e == null) {
+            return "";
+        }
+        StackTraceElement[] trace = e.getStackTrace();
+        return (trace != null && trace.length > 0)
+                ? trace[0].getClassName() + ":" + trace[0].getLineNumber()
+                : "Unknown";
+    }
 }
