@@ -11,8 +11,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -1164,7 +1166,12 @@ public class Time4j {
 
         // Try each format to parse the input date-time string
         for (String format : formats) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                    .appendPattern(format)
+                    .optionalStart()
+                    .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)  // Handles fractional seconds with varying lengths
+                    .optionalEnd()
+                    .toFormatter();
             try {
                 locality = LocalDateTime.parse(dateTimeStr, formatter);
                 // Convert LocalDateTime to ZonedDateTime in the source time zone
