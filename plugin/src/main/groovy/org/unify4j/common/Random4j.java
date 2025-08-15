@@ -209,6 +209,12 @@ public class Random4j {
         return nextPassword(length, Transform4j.fromArray2Chars(values));
     }
 
+    /**
+     * Generates the least significant 64 bits of a UUID based on random values.
+     * The variant is set to 3 (0b10xxxxxx) to indicate a random UUID.
+     *
+     * @return The least significant 64 bits of a UUID.
+     */
     private static long get64LeastSignificantBit() {
         Random random = new Random();
         long random63BitLong = random.nextLong() & 0x3FFFFFFFFFFFFFFFL;
@@ -216,6 +222,12 @@ public class Random4j {
         return random63BitLong + variant3BitFlag;
     }
 
+    /**
+     * Generates the most significant 64 bits of a UUID based on the current time.
+     * The time is calculated from a fixed start date (1900-10-15) to now.
+     *
+     * @return The most significant 64 bits of a UUID.
+     */
     private static long get64MostSignificantBit() {
         LocalDateTime start = LocalDateTime.of(1900, 10, 15, 0, 0, 0);
         Duration duration = Duration.between(start, LocalDateTime.now());
