@@ -5,10 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.unify4j.model.enums.TimezoneType;
 import org.unify4j.text.TimeFormatText;
 
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.function.Function;
 
@@ -247,5 +251,258 @@ public class Time4jDecorator {
      */
     public LocalDate getLocalDate() {
         return Time4j.transformLocal(this.baseDate);
+    }
+
+    /**
+     * Checks if the decorated date is before the specified date.
+     *
+     * @param other The date to compare against
+     * @return true if this date is before the other date, false otherwise
+     */
+    public boolean isBefore(Date other) {
+        if (other == null || this.baseDate == null) {
+            return false;
+        }
+        return this.baseDate.before(other);
+    }
+
+    /**
+     * Checks if the decorated date is after the specified date.
+     *
+     * @param other The date to compare against
+     * @return true if this date is after the other date, false otherwise
+     */
+    public boolean isAfter(Date other) {
+        if (other == null || this.baseDate == null) {
+            return false;
+        }
+        return this.baseDate.after(other);
+    }
+
+    /**
+     * Checks if the decorated date is between two specified dates (inclusive).
+     *
+     * @param startDate The start date of the range
+     * @param endDate   The end date of the range
+     * @return true if this date is between the specified dates, false otherwise
+     */
+    public boolean isBetween(Date startDate, Date endDate) {
+        return Time4j.isWithinRange(this.baseDate, startDate, endDate);
+    }
+
+    /**
+     * Converts the decorated date to a different time zone.
+     *
+     * @param targetTimezone The target time zone
+     * @return A new TimeDecorator with the date converted to the target time zone
+     */
+    public Time4jDecorator convertToTimeZone(ZoneId targetTimezone) {
+        if (targetTimezone == null) {
+            return this;
+        }
+        return transform(date -> {
+            TimeZone fromTz = TimeZone.getTimeZone(this.timezone);
+            TimeZone toTz = TimeZone.getTimeZone(targetTimezone);
+            return Time4jExtensions.convertTimezone(date, fromTz, toTz);
+        }).withTimezone(targetTimezone);
+    }
+
+    /**
+     * Converts the decorated date to a different time zone using TimezoneType.
+     *
+     * @param targetTimezone The target timezone type
+     * @return A new TimeDecorator with the date converted to the target time zone
+     */
+    public Time4jDecorator convertToTimeZone(TimezoneType targetTimezone) {
+        if (targetTimezone == null) {
+            return this;
+        }
+        return convertToTimeZone(ZoneId.of(targetTimezone.getTimeZoneId()));
+    }
+
+    /**
+     * Calculates the duration between the decorated date and another date.
+     *
+     * @param other The other date to calculate duration with
+     * @return Duration object representing the time difference
+     */
+    public Duration getDurationTo(Date other) {
+        if (other == null || this.baseDate == null) {
+            return Duration.ZERO;
+        }
+        LocalDateTime thisDateTime = Time4j.transform(this.baseDate);
+        LocalDateTime otherDateTime = Time4j.transform(other);
+        return Duration.between(thisDateTime, otherDateTime);
+    }
+
+    /**
+     * Calculates the duration from another date to the decorated date.
+     *
+     * @param other The other date to calculate duration from
+     * @return Duration object representing the time difference
+     */
+    public Duration getDurationFrom(Date other) {
+        if (other == null || this.baseDate == null) {
+            return Duration.ZERO;
+        }
+        LocalDateTime thisDateTime = Time4j.transform(this.baseDate);
+        LocalDateTime otherDateTime = Time4j.transform(other);
+        return Duration.between(otherDateTime, thisDateTime);
+    }
+
+    /**
+     * Formats the decorated date with locale support.
+     *
+     * @param pattern The format pattern
+     * @param locale  The locale to use for formatting
+     * @return A formatted string representation of the date
+     */
+    public String formatWithLocale(String pattern, Locale locale) {
+        if (this.baseDate == null || String4j.isEmpty(pattern) || locale == null) {
+            return "";
+        }
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
+            formatter.setTimeZone(TimeZone.getTimeZone(this.timezone));
+            return formatter.format(this.baseDate);
+        } catch (Exception e) {
+            logger.error("Error formatting date with locale: {}", e.getMessage(), e);
+            return "";
+        }
+    }
+
+    /**
+     * Formats the decorated date with default locale.
+     *
+     * @param pattern The format pattern
+     * @return A formatted string representation of the date
+     */
+    public String formatWithDefaultLocale(String pattern) {
+        return formatWithLocale(pattern, Locale.getDefault());
+    }
+
+    /**
+     * Creates a deep copy of the decorated date.
+     *
+     * @return A new TimeDecorator with the same configuration and a copied date
+     */
+    public Time4jDecorator copy() {
+        Date copiedDate = this.baseDate != null ? new Date(this.baseDate.getTime()) : null;
+        return Time4jDecorator.of(copiedDate).withTimezone(this.timezone).withFormat(this.format);
+    }
+
+    /**
+     * Creates a clone of the decorated date.
+     *
+     * @return A new TimeDecorator identical to this one
+     */
+    @SuppressWarnings({"MethodDoesntCallSuperMethod"})
+    public Time4jDecorator clone() {
+        return copy();
+    }
+
+    /**
+     * Validates if the decorated date is a valid date.
+     *
+     * @return true if the date is valid and not null, false otherwise
+     */
+    public boolean isValid() {
+        return this.baseDate != null;
+    }
+
+    /**
+     * Validates if the decorated date falls within business hours (9 AM to 5 PM).
+     *
+     * @return true if the time is within business hours, false otherwise
+     */
+    public boolean isBusinessHours() {
+        if (this.baseDate == null) {
+            return false;
+        }
+        LocalDateTime local = Time4j.transform(this.baseDate);
+        int hour = local.getHour();
+        return hour >= 9 && hour < 17;
+    }
+
+    /**
+     * Validates if the decorated date is a weekday.
+     *
+     * @return true if the date is a weekday, false otherwise
+     */
+    public boolean isWeekday() {
+        return Time4jExtensions.isWeekday(this.baseDate);
+    }
+
+    /**
+     * Validates if the decorated date is a weekend.
+     *
+     * @return true if the date is a weekend, false otherwise
+     */
+    public boolean isWeekend() {
+        return Time4jExtensions.isWeekend(this.baseDate);
+    }
+
+    /**
+     * Checks if the decorated date is in the current month.
+     *
+     * @return true if the date is in the current month, false otherwise
+     */
+    public boolean isCurrentMonth() {
+        if (this.baseDate == null) {
+            return false;
+        }
+        LocalDate thisDate = Time4j.transformLocal(this.baseDate);
+        LocalDate currentDate = LocalDate.now();
+        return thisDate.getMonth() == currentDate.getMonth() &&
+                thisDate.getYear() == currentDate.getYear();
+    }
+
+    /**
+     * Checks if the decorated date is in the current year.
+     *
+     * @return true if the date is in the current year, false otherwise
+     */
+    public boolean isCurrentYear() {
+        if (this.baseDate == null) {
+            return false;
+        }
+        LocalDate thisDate = Time4j.transformLocal(this.baseDate);
+        LocalDate currentDate = LocalDate.now();
+        return thisDate.getYear() == currentDate.getYear();
+    }
+
+    /**
+     * Gets the epoch milliseconds of the decorated date.
+     *
+     * @return The epoch milliseconds, or 0 if date is null
+     */
+    public long getEpochMillis() {
+        return this.baseDate != null ? this.baseDate.getTime() : 0L;
+    }
+
+    /**
+     * Gets the epoch seconds of the decorated date.
+     *
+     * @return The epoch seconds, or 0 if date is null
+     */
+    public long getEpochSeconds() {
+        return this.baseDate != null ? this.baseDate.getTime() / 1000L : 0L;
+    }
+
+    /**
+     * Truncates the decorated date to the specified unit.
+     *
+     * @param unit The temporal unit to truncate to
+     * @return A new TimeDecorator with the truncated date
+     */
+    public Time4jDecorator truncateTo(ChronoUnit unit) {
+        if (this.baseDate == null || unit == null) {
+            return this;
+        }
+        return transform(date -> {
+            LocalDateTime dateTime = Time4j.transform(date);
+            LocalDateTime truncated = dateTime.truncatedTo(unit);
+            return Time4j.transform(truncated);
+        });
     }
 }

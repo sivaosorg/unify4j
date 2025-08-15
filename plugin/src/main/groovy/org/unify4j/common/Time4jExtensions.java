@@ -2,6 +2,9 @@ package org.unify4j.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.unify4j.model.enums.TimePeriodType;
+import org.unify4j.model.request.DateRangeRequest;
+import org.unify4j.model.response.DateStatisticsResponse;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -9,10 +12,7 @@ import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Time4jExtensions {
@@ -402,5 +402,296 @@ public class Time4jExtensions {
         return getDateRange(startDate, endDate).stream()
                 .filter(date -> Time4j.getDayOfWeek(Time4j.transformLocal(date)) == dayOfWeek)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Calculates the number of working hours between two dates.
+     * Assumes standard working hours (9 AM to 5 PM) on weekdays only.
+     *
+     * @param startDate The start date
+     * @param endDate   The end date
+     * @return The number of working hours between the dates
+     */
+    public static long getWorkingHoursBetween(Date startDate, Date endDate) {
+        if (startDate == null || endDate == null || startDate.after(endDate)) {
+            return 0;
+        }
+
+        long workingHours = 0;
+        List<Date> weekdays = getWeekdaysInRange(startDate, endDate);
+
+        for (Date day : weekdays) {
+            Date workStart = Time4jBuilder.from(day).hour(9).minute(0).second(0).build();
+            Date workEnd = Time4jBuilder.from(day).hour(17).minute(0).second(0).build();
+
+            Date effectiveStart = startDate.after(workStart) ? startDate : workStart;
+            Date effectiveEnd = endDate.before(workEnd) ? endDate : workEnd;
+
+            if (effectiveStart.before(effectiveEnd)) {
+                long millisBetween = effectiveEnd.getTime() - effectiveStart.getTime();
+                workingHours += millisBetween / (1000 * 60 * 60); // Convert to hours
+            }
+        }
+
+        return workingHours;
+    }
+
+    /**
+     * Gets all months between two dates.
+     * Returns a list of the first day of each month in the range.
+     *
+     * @param startDate The start date
+     * @param endDate   The end date
+     * @return A list of first days of months in the range
+     */
+    public static List<Date> getMonthsBetween(Date startDate, Date endDate) {
+        if (startDate == null || endDate == null || startDate.after(endDate)) {
+            return new ArrayList<>();
+        }
+
+        List<Date> months = new ArrayList<>();
+        LocalDate start = Time4j.transformLocal(startDate);
+        LocalDate end = Time4j.transformLocal(endDate);
+
+        LocalDate current = start.withDayOfMonth(1);
+        while (!current.isAfter(end)) {
+            months.add(Time4j.transform(current));
+            current = current.plusMonths(1);
+        }
+
+        return months;
+    }
+
+    /**
+     * Gets all years between two dates.
+     * Returns a list of January 1st for each year in the range.
+     *
+     * @param startDate The start date
+     * @param endDate   The end date
+     * @return A list of first days of years in the range
+     */
+    public static List<Date> getYearsBetween(Date startDate, Date endDate) {
+        if (startDate == null || endDate == null || startDate.after(endDate)) {
+            return new ArrayList<>();
+        }
+
+        List<Date> years = new ArrayList<>();
+        LocalDate start = Time4j.transformLocal(startDate);
+        LocalDate end = Time4j.transformLocal(endDate);
+
+        LocalDate current = LocalDate.of(start.getYear(), 1, 1);
+        while (current.getYear() <= end.getYear()) {
+            years.add(Time4j.transform(current));
+            current = current.plusYears(1);
+        }
+
+        return years;
+    }
+
+    /**
+     * Finds the closest date to a target date from a list of dates.
+     *
+     * @param targetDate The target date to find the closest match for
+     * @param candidates The list of candidate dates
+     * @return The closest date to the target, or null if no candidates
+     */
+    public static Date findClosestDate(Date targetDate, List<Date> candidates) {
+        if (targetDate == null || Collection4j.isEmpty(candidates)) {
+            return null;
+        }
+
+        Date closest = null;
+        long minDifference = Long.MAX_VALUE;
+
+        for (Date candidate : candidates) {
+            if (candidate != null) {
+                long difference = Math.abs(candidate.getTime() - targetDate.getTime());
+                if (difference < minDifference) {
+                    minDifference = difference;
+                    closest = candidate;
+                }
+            }
+        }
+
+        return closest;
+    }
+
+    /**
+     * Checks if a date matches a specific pattern (day of week, week of month, etc.).
+     *
+     * @param date        The date to check
+     * @param dayOfWeek   The required day of week (null to ignore)
+     * @param weekOfMonth The required week of month (null to ignore, 1-5)
+     * @param month       The required month (null to ignore, 1-12)
+     * @return true if the date matches all specified criteria
+     */
+    public static boolean matchesPattern(Date date, DayOfWeek dayOfWeek, Integer weekOfMonth, Integer month) {
+        if (date == null) {
+            return false;
+        }
+
+        LocalDate local = Time4j.transformLocal(date);
+
+        // Check day of week
+        if (dayOfWeek != null && local.getDayOfWeek() != dayOfWeek) {
+            return false;
+        }
+
+        // Check month
+        if (month != null && local.getMonthValue() != month) {
+            return false;
+        }
+
+        // Check week of month
+        if (weekOfMonth != null) {
+            int actualWeekOfMonth = (local.getDayOfMonth() - 1) / 7 + 1;
+            return actualWeekOfMonth == weekOfMonth;
+        }
+
+        return true;
+    }
+
+    /**
+     * Gets all dates in a range that match a specific pattern.
+     *
+     * @param startDate   The start date of the range
+     * @param endDate     The end date of the range
+     * @param dayOfWeek   The required day of week (null to ignore)
+     * @param weekOfMonth The required week of month (null to ignore)
+     * @param month       The required month (null to ignore)
+     * @return A list of dates matching the pattern
+     */
+    public static List<Date> findDatesMatchingPattern(Date startDate, Date endDate,
+                                                      DayOfWeek dayOfWeek, Integer weekOfMonth, Integer month) {
+        return getDateRange(startDate, endDate).stream()
+                .filter(date -> matchesPattern(date, dayOfWeek, weekOfMonth, month))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Calculates basic statistics for a collection of dates.
+     *
+     * @param dates The collection of dates to analyze
+     * @return A DateStatistics object containing min, max, average, etc.
+     */
+    @SuppressWarnings({"SimplifyStreamApiCallChains"})
+    public static DateStatisticsResponse calculateDateStatistics(Collection<Date> dates) {
+        if (Collection4j.isEmpty(dates)) {
+            return new DateStatisticsResponse();
+        }
+
+        List<Date> validDates = dates.stream()
+                .filter(Objects::nonNull)
+                .sorted()
+                .collect(Collectors.toList());
+
+        if (validDates.isEmpty()) {
+            return new DateStatisticsResponse();
+        }
+
+        Date min = validDates.get(0);
+        Date max = validDates.get(validDates.size() - 1);
+
+        // Calculate average
+        long totalMillis = validDates.stream()
+                .mapToLong(Date::getTime)
+                .sum();
+        Date average = new Date(totalMillis / validDates.size());
+
+        // Calculate median
+        Date median;
+        int size = validDates.size();
+        if (size % 2 == 0) {
+            long medianMillis = (validDates.get(size / 2 - 1).getTime() +
+                    validDates.get(size / 2).getTime()) / 2;
+            median = new Date(medianMillis);
+        } else {
+            median = validDates.get(size / 2);
+        }
+
+        return new DateStatisticsResponse(min, max, average, median, validDates.size());
+    }
+
+    /**
+     * Gets the business day offset from a given date.
+     * Positive offset moves forward, negative moves backward.
+     *
+     * @param startDate         The starting date
+     * @param businessDayOffset The number of business days to offset
+     * @return The date after applying the business day offset
+     */
+    public static Date getBusinessDayOffset(Date startDate, int businessDayOffset) {
+        if (startDate == null || businessDayOffset == 0) {
+            return startDate;
+        }
+
+        Date current = new Date(startDate.getTime());
+        int remaining = Math.abs(businessDayOffset);
+        boolean forward = businessDayOffset > 0;
+
+        while (remaining > 0) {
+            current = forward ? Time4j.addDays(current, 1) : Time4j.minusDays(current, 1);
+            if (isWeekday(current)) {
+                remaining--;
+            }
+        }
+
+        return current;
+    }
+
+    /**
+     * Checks if a date falls within a specific time period pattern.
+     *
+     * @param date          The date to check
+     * @param pattern       The time period pattern (DAILY, WEEKLY, MONTHLY, YEARLY)
+     * @param referenceDate The reference date for the pattern
+     * @return true if the date matches the pattern relative to reference date
+     */
+    @SuppressWarnings({"EnhancedSwitchMigration"})
+    public static boolean isInTimePeriod(Date date, TimePeriodType pattern, Date referenceDate) {
+        if (date == null || pattern == null || referenceDate == null) {
+            return false;
+        }
+
+        LocalDate localDate = Time4j.transformLocal(date);
+        LocalDate refDate = Time4j.transformLocal(referenceDate);
+
+        switch (pattern) {
+            case DAILY:
+                return localDate.equals(refDate);
+            case WEEKLY:
+                return isSameISOWeek(date, referenceDate);
+            case MONTHLY:
+                return localDate.getMonth() == refDate.getMonth() &&
+                        localDate.getYear() == refDate.getYear();
+            case YEARLY:
+                return localDate.getYear() == refDate.getYear();
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Gets the overlap period between two date ranges.
+     *
+     * @param start1 Start of first range
+     * @param end1   End of first range
+     * @param start2 Start of second range
+     * @param end2   End of second range
+     * @return A DateRange object representing the overlap, or null if no overlap
+     */
+    public static DateRangeRequest getOverlapPeriod(Date start1, Date end1, Date start2, Date end2) {
+        if (start1 == null || end1 == null || start2 == null || end2 == null) {
+            return null;
+        }
+
+        Date overlapStart = start1.after(start2) ? start1 : start2;
+        Date overlapEnd = end1.before(end2) ? end1 : end2;
+
+        if (overlapStart.before(overlapEnd) || overlapStart.equals(overlapEnd)) {
+            return new DateRangeRequest(overlapStart, overlapEnd);
+        }
+
+        return null;
     }
 }
