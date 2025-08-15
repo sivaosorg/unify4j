@@ -1,7 +1,7 @@
 package org.unify4j.model.request;
 
 import org.unify4j.common.Time4j;
-import org.unify4j.common.Time4jExtensions;
+import org.unify4j.common.TimeExtensions4j;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -37,6 +37,6 @@ public class DateRangeRequest implements Serializable {
     }
 
     public List<Date> getAllDates() {
-        return Time4jExtensions.getDateRange(start, end);
+        return TimeExtensions4j.getDateRange(start, end);
     }
 }

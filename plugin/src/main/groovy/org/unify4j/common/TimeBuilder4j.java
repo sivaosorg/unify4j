@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class Time4jBuilder {
-    protected static final Logger logger = LoggerFactory.getLogger(Time4jBuilder.class);
+public class TimeBuilder4j {
+    protected static final Logger logger = LoggerFactory.getLogger(TimeBuilder4j.class);
 
     private int year;
     private int month = 1;
@@ -28,7 +28,7 @@ public class Time4jBuilder {
     /**
      * Private constructor for builder pattern.
      */
-    private Time4jBuilder() {
+    private TimeBuilder4j() {
         // Initialize with current year as default
         this.year = LocalDate.now().getYear();
     }
@@ -38,8 +38,8 @@ public class Time4jBuilder {
      *
      * @return A new TimeBuilder instance
      */
-    public static Time4jBuilder create() {
-        return new Time4jBuilder();
+    public static TimeBuilder4j create() {
+        return new TimeBuilder4j();
     }
 
     /**
@@ -47,8 +47,8 @@ public class Time4jBuilder {
      *
      * @return A new TimeBuilder instance with current date/time
      */
-    public static Time4jBuilder now() {
-        Time4jBuilder builder = new Time4jBuilder();
+    public static TimeBuilder4j now() {
+        TimeBuilder4j builder = new TimeBuilder4j();
         LocalDateTime now = LocalDateTime.now();
         return builder.year(now.getYear())
                 .month(now.getMonthValue())
@@ -65,8 +65,8 @@ public class Time4jBuilder {
      * @param date The date to initialize the builder with
      * @return A new TimeBuilder instance initialized with the provided date
      */
-    public static Time4jBuilder from(Date date) {
-        Time4jBuilder builder = new Time4jBuilder();
+    public static TimeBuilder4j from(Date date) {
+        TimeBuilder4j builder = new TimeBuilder4j();
         if (date != null) {
             LocalDateTime localDateTime = Time4j.transform(date);
             return builder.year(localDateTime.getYear())
@@ -86,8 +86,8 @@ public class Time4jBuilder {
      * @param local The LocalDateTime to initialize the builder with
      * @return A new TimeBuilder instance initialized with the provided LocalDateTime
      */
-    public static Time4jBuilder from(LocalDateTime local) {
-        Time4jBuilder builder = new Time4jBuilder();
+    public static TimeBuilder4j from(LocalDateTime local) {
+        TimeBuilder4j builder = new TimeBuilder4j();
         if (local != null) {
             return builder.year(local.getYear())
                     .month(local.getMonthValue())
@@ -106,7 +106,7 @@ public class Time4jBuilder {
      * @param year The year to set
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder year(int year) {
+    public TimeBuilder4j year(int year) {
         this.year = year;
         return this;
     }
@@ -117,7 +117,7 @@ public class Time4jBuilder {
      * @param month The month to set (1-12, where 1 is January)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder month(int month) {
+    public TimeBuilder4j month(int month) {
         if (month >= 1 && month <= 12) {
             this.month = month;
         } else {
@@ -132,7 +132,7 @@ public class Time4jBuilder {
      * @param day The day to set (1-31 depending on the month)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder day(int day) {
+    public TimeBuilder4j day(int day) {
         if (day >= 1 && day <= 31) {
             this.day = day;
         } else {
@@ -147,7 +147,7 @@ public class Time4jBuilder {
      * @param hour The hour to set (0-23)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder hour(int hour) {
+    public TimeBuilder4j hour(int hour) {
         if (hour >= 0 && hour <= 23) {
             this.hour = hour;
         } else {
@@ -162,7 +162,7 @@ public class Time4jBuilder {
      * @param minute The minute to set (0-59)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder minute(int minute) {
+    public TimeBuilder4j minute(int minute) {
         if (minute >= 0 && minute <= 59) {
             this.minute = minute;
         } else {
@@ -177,7 +177,7 @@ public class Time4jBuilder {
      * @param second The second to set (0-59)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder second(int second) {
+    public TimeBuilder4j second(int second) {
         if (second >= 0 && second <= 59) {
             this.second = second;
         } else {
@@ -192,7 +192,7 @@ public class Time4jBuilder {
      * @param millisecond The millisecond to set (0-999)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder millisecond(int millisecond) {
+    public TimeBuilder4j millisecond(int millisecond) {
         if (millisecond >= 0 && millisecond <= 999) {
             this.millisecond = millisecond;
         } else {
@@ -207,7 +207,7 @@ public class Time4jBuilder {
      * @param timezone The time zone to set
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder timezone(ZoneId timezone) {
+    public TimeBuilder4j timezone(ZoneId timezone) {
         if (timezone != null) {
             this.timezone = timezone;
         }
@@ -220,7 +220,7 @@ public class Time4jBuilder {
      * @param timezoneID The time zone ID to set (e.g., "UTC", "America/New_York")
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder timezone(String timezoneID) {
+    public TimeBuilder4j timezone(String timezoneID) {
         if (String4j.isNotEmpty(timezoneID)) {
             this.timezone = Time4j.parseTimeZone(timezoneID);
         }
@@ -233,7 +233,7 @@ public class Time4jBuilder {
      * @param timezone The timezone type to set
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder timezone(TimezoneType timezone) {
+    public TimeBuilder4j timezone(TimezoneType timezone) {
         if (timezone != null) {
             this.timezone = ZoneId.of(timezone.getTimeZoneId());
         }
@@ -246,7 +246,7 @@ public class Time4jBuilder {
      * @param formatPattern The format pattern to set
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder formatPattern(String formatPattern) {
+    public TimeBuilder4j formatPattern(String formatPattern) {
         if (String4j.isNotEmpty(formatPattern)) {
             this.formatPattern = formatPattern;
         }
@@ -258,7 +258,7 @@ public class Time4jBuilder {
      *
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder atStartOfDay() {
+    public TimeBuilder4j atStartOfDay() {
         this.hour = 0;
         this.minute = 0;
         this.second = 0;
@@ -271,7 +271,7 @@ public class Time4jBuilder {
      *
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder atEndOfDay() {
+    public TimeBuilder4j atEndOfDay() {
         this.hour = 23;
         this.minute = 59;
         this.second = 59;
@@ -284,7 +284,7 @@ public class Time4jBuilder {
      *
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder atNoon() {
+    public TimeBuilder4j atNoon() {
         this.hour = 12;
         this.minute = 0;
         this.second = 0;
@@ -298,7 +298,7 @@ public class Time4jBuilder {
      * @param days The number of days to add
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder addDays(int days) {
+    public TimeBuilder4j addDays(int days) {
         LocalDate current = LocalDate.of(year, month, day);
         LocalDate newDate = current.plusDays(days);
         this.year = newDate.getYear();
@@ -313,7 +313,7 @@ public class Time4jBuilder {
      * @param months The number of months to add
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder addMonths(int months) {
+    public TimeBuilder4j addMonths(int months) {
         LocalDate current = LocalDate.of(year, month, day);
         LocalDate newDate = current.plusMonths(months);
         this.year = newDate.getYear();
@@ -328,7 +328,7 @@ public class Time4jBuilder {
      * @param years The number of years to add
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder addYears(int years) {
+    public TimeBuilder4j addYears(int years) {
         this.year += years;
         return this;
     }
@@ -338,7 +338,7 @@ public class Time4jBuilder {
      *
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder firstDayOfMonth() {
+    public TimeBuilder4j firstDayOfMonth() {
         this.day = 1;
         return this;
     }
@@ -348,7 +348,7 @@ public class Time4jBuilder {
      *
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder lastDayOfMonth() {
+    public TimeBuilder4j lastDayOfMonth() {
         LocalDate date = LocalDate.of(year, month, 1);
         this.day = date.lengthOfMonth();
         return this;
@@ -434,7 +434,7 @@ public class Time4jBuilder {
      * @param year The year to calculate Easter for
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder easter(int year) {
+    public TimeBuilder4j easter(int year) {
         Date easterDate = calculateEaster(year);
         if (easterDate != null) {
             LocalDate easter = Time4j.transformLocal(easterDate);
@@ -451,7 +451,7 @@ public class Time4jBuilder {
      * @param year The year for Christmas
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder christmas(int year) {
+    public TimeBuilder4j christmas(int year) {
         this.year = year;
         this.month = 12;
         this.day = 25;
@@ -464,7 +464,7 @@ public class Time4jBuilder {
      * @param year The year for New Year's Day
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder newYear(int year) {
+    public TimeBuilder4j newYear(int year) {
         this.year = year;
         this.month = 1;
         this.day = 1;
@@ -481,7 +481,7 @@ public class Time4jBuilder {
      * @param occurrence The occurrence (1-5, where 1 is first, 5 is last)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder nthDayOfWeekInMonth(int year, int month, DayOfWeek dayOfWeek, int occurrence) {
+    public TimeBuilder4j nthDayOfWeekInMonth(int year, int month, DayOfWeek dayOfWeek, int occurrence) {
         if (occurrence < 1 || occurrence > 5) {
             logger.warn("Invalid occurrence value: {}. Should be between 1 and 5.", occurrence);
             return this;
@@ -504,7 +504,7 @@ public class Time4jBuilder {
      * @param dayOfWeek The day of the week
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder lastDayOfWeekInMonth(int year, int month, DayOfWeek dayOfWeek) {
+    public TimeBuilder4j lastDayOfWeekInMonth(int year, int month, DayOfWeek dayOfWeek) {
         LocalDate firstOfMonth = LocalDate.of(year, month, 1);
         LocalDate targetDate = firstOfMonth.with(TemporalAdjusters.lastInMonth(dayOfWeek));
 
@@ -520,7 +520,7 @@ public class Time4jBuilder {
      * @param daysFromToday The number of days from today (can be negative)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder relativeDays(int daysFromToday) {
+    public TimeBuilder4j relativeDays(int daysFromToday) {
         LocalDate today = LocalDate.now();
         LocalDate targetDate = today.plusDays(daysFromToday);
 
@@ -536,7 +536,7 @@ public class Time4jBuilder {
      * @param weeksFromToday The number of weeks from today (can be negative)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder relativeWeeks(int weeksFromToday) {
+    public TimeBuilder4j relativeWeeks(int weeksFromToday) {
         return relativeDays(weeksFromToday * 7);
     }
 
@@ -546,7 +546,7 @@ public class Time4jBuilder {
      * @param monthsFromToday The number of months from today (can be negative)
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder relativeMonths(int monthsFromToday) {
+    public TimeBuilder4j relativeMonths(int monthsFromToday) {
         LocalDate today = LocalDate.now();
         LocalDate targetDate = today.plusMonths(monthsFromToday);
 
@@ -583,19 +583,19 @@ public class Time4jBuilder {
      * @return A list of all weekdays in the configured month
      */
     public List<Date> generateWeekdaysInMonth() {
-        Date firstOfMonth = Time4jBuilder.create()
+        Date firstOfMonth = TimeBuilder4j.create()
                 .year(this.year)
                 .month(this.month)
                 .day(1)
                 .build();
 
-        Date lastOfMonth = Time4jBuilder.create()
+        Date lastOfMonth = TimeBuilder4j.create()
                 .year(this.year)
                 .month(this.month)
                 .lastDayOfMonth()
                 .build();
 
-        return Time4jExtensions.getWeekdaysInRange(firstOfMonth, lastOfMonth);
+        return TimeExtensions4j.getWeekdaysInRange(firstOfMonth, lastOfMonth);
     }
 
     /**
@@ -613,7 +613,7 @@ public class Time4jBuilder {
      * @param timeString The time string (e.g., "14:30")
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder timeFromString(String timeString) {
+    public TimeBuilder4j timeFromString(String timeString) {
         if (String4j.isEmpty(timeString)) {
             return this;
         }
@@ -641,7 +641,7 @@ public class Time4jBuilder {
      * @param dayOfWeek  The day of the week
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder isoWeek(int year, int weekNumber, DayOfWeek dayOfWeek) {
+    public TimeBuilder4j isoWeek(int year, int weekNumber, DayOfWeek dayOfWeek) {
         try {
             LocalDate date = LocalDate.of(year, 1, 1)
                     .with(java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR, weekNumber)
@@ -690,9 +690,9 @@ public class Time4jBuilder {
      * Inner class for creating reusable builder templates.
      */
     public static class TimeBuilderTemplate {
-        private final Time4jBuilder sourceBuilder;
+        private final TimeBuilder4j sourceBuilder;
 
-        private TimeBuilderTemplate(Time4jBuilder builder) {
+        private TimeBuilderTemplate(TimeBuilder4j builder) {
             this.sourceBuilder = builder;
         }
 
@@ -701,8 +701,8 @@ public class Time4jBuilder {
          *
          * @return A new TimeBuilder with the template configuration
          */
-        public Time4jBuilder newInstance() {
-            return Time4jBuilder.create()
+        public TimeBuilder4j newInstance() {
+            return TimeBuilder4j.create()
                     .year(sourceBuilder.year)
                     .month(sourceBuilder.month)
                     .day(sourceBuilder.day)
@@ -719,8 +719,8 @@ public class Time4jBuilder {
          *
          * @return A new TimeBuilder with date configuration and time at start of day
          */
-        public Time4jBuilder dateOnly() {
-            return Time4jBuilder.create()
+        public TimeBuilder4j dateOnly() {
+            return TimeBuilder4j.create()
                     .year(sourceBuilder.year)
                     .month(sourceBuilder.month)
                     .day(sourceBuilder.day)
@@ -733,9 +733,9 @@ public class Time4jBuilder {
          *
          * @return A new TimeBuilder with time configuration and today's date
          */
-        public Time4jBuilder timeOnly() {
+        public TimeBuilder4j timeOnly() {
             LocalDate today = LocalDate.now();
-            return Time4jBuilder.create()
+            return TimeBuilder4j.create()
                     .year(today.getYear())
                     .month(today.getMonthValue())
                     .day(today.getDayOfMonth())

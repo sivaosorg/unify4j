@@ -16,8 +16,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.function.Function;
 
-public class Time4jDecorator {
-    protected static final Logger logger = LoggerFactory.getLogger(Time4jDecorator.class);
+public class TimeDecorator4j {
+    protected static final Logger logger = LoggerFactory.getLogger(TimeDecorator4j.class);
 
     private final Date baseDate;
     private ZoneId timezone;
@@ -28,7 +28,7 @@ public class Time4jDecorator {
      *
      * @param base The base date to be decorated
      */
-    private Time4jDecorator(Date base) {
+    private TimeDecorator4j(Date base) {
         this.baseDate = base;
         this.timezone = ZoneId.systemDefault();
         this.format = TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN;
@@ -40,8 +40,8 @@ public class Time4jDecorator {
      * @param date The date to be decorated
      * @return A new TimeDecorator instance
      */
-    public static Time4jDecorator of(Date date) {
-        return new Time4jDecorator(date);
+    public static TimeDecorator4j of(Date date) {
+        return new TimeDecorator4j(date);
     }
 
     /**
@@ -49,8 +49,8 @@ public class Time4jDecorator {
      *
      * @return A new TimeDecorator instance with current date
      */
-    public static Time4jDecorator now() {
-        return new Time4jDecorator(new Date());
+    public static TimeDecorator4j now() {
+        return new TimeDecorator4j(new Date());
     }
 
     /**
@@ -59,7 +59,7 @@ public class Time4jDecorator {
      * @param timezone The time zone to apply
      * @return This decorator instance for method chaining
      */
-    public Time4jDecorator withTimezone(ZoneId timezone) {
+    public TimeDecorator4j withTimezone(ZoneId timezone) {
         this.timezone = timezone;
         return this;
     }
@@ -70,7 +70,7 @@ public class Time4jDecorator {
      * @param timezone The timezone type to apply
      * @return This decorator instance for method chaining
      */
-    public Time4jDecorator withTimezone(TimezoneType timezone) {
+    public TimeDecorator4j withTimezone(TimezoneType timezone) {
         if (timezone != null) {
             this.timezone = ZoneId.of(timezone.getTimeZoneId());
         }
@@ -83,7 +83,7 @@ public class Time4jDecorator {
      * @param format The format pattern to apply
      * @return This decorator instance for method chaining
      */
-    public Time4jDecorator withFormat(String format) {
+    public TimeDecorator4j withFormat(String format) {
         if (String4j.isNotEmpty(format)) {
             this.format = format;
         }
@@ -96,9 +96,9 @@ public class Time4jDecorator {
      * @param transformer The transformation function to apply
      * @return A new TimeDecorator with the transformed date
      */
-    public Time4jDecorator transform(Function<Date, Date> transformer) {
+    public TimeDecorator4j transform(Function<Date, Date> transformer) {
         Date applied = transformer.apply(this.baseDate);
-        return Time4jDecorator.of(applied).withTimezone(this.timezone).withFormat(this.format);
+        return TimeDecorator4j.of(applied).withTimezone(this.timezone).withFormat(this.format);
     }
 
     /**
@@ -107,7 +107,7 @@ public class Time4jDecorator {
      * @param days The number of days to add
      * @return A new TimeDecorator with the modified date
      */
-    public Time4jDecorator addDays(int days) {
+    public TimeDecorator4j addDays(int days) {
         return transform(date -> Time4j.addDays(date, days));
     }
 
@@ -117,7 +117,7 @@ public class Time4jDecorator {
      * @param hours The number of hours to add
      * @return A new TimeDecorator with the modified date
      */
-    public Time4jDecorator addHours(int hours) {
+    public TimeDecorator4j addHours(int hours) {
         return transform(date -> Time4j.addHours(date, hours));
     }
 
@@ -127,7 +127,7 @@ public class Time4jDecorator {
      * @param minutes The number of minutes to add
      * @return A new TimeDecorator with the modified date
      */
-    public Time4jDecorator addMinutes(int minutes) {
+    public TimeDecorator4j addMinutes(int minutes) {
         return transform(date -> Time4j.addMinutes(date, minutes));
     }
 
@@ -136,7 +136,7 @@ public class Time4jDecorator {
      *
      * @return A new TimeDecorator with the rounded date
      */
-    public Time4jDecorator roundDownToNearestHour() {
+    public TimeDecorator4j roundDownToNearestHour() {
         return transform(Time4j::roundDownToNearestHour);
     }
 
@@ -146,7 +146,7 @@ public class Time4jDecorator {
      * @param hours The number of hours to round up
      * @return A new TimeDecorator with the rounded date
      */
-    public Time4jDecorator roundUpToNextHour(int hours) {
+    public TimeDecorator4j roundUpToNextHour(int hours) {
         return transform(date -> Time4j.roundUpToNextHour(date, hours));
     }
 
@@ -155,7 +155,7 @@ public class Time4jDecorator {
      *
      * @return A new TimeDecorator with the date set to beginning of day
      */
-    public Time4jDecorator toBeginOfDay() {
+    public TimeDecorator4j toBeginOfDay() {
         return transform(Time4j::ofBeginDay);
     }
 
@@ -164,7 +164,7 @@ public class Time4jDecorator {
      *
      * @return A new TimeDecorator with the date set to end of day
      */
-    public Time4jDecorator toEndOfDay() {
+    public TimeDecorator4j toEndOfDay() {
         return transform(Time4j::ofEndDay);
     }
 
@@ -296,14 +296,14 @@ public class Time4jDecorator {
      * @param targetTimezone The target time zone
      * @return A new TimeDecorator with the date converted to the target time zone
      */
-    public Time4jDecorator convertToTimezone(ZoneId targetTimezone) {
+    public TimeDecorator4j convertToTimezone(ZoneId targetTimezone) {
         if (targetTimezone == null) {
             return this;
         }
         return transform(date -> {
             TimeZone fromTz = TimeZone.getTimeZone(this.timezone);
             TimeZone toTz = TimeZone.getTimeZone(targetTimezone);
-            return Time4jExtensions.convertTimezone(date, fromTz, toTz);
+            return TimeExtensions4j.convertTimezone(date, fromTz, toTz);
         }).withTimezone(targetTimezone);
     }
 
@@ -313,7 +313,7 @@ public class Time4jDecorator {
      * @param targetTimezone The target timezone type
      * @return A new TimeDecorator with the date converted to the target time zone
      */
-    public Time4jDecorator convertToTimezone(TimezoneType targetTimezone) {
+    public TimeDecorator4j convertToTimezone(TimezoneType targetTimezone) {
         if (targetTimezone == null) {
             return this;
         }
@@ -386,9 +386,9 @@ public class Time4jDecorator {
      *
      * @return A new TimeDecorator with the same configuration and a copied date
      */
-    public Time4jDecorator copy() {
+    public TimeDecorator4j copy() {
         Date copiedDate = this.baseDate != null ? new Date(this.baseDate.getTime()) : null;
-        return Time4jDecorator.of(copiedDate).withTimezone(this.timezone).withFormat(this.format);
+        return TimeDecorator4j.of(copiedDate).withTimezone(this.timezone).withFormat(this.format);
     }
 
     /**
@@ -397,7 +397,7 @@ public class Time4jDecorator {
      * @return A new TimeDecorator identical to this one
      */
     @SuppressWarnings({"MethodDoesntCallSuperMethod"})
-    public Time4jDecorator clone() {
+    public TimeDecorator4j clone() {
         return copy();
     }
 
@@ -430,7 +430,7 @@ public class Time4jDecorator {
      * @return true if the date is a weekday, false otherwise
      */
     public boolean isWeekday() {
-        return Time4jExtensions.isWeekday(this.baseDate);
+        return TimeExtensions4j.isWeekday(this.baseDate);
     }
 
     /**
@@ -439,7 +439,7 @@ public class Time4jDecorator {
      * @return true if the date is a weekend, false otherwise
      */
     public boolean isWeekend() {
-        return Time4jExtensions.isWeekend(this.baseDate);
+        return TimeExtensions4j.isWeekend(this.baseDate);
     }
 
     /**
@@ -495,7 +495,7 @@ public class Time4jDecorator {
      * @param unit The temporal unit to truncate to
      * @return A new TimeDecorator with the truncated date
      */
-    public Time4jDecorator truncateTo(ChronoUnit unit) {
+    public TimeDecorator4j truncateTo(ChronoUnit unit) {
         if (this.baseDate == null || unit == null) {
             return this;
         }

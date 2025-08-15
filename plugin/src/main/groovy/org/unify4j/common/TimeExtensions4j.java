@@ -15,8 +15,8 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Time4jExtensions {
-    protected static final Logger logger = LoggerFactory.getLogger(Time4jExtensions.class);
+public class TimeExtensions4j {
+    protected static final Logger logger = LoggerFactory.getLogger(TimeExtensions4j.class);
 
     /**
      * Creates a TimeDecorator for enhanced date operations.
@@ -25,8 +25,8 @@ public class Time4jExtensions {
      * @param date The date to decorate
      * @return A TimeDecorator instance for enhanced operations
      */
-    public static Time4jDecorator decorate(Date date) {
-        return Time4jDecorator.of(date);
+    public static TimeDecorator4j decorate(Date date) {
+        return TimeDecorator4j.of(date);
     }
 
     /**
@@ -35,8 +35,8 @@ public class Time4jExtensions {
      *
      * @return A TimeBuilder instance for fluent date construction
      */
-    public static Time4jBuilder builder() {
-        return Time4jBuilder.create();
+    public static TimeBuilder4j builder() {
+        return TimeBuilder4j.create();
     }
 
     /**
@@ -155,7 +155,7 @@ public class Time4jExtensions {
      */
     public static List<Date> getWeekdaysInRange(Date startDate, Date endDate) {
         return getDateRange(startDate, endDate).stream()
-                .filter(Time4jExtensions::isWeekday)
+                .filter(TimeExtensions4j::isWeekday)
                 .collect(Collectors.toList());
     }
 
@@ -169,7 +169,7 @@ public class Time4jExtensions {
      */
     public static List<Date> getWeekendsInRange(Date startDate, Date endDate) {
         return getDateRange(startDate, endDate).stream()
-                .filter(Time4jExtensions::isWeekend)
+                .filter(TimeExtensions4j::isWeekend)
                 .collect(Collectors.toList());
     }
 
@@ -421,8 +421,8 @@ public class Time4jExtensions {
         List<Date> weekdays = getWeekdaysInRange(startDate, endDate);
 
         for (Date day : weekdays) {
-            Date workStart = Time4jBuilder.from(day).hour(9).minute(0).second(0).build();
-            Date workEnd = Time4jBuilder.from(day).hour(17).minute(0).second(0).build();
+            Date workStart = TimeBuilder4j.from(day).hour(9).minute(0).second(0).build();
+            Date workEnd = TimeBuilder4j.from(day).hour(17).minute(0).second(0).build();
 
             Date effectiveStart = startDate.after(workStart) ? startDate : workStart;
             Date effectiveEnd = endDate.before(workEnd) ? endDate : workEnd;
