@@ -199,10 +199,12 @@ public class Random4j {
     }
 
     /**
-     * Generates a random password of 8 characters
+     * Generates a random password of length equal to {@code length},
+     * consisting only of the characters contained in the default set.
+     * The default set includes lowercase letters, digits, and some special characters.
      *
      * @param length - the desired password length.
-     * @return The randomized password as a String
+     * @return the generated password.
      */
     public static String nextPassword(int length) {
         String[] values = {"a", "b", "c", "d", "e", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "u", "v", "z", "x", "y", "1", "2", "3", "4", "5", "6", "7", "8", "9", "&", "%", "?", "!", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "Z", "X", "Y"};
