@@ -220,7 +220,7 @@ public class Time4jBuilder {
      * @param timezoneID The time zone ID to set (e.g., "UTC", "America/New_York")
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder timeZone(String timezoneID) {
+    public Time4jBuilder timezone(String timezoneID) {
         if (String4j.isNotEmpty(timezoneID)) {
             this.timezone = Time4j.parseTimeZone(timezoneID);
         }
@@ -233,7 +233,7 @@ public class Time4jBuilder {
      * @param timezone The timezone type to set
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder timeZone(TimezoneType timezone) {
+    public Time4jBuilder timezone(TimezoneType timezone) {
         if (timezone != null) {
             this.timezone = ZoneId.of(timezone.getTimeZoneId());
         }
