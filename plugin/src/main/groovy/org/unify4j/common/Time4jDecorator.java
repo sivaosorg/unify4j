@@ -296,7 +296,7 @@ public class Time4jDecorator {
      * @param targetTimezone The target time zone
      * @return A new TimeDecorator with the date converted to the target time zone
      */
-    public Time4jDecorator convertToTimeZone(ZoneId targetTimezone) {
+    public Time4jDecorator convertToTimezone(ZoneId targetTimezone) {
         if (targetTimezone == null) {
             return this;
         }
@@ -313,11 +313,11 @@ public class Time4jDecorator {
      * @param targetTimezone The target timezone type
      * @return A new TimeDecorator with the date converted to the target time zone
      */
-    public Time4jDecorator convertToTimeZone(TimezoneType targetTimezone) {
+    public Time4jDecorator convertToTimezone(TimezoneType targetTimezone) {
         if (targetTimezone == null) {
             return this;
         }
-        return convertToTimeZone(ZoneId.of(targetTimezone.getTimeZoneId()));
+        return convertToTimezone(ZoneId.of(targetTimezone.getTimeZoneId()));
     }
 
     /**

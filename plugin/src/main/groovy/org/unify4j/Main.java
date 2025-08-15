@@ -16,5 +16,6 @@ public class Main {
         System.out.println(Time4jDecorator.now().withTimezone(TimezoneType.DefaultTimezoneManila).format());
         System.out.println(Time4jBuilder.from(new Date()).atEndOfDay().firstDayOfMonth().buildFormatted());
         System.out.println(Time4jExtensions.decorate(new Date()).toEndOfDay().format());
+        System.out.println(Time4jExtensions.decorate(new Date()).withTimezone(TimezoneType.DefaultTimezoneManila).format());
     }
 }

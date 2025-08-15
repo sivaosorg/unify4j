@@ -207,7 +207,7 @@ public class Time4jBuilder {
      * @param timezone The time zone to set
      * @return This builder instance for method chaining
      */
-    public Time4jBuilder timeZone(ZoneId timezone) {
+    public Time4jBuilder timezone(ZoneId timezone) {
         if (timezone != null) {
             this.timezone = timezone;
         }
@@ -710,7 +710,7 @@ public class Time4jBuilder {
                     .minute(sourceBuilder.minute)
                     .second(sourceBuilder.second)
                     .millisecond(sourceBuilder.millisecond)
-                    .timeZone(sourceBuilder.timezone)
+                    .timezone(sourceBuilder.timezone)
                     .formatPattern(sourceBuilder.formatPattern);
         }
 
@@ -725,7 +725,7 @@ public class Time4jBuilder {
                     .month(sourceBuilder.month)
                     .day(sourceBuilder.day)
                     .atStartOfDay()
-                    .timeZone(sourceBuilder.timezone);
+                    .timezone(sourceBuilder.timezone);
         }
 
         /**
@@ -743,7 +743,7 @@ public class Time4jBuilder {
                     .minute(sourceBuilder.minute)
                     .second(sourceBuilder.second)
                     .millisecond(sourceBuilder.millisecond)
-                    .timeZone(sourceBuilder.timezone);
+                    .timezone(sourceBuilder.timezone);
         }
     }
 }
