@@ -1095,7 +1095,7 @@ public class String4j {
      * Returns null if the input byte array is null.
      * @throws IllegalArgumentException If the specified encoding is not supported by the JVM.
      */
-    public static String createString(byte[] bytes, String encoding) {
+    public static String create(byte[] bytes, String encoding) {
         try {
             return bytes == null ? null : new String(bytes, encoding);
         } catch (UnsupportedEncodingException e) {
@@ -1112,8 +1112,8 @@ public class String4j {
      * @return The resulting UTF-8 encoded String decoded from the byte array.
      * Returns null if the input byte array is null.
      */
-    public static String createUtf8String(byte[] bytes) {
-        return createString(bytes, "UTF-8");
+    public static String createUTF8(byte[] bytes) {
+        return create(bytes, "UTF-8");
     }
 
     /**
