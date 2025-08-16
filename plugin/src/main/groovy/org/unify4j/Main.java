@@ -6,6 +6,7 @@ import org.unify4j.common.*;
 import org.unify4j.model.enums.TimezoneType;
 import org.unify4j.model.request.IDecisionRequest;
 import org.unify4j.model.request.TimeframeRequest;
+import org.unify4j.model.response.DateStatsResponse;
 
 import java.util.Date;
 
@@ -19,8 +20,10 @@ public class Main {
         System.out.println(TimeExtensions4j.decorate(new Date()).withTimezone(TimezoneType.DefaultTimezoneManila).format());
         TimeframeRequest as = new TimeframeRequest();
         as.setStart(new Date());
-        as.setEnd(Time4j.addDays(new Date(), 10));
+        as.setEnd(Time4j.addDays(new Date(), 15));
         System.out.println(as);
+        DateStatsResponse stats = TimeExtensions4j.calculateDateStats(as.getAllDates());
+        System.out.println(stats);
         IDecisionRequest decision = new IDecisionRequest();
         decision.setEnabled(true);
         decision.setValue(1234);

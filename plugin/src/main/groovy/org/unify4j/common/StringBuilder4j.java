@@ -291,6 +291,20 @@ public class StringBuilder4j {
     }
 
     /**
+     * Conditionally appends an object to the builder.
+     *
+     * @param condition The condition to check
+     * @param o         The object to append if condition is true
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            this.append(o.toString());
+        }
+        return this;
+    }
+
+    /**
      * Conditionally appends a string using a predicate.
      *
      * @param predicate The predicate to test

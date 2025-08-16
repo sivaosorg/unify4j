@@ -1,5 +1,8 @@
 package org.unify4j.model.response;
 
+import org.unify4j.common.StringBuilder4j;
+import org.unify4j.common.Time4j;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -48,5 +51,32 @@ public class DateStatsResponse implements Serializable {
             return (max.getTime() - min.getTime()) / (1000 * 60 * 60 * 24);
         }
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return StringBuilder4j.create()
+                .append("Date Stats")
+                .appendColon()
+                .appendSpace()
+                .appendLBrace()
+                .appendSpace()
+                .appendIf(min != null, "min: ")
+                .appendIf(min != null, Time4j.format(min))
+                .appendIf(min != null && max != null, ", ")
+                .appendIf(max != null, "max: ")
+                .appendIf(max != null, Time4j.format(max))
+                .appendIf(max != null && average != null, ", ")
+                .appendIf(average != null, "average: ")
+                .appendIf(average != null, Time4j.format(average))
+                .appendIf(average != null && median != null, ", ")
+                .appendIf(median != null, "median: ")
+                .appendIf(median != null, Time4j.format(median))
+                .appendIf(median != null && count > 0, ", ")
+                .appendIf(count >= 0, "count: ")
+                .appendIf(count >= 0, count)
+                .appendSpace()
+                .appendRBrace()
+                .build();
     }
 }
