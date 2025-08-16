@@ -948,6 +948,66 @@ public class Text4j {
     }
 
     /**
+     * Conditionally appends the given string suffixed with an equals sign based on the provided condition.
+     *
+     * @param condition If true, the string will be appended; otherwise, no action is taken.
+     * @param str       The string to suffix with an equals sign if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingEqualIf(boolean condition, String str) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.endingEqual(str);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the string representation of the given object suffixed with an equals sign based on the provided condition.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
+     * @param value     The object to suffix with an equals sign if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingEqualIf(boolean condition, Object value) {
+        if (condition && value != null) {
+            return this.endingEqual(value);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the given string suffixed with an equals sign repeated a specified number of times based on the provided condition.
+     *
+     * @param condition If true, the string will be appended; otherwise, no action is taken.
+     * @param value     The text to suffix with an equals sign if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingEqualIf(boolean condition, Object value, int repeat) {
+        if (condition && value != null) {
+            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            return this.endingEqual(String4j.repeat(str, repeat));
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the given string suffixed with an equals sign repeated a specified number of times based on the provided condition.
+     *
+     * @param condition If true, the string will be appended; otherwise, no action is taken.
+     * @param str       The text to suffix with an equals sign if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingEqualIf(boolean condition, String str, int repeat) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.endingEqual(String4j.repeat(str, repeat));
+        }
+        return this;
+    }
+
+    /**
      * Appends a new line to the message.
      *
      * @return The current instance of Text4j.
