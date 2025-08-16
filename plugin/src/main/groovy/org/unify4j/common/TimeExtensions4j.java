@@ -3,7 +3,7 @@ package org.unify4j.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.unify4j.model.enums.TimePeriodType;
-import org.unify4j.model.request.DateRangeRequest;
+import org.unify4j.model.request.TimeframeRequest;
 import org.unify4j.model.response.DateStatisticsResponse;
 
 import java.time.DayOfWeek;
@@ -680,7 +680,7 @@ public class TimeExtensions4j {
      * @param end2   End of second range
      * @return A DateRange object representing the overlap, or null if no overlap
      */
-    public static DateRangeRequest getOverlapPeriod(Date start1, Date end1, Date start2, Date end2) {
+    public static TimeframeRequest getOverlapPeriod(Date start1, Date end1, Date start2, Date end2) {
         if (start1 == null || end1 == null || start2 == null || end2 == null) {
             return null;
         }
@@ -689,7 +689,7 @@ public class TimeExtensions4j {
         Date overlapEnd = end1.before(end2) ? end1 : end2;
 
         if (overlapStart.before(overlapEnd) || overlapStart.equals(overlapEnd)) {
-            return new DateRangeRequest(overlapStart, overlapEnd);
+            return new TimeframeRequest(overlapStart, overlapEnd);
         }
 
         return null;

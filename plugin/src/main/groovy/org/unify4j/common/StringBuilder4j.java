@@ -89,6 +89,28 @@ public class StringBuilder4j {
     }
 
     /**
+     * Builds a template string by replacing placeholders.
+     *
+     * @param template The template string with placeholders
+     * @param values   The values to replace placeholders
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j from(String template, Map<String, String> values) {
+        if (String4j.isNotEmpty(template)) {
+            String processed = template;
+            if (values != null) {
+                for (Map.Entry<String, String> entry : values.entrySet()) {
+                    String placeholder = "${" + entry.getKey() + "}";
+                    String value = entry.getValue() != null ? entry.getValue() : "";
+                    processed = processed.replace(placeholder, value);
+                }
+            }
+            this.append(processed);
+        }
+        return this;
+    }
+
+    /**
      * Sets the encoding for this builder.
      *
      * @param encoding The encoding to use
@@ -386,6 +408,382 @@ public class StringBuilder4j {
     }
 
     /**
+     * Appends a tab character to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendTab() {
+        return this.append("\t");
+    }
+
+    /**
+     * Appends a comma to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendComma() {
+        return this.append(",");
+    }
+
+    /**
+     * Appends a semicolon to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendSemicolon() {
+        return this.append(";");
+    }
+
+    /**
+     * Appends a left parenthesis to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendLBrace() {
+        return this.append("{");
+    }
+
+    /**
+     * Appends a right parenthesis to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendRBrace() {
+        return this.append("}");
+    }
+
+    /**
+     * Appends a left square bracket to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendLBracket() {
+        return this.append("[");
+    }
+
+    /**
+     * Appends a right square bracket to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendRBracket() {
+        return this.append("]");
+    }
+
+    /**
+     * Appends a left parenthesis to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendLParen() {
+        return this.append("(");
+    }
+
+    /**
+     * Appends a right parenthesis to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendRParen() {
+        return this.append(")");
+    }
+
+    /**
+     * Appends a double quote to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendDoubleQuote() {
+        return this.append("\"");
+    }
+
+    /**
+     * Appends a single quote to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendColon() {
+        return this.append(":");
+    }
+
+    /**
+     * Appends a string if a condition is met, otherwise appends a default value.
+     *
+     * @param condition    The condition to check
+     * @param str          The string to append if condition is true
+     * @param defaultValue The default value to append if condition is false
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIf(boolean condition, String str, String defaultValue) {
+        if (condition) {
+            this.append(str);
+        } else {
+            this.append(defaultValue);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if a predicate is true, otherwise appends a default value.
+     *
+     * @param predicate    The predicate to test
+     * @param str          The string to append if predicate is true
+     * @param defaultValue The default value to append if predicate is false
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIf(Predicate<String> predicate, String str, String defaultValue) {
+        if (predicate != null && predicate.test(str)) {
+            this.append(str);
+        } else {
+            this.append(defaultValue);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string from a supplier if a condition is met, otherwise appends a default value.
+     *
+     * @param condition    The condition to check
+     * @param supplier     The supplier for the string to append if condition is true
+     * @param defaultValue The default value to append if condition is false
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIf(boolean condition, Supplier<String> supplier, String defaultValue) {
+        if (condition && supplier != null) {
+            this.append(supplier.get());
+        } else {
+            this.append(defaultValue);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if it will not exceed the maximum length.
+     *
+     * @param condition The condition to check
+     * @param str       The string to append if condition is true and it won't exceed max length
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfWillExceedMaxLength(boolean condition, String str) {
+        if (condition && !this.willExceedMaxLength(str)) {
+            this.append(str);
+        } else if (condition) {
+            logger.warn("Appending string would exceed max length {}, skipping", maxLength);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if it will not exceed the maximum length based on a predicate.
+     *
+     * @param predicate The predicate to test
+     * @param str       The string to append if predicate is true, and it won't exceed max length
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfWillExceedMaxLength(Predicate<String> predicate, String str) {
+        if (predicate != null && predicate.test(str) && !this.willExceedMaxLength(str)) {
+            this.append(str);
+        } else if (predicate != null) {
+            logger.warn("Appending string would exceed max length {}, skipping", maxLength);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string from a supplier if it will not exceed the maximum length.
+     *
+     * @param condition The condition to check
+     * @param supplier  The supplier for the string to append if condition is true and it won't exceed max length
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfWillExceedMaxLength(boolean condition, Supplier<String> supplier) {
+        if (condition && supplier != null) {
+            String str = supplier.get();
+            if (!this.willExceedMaxLength(str)) {
+                this.append(str);
+            } else {
+                logger.warn("Appending string from supplier would exceed max length {}, skipping", maxLength);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if it is not empty.
+     *
+     * @param str The string to append
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(String str) {
+        if (String4j.isNotEmpty(str)) {
+            this.append(str);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string from a supplier if it is not empty.
+     *
+     * @param supplier The supplier for the string to append
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(Supplier<String> supplier) {
+        if (supplier != null) {
+            String str = supplier.get();
+            if (String4j.isNotEmpty(str)) {
+                this.append(str);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if it is not empty based on a predicate.
+     *
+     * @param predicate The predicate to test
+     * @param str       The string to append if predicate is true and string is not empty
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(Predicate<String> predicate, String str) {
+        if (predicate != null && predicate.test(str) && String4j.isNotEmpty(str)) {
+            this.append(str);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string from a supplier if it is not empty based on a predicate.
+     *
+     * @param predicate The predicate to test
+     * @param supplier  The supplier for the string to append if predicate is true and string is not empty
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(Predicate<String> predicate, Supplier<String> supplier) {
+        if (predicate != null && supplier != null) {
+            String str = supplier.get();
+            if (predicate.test(str) && String4j.isNotEmpty(str)) {
+                this.append(str);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if a condition is true and the string is not empty.
+     *
+     * @param condition The condition to check
+     * @param str       The string to append if condition is true and string is not empty
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(boolean condition, String str) {
+        if (condition && String4j.isNotEmpty(str)) {
+            this.append(str);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string from a supplier if a condition is true and the string is not empty.
+     *
+     * @param condition The condition to check
+     * @param supplier  The supplier for the string to append if condition is true and string is not empty
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(boolean condition, Supplier<String> supplier) {
+        if (condition && supplier != null) {
+            String str = supplier.get();
+            if (String4j.isNotEmpty(str)) {
+                this.append(str);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if a predicate is true and the string is not empty.
+     *
+     * @param predicate The predicate to test
+     * @param condition The condition to check
+     * @param str       The string to append if predicate is true, condition is true, and string is not empty
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(Predicate<String> predicate, boolean condition, String str) {
+        if (predicate != null && condition && String4j.isNotEmpty(str) && predicate.test(str)) {
+            this.append(str);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string from a supplier if a predicate is true and the string is not empty.
+     *
+     * @param predicate The predicate to test
+     * @param condition The condition to check
+     * @param supplier  The supplier for the string to append if predicate is true, condition is true, and string is not empty
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(Predicate<String> predicate, boolean condition, Supplier<String> supplier) {
+        if (predicate != null && condition && supplier != null) {
+            String str = supplier.get();
+            if (String4j.isNotEmpty(str) && predicate.test(str)) {
+                this.append(str);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if a condition is true, the string is not empty, and it matches a predicate.
+     *
+     * @param condition The condition to check
+     * @param predicate The predicate to test
+     * @param str       The string to append if condition is true, string is not empty, and predicate is true
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(boolean condition, Predicate<String> predicate, String str) {
+        if (condition && String4j.isNotEmpty(str) && (predicate == null || predicate.test(str))) {
+            this.append(str);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string from a supplier if a condition is true, the string is not empty, and it matches a predicate.
+     *
+     * @param condition The condition to check
+     * @param predicate The predicate to test
+     * @param supplier  The supplier for the string to append if condition is true, string is not empty, and predicate is true
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(boolean condition, Predicate<String> predicate, Supplier<String> supplier) {
+        if (condition && supplier != null) {
+            String str = supplier.get();
+            if (String4j.isNotEmpty(str) && (predicate == null || predicate.test(str))) {
+                this.append(str);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Appends a string if a condition is true, the string is not empty, and it matches a predicate.
+     *
+     * @param condition The condition to check
+     * @param supplier  The supplier for the string to append if condition is true, string is not empty, and predicate is true
+     * @param predicate The predicate to test
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendIfNotEmpty(boolean condition, Supplier<String> supplier, Predicate<String> predicate) {
+        if (condition && supplier != null) {
+            String str = supplier.get();
+            if (String4j.isNotEmpty(str) && (predicate == null || predicate.test(str))) {
+                this.append(str);
+            }
+        }
+        return this;
+    }
+
+    /**
      * Prepends a string to the beginning of the builder.
      *
      * @param str The string to prepend
@@ -439,6 +837,37 @@ public class StringBuilder4j {
     }
 
     /**
+     * Replaces all occurrences of a target string based on a predicate.
+     *
+     * @param predicate   The predicate to test each part
+     * @param target      The string to replace
+     * @param replacement The replacement string
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j replaceIf(Predicate<String> predicate, String target, String replacement) {
+        if (predicate != null && predicate.test(target)) {
+            this.replace(target, replacement);
+        }
+        return this;
+    }
+
+    /**
+     * Replaces all occurrences of a target string with a replacement from a supplier.
+     *
+     * @param predicate           The predicate to test each part
+     * @param target              The string to replace
+     * @param replacementSupplier The supplier for the replacement string
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j replaceIf(Predicate<String> predicate, String target, Supplier<String> replacementSupplier) {
+        if (predicate != null && predicate.test(target) && replacementSupplier != null) {
+            String replacement = replacementSupplier.get();
+            this.replace(target, replacement);
+        }
+        return this;
+    }
+
+    /**
      * Removes all occurrences of a specified string.
      *
      * @param str The string to remove
@@ -446,6 +875,33 @@ public class StringBuilder4j {
      */
     public StringBuilder4j remove(String str) {
         return this.replace(str, "");
+    }
+
+    /**
+     * Removes all occurrences of a specified string based on a predicate.
+     *
+     * @param predicate The predicate to test each part
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j removeIf(Predicate<String> predicate) {
+        if (predicate != null) {
+            String content = buffer.toString();
+            String[] parts = content.split(separator);
+            StringBuilder result = new StringBuilder();
+
+            for (String part : parts) {
+                if (!predicate.test(part)) {
+                    if (!result.isEmpty()) {
+                        result.append(separator);
+                    }
+                    result.append(part);
+                }
+            }
+
+            buffer.setLength(0);
+            buffer.append(result);
+        }
+        return this;
     }
 
     /**
@@ -513,28 +969,6 @@ public class StringBuilder4j {
             for (int i = 0; i < count; i++) {
                 this.append(str);
             }
-        }
-        return this;
-    }
-
-    /**
-     * Builds a template string by replacing placeholders.
-     *
-     * @param template The template string with placeholders
-     * @param values   The values to replace placeholders
-     * @return This builder instance for method chaining
-     */
-    public StringBuilder4j fromTemplate(String template, Map<String, String> values) {
-        if (String4j.isNotEmpty(template)) {
-            String processed = template;
-            if (values != null) {
-                for (Map.Entry<String, String> entry : values.entrySet()) {
-                    String placeholder = "${" + entry.getKey() + "}";
-                    String value = entry.getValue() != null ? entry.getValue() : "";
-                    processed = processed.replace(placeholder, value);
-                }
-            }
-            this.append(processed);
         }
         return this;
     }
