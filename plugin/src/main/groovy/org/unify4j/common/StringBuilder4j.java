@@ -303,7 +303,7 @@ public class StringBuilder4j {
      * @param args   The format arguments
      * @return This builder instance for method chaining
      */
-    public StringBuilder4j appendFormat(String format, Object... args) {
+    public StringBuilder4j append(String format, Object... args) {
         if (String4j.isNotEmpty(format)) {
             try {
                 String formatted = String.format(locale, format, args);
@@ -313,29 +313,6 @@ public class StringBuilder4j {
                 this.append(format);
             }
         }
-        return this;
-    }
-
-    /**
-     * Appends a line separator after the current content.
-     *
-     * @return This builder instance for method chaining
-     */
-    @SuppressWarnings({"UnusedReturnValue"})
-    public StringBuilder4j appendLine() {
-        buffer.append(System.lineSeparator());
-        return this;
-    }
-
-    /**
-     * Appends a string followed by a line separator.
-     *
-     * @param str The string to append
-     * @return This builder instance for method chaining
-     */
-    public StringBuilder4j appendLine(String str) {
-        this.append(str);
-        this.appendLine();
         return this;
     }
 
@@ -374,6 +351,38 @@ public class StringBuilder4j {
             this.append(obj.toString());
         }
         return this;
+    }
+
+    /**
+     * Appends a line separator after the current content.
+     *
+     * @return This builder instance for method chaining
+     */
+    @SuppressWarnings({"UnusedReturnValue"})
+    public StringBuilder4j appendLine() {
+        buffer.append(System.lineSeparator());
+        return this;
+    }
+
+    /**
+     * Appends a string followed by a line separator.
+     *
+     * @param str The string to append
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendLine(String str) {
+        this.append(str);
+        this.appendLine();
+        return this;
+    }
+
+    /**
+     * Appends a space character to the builder.
+     *
+     * @return This builder instance for method chaining
+     */
+    public StringBuilder4j appendSpace() {
+        return this.append(" ");
     }
 
     /**

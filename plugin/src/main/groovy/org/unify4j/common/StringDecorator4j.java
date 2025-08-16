@@ -502,7 +502,7 @@ public class StringDecorator4j {
      * @param newValue The new string value
      * @return A new StringDecorator instance
      */
-    private StringDecorator4j create(String newValue) {
+    protected StringDecorator4j create(String newValue) {
         StringDecorator4j newDecorator = new StringDecorator4j(newValue);
         newDecorator.encoding = this.encoding;
         newDecorator.locale = this.locale;
