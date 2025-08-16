@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.unify4j.model.enums.TimePeriodType;
 import org.unify4j.model.request.TimeframeRequest;
-import org.unify4j.model.response.DateStatisticsResponse;
+import org.unify4j.model.response.DateStatsResponse;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -575,9 +575,9 @@ public class TimeExtensions4j {
      * @return A DateStatistics object containing min, max, average, etc.
      */
     @SuppressWarnings({"SimplifyStreamApiCallChains"})
-    public static DateStatisticsResponse calculateDateStatistics(Collection<Date> dates) {
+    public static DateStatsResponse calculateDateStats(Collection<Date> dates) {
         if (Collection4j.isEmpty(dates)) {
-            return new DateStatisticsResponse();
+            return new DateStatsResponse();
         }
 
         List<Date> validDates = dates.stream()
@@ -586,7 +586,7 @@ public class TimeExtensions4j {
                 .collect(Collectors.toList());
 
         if (validDates.isEmpty()) {
-            return new DateStatisticsResponse();
+            return new DateStatsResponse();
         }
 
         Date min = validDates.get(0);
@@ -609,7 +609,7 @@ public class TimeExtensions4j {
             median = validDates.get(size / 2);
         }
 
-        return new DateStatisticsResponse(min, max, average, median, validDates.size());
+        return new DateStatsResponse(min, max, average, median, validDates.size());
     }
 
     /**

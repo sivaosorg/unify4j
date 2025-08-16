@@ -4,18 +4,18 @@ import java.io.Serializable;
 import java.util.Date;
 
 @SuppressWarnings({"all"})
-public class DateStatisticsResponse implements Serializable {
+public class DateStatsResponse implements Serializable {
     private final Date min;
     private final Date max;
     private final Date average;
     private final Date median;
     private final int count;
 
-    public DateStatisticsResponse() {
+    public DateStatsResponse() {
         this(null, null, null, null, 0);
     }
 
-    public DateStatisticsResponse(Date min, Date max, Date average, Date median, int count) {
+    public DateStatsResponse(Date min, Date max, Date average, Date median, int count) {
         this.min = min;
         this.max = max;
         this.average = average;

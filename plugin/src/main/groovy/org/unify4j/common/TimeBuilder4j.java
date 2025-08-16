@@ -26,9 +26,9 @@ public class TimeBuilder4j {
     private String formatPattern = TimeFormatText.BIBLIOGRAPHY_EPOCH_PATTERN;
 
     /**
-     * Private constructor for builder pattern.
+     * Default constructor initializes the builder with the current year.
      */
-    private TimeBuilder4j() {
+    protected TimeBuilder4j() {
         // Initialize with current year as default
         this.year = LocalDate.now().getYear();
     }
@@ -658,9 +658,12 @@ public class TimeBuilder4j {
     }
 
     /**
-     * Helper method to calculate Easter Sunday for a given year.
+     * Calculates Easter Sunday for the given year using the anonymous Gregorian algorithm.
+     *
+     * @param year The year to calculate Easter for
+     * @return The Date of Easter Sunday for the specified year
      */
-    private Date calculateEaster(int year) {
+    protected Date calculateEaster(int year) {
         try {
             // Using the anonymous Gregorian algorithm
             int a = year % 19;
