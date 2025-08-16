@@ -51,7 +51,7 @@ public class Text4j {
      */
     public Text4j appendCompact(Object o) {
         if (o != null) {
-            return this.appendCompact(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+            return this.appendCompact(Json4j.marshall(o));
         }
         return this;
     }
@@ -118,7 +118,7 @@ public class Text4j {
      */
     public Text4j append(Object o) {
         if (o != null) {
-            return this.append(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+            return this.append(Json4j.marshall(o));
         }
         return this;
     }
@@ -132,8 +132,7 @@ public class Text4j {
      */
     public Text4j append(Object o, int repeat) {
         if (o != null) {
-            String value = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
-            return this.append(String4j.repeat(value, repeat));
+            return this.append(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -191,7 +190,7 @@ public class Text4j {
      */
     public Text4j appendIf(boolean condition, Object o) {
         if (condition && o != null) {
-            return this.append(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+            return this.append(Json4j.marshall(o));
         }
         return this;
     }
@@ -206,8 +205,7 @@ public class Text4j {
      */
     public Text4j appendIf(boolean condition, Object o, int repeat) {
         if (condition && o != null) {
-            String value = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
-            return this.append(String4j.repeat(value, repeat));
+            return this.append(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -1195,7 +1193,7 @@ public class Text4j {
         if (o == null) {
             return this;
         }
-        return this.beginningComma(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+        return this.beginningComma(Json4j.marshall(o));
     }
 
     /**
@@ -1288,7 +1286,7 @@ public class Text4j {
         if (o == null) {
             return this;
         }
-        return this.endingComma(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+        return this.endingComma(Json4j.marshall(o));
     }
 
     /**
@@ -1465,7 +1463,7 @@ public class Text4j {
         if (o == null) {
             return this;
         }
-        return this.beginningColon(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+        return this.beginningColon(Json4j.marshall(o));
     }
 
     /**
@@ -1496,7 +1494,7 @@ public class Text4j {
         if (o == null) {
             return this;
         }
-        return this.endingColon(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+        return this.endingColon(Json4j.marshall(o));
     }
 
     /**
@@ -1601,8 +1599,7 @@ public class Text4j {
      */
     public Text4j spaceIf(boolean condition, Object o, int repeat) {
         if (condition && o != null) {
-            String value = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
-            return this.append(String4j.repeat(value, repeat)).space();
+            return this.append(String4j.repeat(o, repeat)).space();
         }
         return this;
     }
