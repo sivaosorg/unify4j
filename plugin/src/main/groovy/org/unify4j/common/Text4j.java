@@ -323,7 +323,7 @@ public class Text4j {
         if (value == null) {
             return this;
         }
-        return this.vertical(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+        return this.vertical(Json4j.marshall(value));
     }
 
     /**
@@ -350,7 +350,7 @@ public class Text4j {
      */
     public Text4j verticalIf(boolean condition, Object value) {
         if (condition && value != null) {
-            return this.vertical(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+            return this.vertical(Json4j.marshall(value));
         }
         return this;
     }
@@ -365,7 +365,7 @@ public class Text4j {
      */
     public Text4j verticalIf(boolean condition, Object value, int repeat) {
         if (condition && value != null) {
-            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            String str = Json4j.marshall(value);
             return this.vertical(String4j.repeat(str, repeat));
         }
         return this;
@@ -399,7 +399,7 @@ public class Text4j {
         if (value == null) {
             return this;
         }
-        return this.parenthesis(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+        return this.parenthesis(Json4j.marshall(value));
     }
 
     /**
@@ -426,7 +426,7 @@ public class Text4j {
      */
     public Text4j parenthesisIf(boolean condition, Object value) {
         if (condition && value != null) {
-            return this.parenthesis(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+            return this.parenthesis(Json4j.marshall(value));
         }
         return this;
     }
@@ -441,7 +441,7 @@ public class Text4j {
      */
     public Text4j parenthesisIf(boolean condition, Object value, int repeat) {
         if (condition && value != null) {
-            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            String str = Json4j.marshall(value);
             return this.parenthesis(String4j.repeat(str, repeat));
         }
         return this;
@@ -490,7 +490,7 @@ public class Text4j {
         if (value == null) {
             return this;
         }
-        return this.bracket(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+        return this.bracket(Json4j.marshall(value));
     }
 
     /**
@@ -517,7 +517,7 @@ public class Text4j {
      */
     public Text4j bracketIf(boolean condition, Object value) {
         if (condition && value != null) {
-            return this.bracket(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+            return this.bracket(Json4j.marshall(value));
         }
         return this;
     }
@@ -532,7 +532,7 @@ public class Text4j {
      */
     public Text4j bracketIf(boolean condition, Object value, int repeat) {
         if (condition && value != null) {
-            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            String str = Json4j.marshall(value);
             return this.bracket(String4j.repeat(str, repeat));
         }
         return this;
@@ -581,7 +581,7 @@ public class Text4j {
         if (value == null) {
             return this;
         }
-        return this.curlyBracket(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+        return this.curlyBracket(Json4j.marshall(value));
     }
 
     /**
@@ -608,7 +608,7 @@ public class Text4j {
      */
     public Text4j curlyBracketIf(boolean condition, Object value) {
         if (condition && value != null) {
-            return this.curlyBracket(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+            return this.curlyBracket(Json4j.marshall(value));
         }
         return this;
     }
@@ -623,7 +623,7 @@ public class Text4j {
      */
     public Text4j curlyBracketIf(boolean condition, Object value, int repeat) {
         if (condition && value != null) {
-            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            String str = Json4j.marshall(value);
             return this.curlyBracket(String4j.repeat(str, repeat));
         }
         return this;
@@ -672,7 +672,7 @@ public class Text4j {
         if (value == null) {
             return this;
         }
-        return this.quotation(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+        return this.quotation(Json4j.marshall(value));
     }
 
     /**
@@ -699,7 +699,7 @@ public class Text4j {
      */
     public Text4j quotationIf(boolean condition, Object value) {
         if (condition && value != null) {
-            return this.quotation(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+            return this.quotation(Json4j.marshall(value));
         }
         return this;
     }
@@ -714,7 +714,7 @@ public class Text4j {
      */
     public Text4j quotationIf(boolean condition, Object value, int repeat) {
         if (condition && value != null) {
-            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            String str = Json4j.marshall(value);
             return this.quotation(String4j.repeat(str, repeat));
         }
         return this;
@@ -762,7 +762,7 @@ public class Text4j {
         if (value == null) {
             return this;
         }
-        return this.hyphenMinus(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+        return this.hyphenMinus(Json4j.marshall(value));
     }
 
     /**
@@ -789,7 +789,7 @@ public class Text4j {
      */
     public Text4j hyphenMinusIf(boolean condition, Object value) {
         if (condition && value != null) {
-            return this.hyphenMinus(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+            return this.hyphenMinus(Json4j.marshall(value));
         }
         return this;
     }
@@ -804,7 +804,7 @@ public class Text4j {
      */
     public Text4j hyphenMinusIf(boolean condition, Object value, int repeat) {
         if (condition && value != null) {
-            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            String str = Json4j.marshall(value);
             return this.hyphenMinus(String4j.repeat(str, repeat));
         }
         return this;
@@ -852,7 +852,7 @@ public class Text4j {
         if (value == null) {
             return this;
         }
-        return this.equal(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+        return this.equal(Json4j.marshall(value));
     }
 
     /**
@@ -879,7 +879,7 @@ public class Text4j {
      */
     public Text4j equalIf(boolean condition, Object value) {
         if (condition && value != null) {
-            return this.equal(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+            return this.equal(Json4j.marshall(value));
         }
         return this;
     }
@@ -894,7 +894,7 @@ public class Text4j {
      */
     public Text4j equalIf(boolean condition, Object value, int repeat) {
         if (condition && value != null) {
-            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            String str = Json4j.marshall(value);
             return this.equal(String4j.repeat(str, repeat));
         }
         return this;
@@ -942,7 +942,7 @@ public class Text4j {
         if (value == null) {
             return this;
         }
-        return this.endingEqual(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+        return this.endingEqual(Json4j.marshall(value));
     }
 
     /**
@@ -984,7 +984,7 @@ public class Text4j {
      */
     public Text4j endingEqualIf(boolean condition, Object value, int repeat) {
         if (condition && value != null) {
-            String str = Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value);
+            String str = Json4j.marshall(value);
             return this.endingEqual(String4j.repeat(str, repeat));
         }
         return this;
