@@ -1195,7 +1195,6 @@ public class String4j {
      * or null if the object is null
      * @throws IllegalArgumentException if the repeat count is negative
      */
-    @SuppressWarnings({"StringRepeatCanBeUsed"})
     public static String repeat(Object o, int cnt) {
         if (o == null) {
             return null;
@@ -1203,11 +1202,8 @@ public class String4j {
         if (cnt < 0) {
             throw new IllegalArgumentException("Repeat count must be non-negative");
         }
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < cnt; i++) {
-            builder.append(o);
-        }
-        return builder.toString();
+        String str = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
+        return repeat(str, cnt);
     }
 
     /**
@@ -1230,13 +1226,7 @@ public class String4j {
         if (cnt < 0) {
             throw new IllegalArgumentException("Repeat count must be non-negative");
         }
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < cnt; i++) {
-            if (i > 0 && isNotEmpty(separator)) {
-                builder.append(separator);
-            }
-            builder.append(o);
-        }
-        return builder.toString();
+        String str = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
+        return repeat(str, cnt, separator);
     }
 }
