@@ -423,6 +423,36 @@ public class Text4j {
     }
 
     /**
+     * Appends the given string suffixed with an equals sign.
+     *
+     * @param str The string to suffix with an equals sign.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingEqual(String str) {
+        if (String4j.isEmpty(str)) {
+            return this;
+        }
+        String f = String.format("%s%s",
+                str,
+                Ascii.Symbol.EQUALS_SIGN);
+        return this.append(f);
+    }
+
+    /**
+     * Appends the string representation of the given object suffixed with an equals sign.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param value The object to suffix with an equals sign.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingEqual(Object value) {
+        if (value == null) {
+            return this;
+        }
+        return this.endingEqual(Class4j.isPrimitive(value.getClass()) ? value.toString() : Json4j.toJson(value));
+    }
+
+    /**
      * Appends a new line to the message.
      *
      * @return The current instance of Text4j.
