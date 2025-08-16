@@ -28,9 +28,11 @@ public class Main {
         System.out.println(decision);
         String text = new Text4j()
                 .appendCompact("TZ")
-                .colon().timestamp().endingColon("text")
+                .colon().timestamp()
+                .endingColon("text")
                 .curlyBracket("LOG")
                 .verticalIf(true, 123, 3)
+                .quotation("Sample Text")
                 .toString();
         System.out.println(text);
     }
