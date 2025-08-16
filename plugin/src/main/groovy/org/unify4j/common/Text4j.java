@@ -190,7 +190,7 @@ public class Text4j {
      */
     public Text4j appendIf(boolean condition, Object o) {
         if (condition && o != null) {
-            return this.append(Json4j.marshall(o));
+            return this.append(o);
         }
         return this;
     }
@@ -205,7 +205,7 @@ public class Text4j {
      */
     public Text4j appendIf(boolean condition, Object o, int repeat) {
         if (condition && o != null) {
-            return this.append(String4j.repeat(o, repeat));
+            return this.append(o, repeat);
         }
         return this;
     }
@@ -391,14 +391,14 @@ public class Text4j {
      * Appends the string representation of the given object enclosed in parentheses.
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
-     * @param value The object to enclose in parentheses.
+     * @param o The object to enclose in parentheses.
      * @return The current instance of Text4j.
      */
-    public Text4j parenthesis(Object value) {
-        if (value == null) {
+    public Text4j parenthesis(Object o) {
+        if (o == null) {
             return this;
         }
-        return this.parenthesis(Json4j.marshall(value));
+        return this.parenthesis(Json4j.marshall(o));
     }
 
     /**
@@ -420,12 +420,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
-     * @param value     The object to enclose in parentheses if the condition is true.
+     * @param o         The object to enclose in parentheses if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j parenthesisIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.parenthesis(Json4j.marshall(value));
+    public Text4j parenthesisIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.parenthesis(o);
         }
         return this;
     }
@@ -481,14 +481,14 @@ public class Text4j {
      * Appends the string representation of the given object enclosed in square brackets.
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
-     * @param value The object to enclose in square brackets.
+     * @param o The object to enclose in square brackets.
      * @return The current instance of Text4j.
      */
-    public Text4j bracket(Object value) {
-        if (value == null) {
+    public Text4j bracket(Object o) {
+        if (o == null) {
             return this;
         }
-        return this.bracket(Json4j.marshall(value));
+        return this.bracket(Json4j.marshall(o));
     }
 
     /**
@@ -510,12 +510,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
-     * @param value     The object to enclose in square brackets if the condition is true.
+     * @param o         The object to enclose in square brackets if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j bracketIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.bracket(Json4j.marshall(value));
+    public Text4j bracketIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.bracket(o);
         }
         return this;
     }
@@ -571,14 +571,14 @@ public class Text4j {
      * Appends the string representation of the given object enclosed in curly brackets.
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
-     * @param value The object to enclose in curly brackets.
+     * @param o The object to enclose in curly brackets.
      * @return The current instance of Text4j.
      */
-    public Text4j curlyBracket(Object value) {
-        if (value == null) {
+    public Text4j curlyBracket(Object o) {
+        if (o == null) {
             return this;
         }
-        return this.curlyBracket(Json4j.marshall(value));
+        return this.curlyBracket(Json4j.marshall(o));
     }
 
     /**
@@ -600,12 +600,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
-     * @param value     The object to enclose in curly brackets if the condition is true.
+     * @param o         The object to enclose in curly brackets if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j curlyBracketIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.curlyBracket(Json4j.marshall(value));
+    public Text4j curlyBracketIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.curlyBracket(o);
         }
         return this;
     }
