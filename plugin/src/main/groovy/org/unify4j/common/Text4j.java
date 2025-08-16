@@ -1027,6 +1027,63 @@ public class Text4j {
     }
 
     /**
+     * Conditionally appends a new line to the message based on the provided condition.
+     *
+     * @param condition If true, a new line will be appended; otherwise, no action is taken.
+     * @return The current instance of Text4j.
+     */
+    public Text4j lineIf(boolean condition) {
+        if (condition) {
+            return this.line();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a new line repeated a specified number of times to the message based on the provided condition.
+     *
+     * @param condition If true, a new line will be appended; otherwise, no action is taken.
+     * @param repeat    The number of times to append the new line.
+     * @return The current instance of Text4j.
+     */
+    public Text4j lineIf(boolean condition, int repeat) {
+        if (condition) {
+            return this.line(repeat);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the given string followed by a new line to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended followed by a new line; otherwise, no action is taken.
+     * @param str       The string to append followed by a new line if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j lineIf(boolean condition, String str) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.append(str).line();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the string representation of the given object followed by a new line to the message.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param condition If true, the object's string representation will be appended followed by a new line; otherwise, no action is taken.
+     * @param value     The object to append followed by a new line if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j lineIf(boolean condition, Object value) {
+        if (condition && value != null) {
+            return this.append(value).line();
+        }
+        return this;
+    }
+
+    /**
      * Appends a comma to the message.
      *
      * @return The current instance of Text4j.
