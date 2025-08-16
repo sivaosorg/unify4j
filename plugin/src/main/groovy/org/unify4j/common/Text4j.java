@@ -1207,8 +1207,7 @@ public class Text4j {
      */
     public Text4j beginningCommaIf(boolean condition, Object o, int repeat) {
         if (condition && o != null) {
-            String str = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
-            return this.beginningComma(String4j.repeat(str, repeat));
+            return this.beginningComma(String4j.repeat(o, repeat));
         }
         return this;
     }
