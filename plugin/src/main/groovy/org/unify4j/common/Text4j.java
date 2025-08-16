@@ -1363,6 +1363,81 @@ public class Text4j {
     }
 
     /**
+     * Conditionally appends a colon to the message based on the provided condition.
+     *
+     * @param condition If true, a colon will be appended; otherwise, no action is taken.
+     * @return The current instance of Text4j.
+     */
+    public Text4j colonIf(boolean condition) {
+        if (condition) {
+            return this.colon();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the given string followed by a colon to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended followed by a colon; otherwise, no action is taken.
+     * @param str       The string to append followed by a colon if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j colonIf(boolean condition, String str) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.append(str).colon();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the string representation of the given object followed by a colon to the message.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param condition If true, the object's string representation will be appended followed by a colon; otherwise, no action is taken.
+     * @param o         The object to append followed by a colon if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j colonIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.append(o).colon();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the given string repeated a specified number of times followed by a colon to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended followed by a colon; otherwise, no action is taken.
+     * @param o         The text to append followed by a colon if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j colonIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.append(String4j.repeat(o, repeat)).colon();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the given string repeated a specified number of times followed by a colon to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended followed by a colon; otherwise, no action is taken.
+     * @param str       The text to append followed by a colon if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j colonIf(boolean condition, String str, int repeat) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.append(String4j.repeat(str, repeat)).colon();
+        }
+        return this;
+    }
+
+    /**
      * Appends a colon followed by the given string to the message.
      * If the string is empty, no action is taken.
      *
