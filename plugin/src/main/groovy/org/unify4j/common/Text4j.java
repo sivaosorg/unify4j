@@ -153,6 +153,66 @@ public class Text4j {
     }
 
     /**
+     * Conditionally appends a non-empty string to the message based on the provided condition.
+     *
+     * @param condition If true, the string will be appended; otherwise, no action is taken.
+     * @param str       The string to append if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendIf(boolean condition, String str) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.append(str);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a formatted string using the specified format and arguments to the message.
+     *
+     * @param condition If true, the formatted string will be appended; otherwise, no action is taken.
+     * @param format    The format string.
+     * @param args      The arguments to format.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendIf(boolean condition, String format, Object... args) {
+        if (condition && !String4j.isEmpty(format) && !Array4j.isEmpty(args)) {
+            String formatted = String.format(format, args);
+            return this.append(formatted);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a non-null object's string representation (or its JSON if not a primitive) to the message.
+     *
+     * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
+     * @param o         The object to append if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.append(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a non-null object's string representation (or its JSON if not a primitive) repeated a specified number of times to the message.
+     *
+     * @param condition If true, the object's string representation repeated will be appended; otherwise, no action is taken.
+     * @param o         The object to append if the condition is true.
+     * @param repeat    The number of times to repeat the object's string representation.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            String value = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
+            return this.append(String4j.repeat(value, repeat));
+        }
+        return this;
+    }
+
+    /**
      * Appends a formatted timestamp of the given date and timezone.
      *
      * @param date     The date to format.
