@@ -59,7 +59,7 @@ public class IDecisionRequest implements Serializable {
     @Override
     public String toString() {
         return StringBuilder4j.create()
-                .append("IDecision Inquiry")
+                .append("Submission")
                 .appendColon()
                 .appendSpace()
                 .appendLBrace()

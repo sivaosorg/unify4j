@@ -7,6 +7,7 @@ import org.unify4j.text.TimeFormatText;
 import java.util.Date;
 import java.util.TimeZone;
 
+@SuppressWarnings({"GrazieInspection"})
 public class Text4j {
     protected final StringBuilder message;
 

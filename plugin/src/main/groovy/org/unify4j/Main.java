@@ -7,6 +7,7 @@ import org.unify4j.common.TimeBuilder4j;
 import org.unify4j.common.TimeDecorator4j;
 import org.unify4j.common.TimeExtensions4j;
 import org.unify4j.model.enums.TimezoneType;
+import org.unify4j.model.request.IDecisionRequest;
 import org.unify4j.model.request.TimeframeRequest;
 
 import java.util.Date;
@@ -23,5 +24,10 @@ public class Main {
         as.setStart(new Date());
         as.setEnd(Time4j.addDays(new Date(), 10));
         System.out.println(as);
+        IDecisionRequest decision = new IDecisionRequest();
+        decision.setEnabled(true);
+        decision.setValue(1234);
+        decision.setLabel("Sample Decision Label");
+        System.out.println(decision);
     }
 }
