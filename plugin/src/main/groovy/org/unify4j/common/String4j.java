@@ -1202,7 +1202,7 @@ public class String4j {
         if (cnt < 0) {
             throw new IllegalArgumentException("Repeat count must be non-negative");
         }
-        String str = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
+        String str = Json4j.marshall(o);
         return repeat(str, cnt);
     }
 
@@ -1226,7 +1226,7 @@ public class String4j {
         if (cnt < 0) {
             throw new IllegalArgumentException("Repeat count must be non-negative");
         }
-        String str = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
+        String str = Json4j.marshall(o);
         return repeat(str, cnt, separator);
     }
 }
