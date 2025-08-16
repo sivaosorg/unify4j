@@ -1136,6 +1136,38 @@ public class Text4j {
     }
 
     /**
+     * Conditionally appends the given string repeated a specified number of times followed by a comma to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended followed by a comma; otherwise, no action is taken.
+     * @param value     The text to append followed by a comma if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j commaIf(boolean condition, Object value, int repeat) {
+        if (condition && value != null) {
+            return this.append(String4j.repeat(value, repeat)).comma();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the given string repeated a specified number of times followed by a comma to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended followed by a comma; otherwise, no action is taken.
+     * @param str       The text to append followed by a comma if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j commaIf(boolean condition, String str, int repeat) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.append(String4j.repeat(str, repeat)).comma();
+        }
+        return this;
+    }
+
+    /**
      * Appends a comma followed by the given string to the message.
      * If the string is empty, no action is taken.
      *
