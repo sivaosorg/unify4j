@@ -345,12 +345,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
-     * @param value     The object to enclose in vertical bars if the condition is true.
+     * @param o         The object to enclose in vertical bars if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j verticalIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.vertical(Json4j.marshall(value));
+    public Text4j verticalIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.vertical(o);
         }
         return this;
     }
