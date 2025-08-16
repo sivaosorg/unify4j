@@ -20,7 +20,7 @@ public class Main {
         System.out.println(TimeExtensions4j.decorate(new Date()).withTimezone(TimezoneType.DefaultTimezoneManila).format());
         TimeframeRequest as = new TimeframeRequest();
         as.setStart(new Date());
-        as.setEnd(Time4j.addDays(new Date(), 15));
+        as.setEnd(Time4j.addDays(new Date(), 2));
         System.out.println(as);
         DateStatsResponse stats = TimeExtensions4j.calculateDateStats(as.getAllDates());
         System.out.println(stats);
@@ -38,5 +38,6 @@ public class Main {
                 .quotation("Sample Text")
                 .toString();
         System.out.println(text);
+        System.out.println(String4j.repeat(123, 4));
     }
 }

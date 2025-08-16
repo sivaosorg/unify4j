@@ -1153,4 +1153,90 @@ public class String4j {
         }
         return builder.toString();
     }
+
+    /**
+     * Repeats the given string a specified number of times, with an optional separator.
+     *
+     * @param s         the string to be repeated
+     * @param cnt       the number of times to repeat the string
+     * @param separator the separator to be placed between repetitions, may be null or empty
+     * @return a new string consisting of the original string repeated the specified number of times,
+     * separated by the specified separator, or the original string if it is empty
+     * @throws IllegalArgumentException if the repeat count is negative
+     *                                  <p>
+     *                                  This method suppresses the "StringRepeatCanBeUsed" warning as it manually implements the repeat logic
+     *                                  to maintain compatibility with Java versions prior to 11 where the String::repeat method is not available.
+     */
+    public static String repeat(String s, int cnt, String separator) {
+        if (isEmpty(s)) {
+            return s;
+        }
+        if (cnt < 0) {
+            throw new IllegalArgumentException("Repeat count must be non-negative");
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < cnt; i++) {
+            if (i > 0 && isNotEmpty(separator)) {
+                builder.append(separator);
+            }
+            builder.append(s);
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Repeats the given object a specified number of times.
+     * <p>
+     * This method converts the object to a string representation and repeats it the specified number of times.
+     *
+     * @param o   the object to be repeated, may be null
+     * @param cnt the number of times to repeat the object, must be non-negative
+     * @return a new string consisting of the object's string representation repeated the specified number of times,
+     * or null if the object is null
+     * @throws IllegalArgumentException if the repeat count is negative
+     */
+    @SuppressWarnings({"StringRepeatCanBeUsed"})
+    public static String repeat(Object o, int cnt) {
+        if (o == null) {
+            return null;
+        }
+        if (cnt < 0) {
+            throw new IllegalArgumentException("Repeat count must be non-negative");
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < cnt; i++) {
+            builder.append(o);
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Repeats the given object a specified number of times, with an optional separator.
+     * <p>
+     * This method converts the object to a string representation and repeats it the specified number of times,
+     * inserting the specified separator between repetitions.
+     *
+     * @param o         the object to be repeated, may be null
+     * @param cnt       the number of times to repeat the object, must be non-negative
+     * @param separator the separator to be placed between repetitions, may be null or empty
+     * @return a new string consisting of the object's string representation repeated the specified number of times,
+     * separated by the specified separator, or null if the object is null
+     * @throws IllegalArgumentException if the repeat count is negative
+     */
+    public static String repeat(Object o, int cnt, String separator) {
+        if (o == null) {
+            return null;
+        }
+        if (cnt < 0) {
+            throw new IllegalArgumentException("Repeat count must be non-negative");
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < cnt; i++) {
+            if (i > 0 && isNotEmpty(separator)) {
+                builder.append(separator);
+            }
+            builder.append(o);
+        }
+        return builder.toString();
+    }
 }
