@@ -1093,6 +1093,49 @@ public class Text4j {
     }
 
     /**
+     * Conditionally appends a comma to the message based on the provided condition.
+     *
+     * @param condition If true, a comma will be appended; otherwise, no action is taken.
+     * @return The current instance of Text4j.
+     */
+    public Text4j commaIf(boolean condition) {
+        if (condition) {
+            return this.comma();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the given string followed by a comma to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended followed by a comma; otherwise, no action is taken.
+     * @param str       The string to append followed by a comma if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j commaIf(boolean condition, String str) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.append(str).comma();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends the string representation of the given object followed by a comma to the message.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param condition If true, the object's string representation will be appended followed by a comma; otherwise, no action is taken.
+     * @param value     The object to append followed by a comma if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j commaIf(boolean condition, Object value) {
+        if (condition && value != null) {
+            return this.append(value).comma();
+        }
+        return this;
+    }
+
+    /**
      * Appends a comma followed by the given string to the message.
      * If the string is empty, no action is taken.
      *
@@ -1121,6 +1164,69 @@ public class Text4j {
             return this;
         }
         return this.beginningComma(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+    }
+
+    /**
+     * Conditionally appends a comma followed by the given string to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended after a comma; otherwise, no action is taken.
+     * @param str       The string to append after the comma if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j beginningCommaIf(boolean condition, String str) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.beginningComma(str);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a comma followed by the string representation of the given object to the message.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param condition If true, the object's string representation will be appended after a comma; otherwise, no action is taken.
+     * @param o         The object to append after the comma if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j beginningCommaIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.beginningComma(o);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a comma followed by the given string repeated a specified number of times to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended after a comma; otherwise, no action is taken.
+     * @param o         The text to append after the comma if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j beginningCommaIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            String str = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
+            return this.beginningComma(String4j.repeat(str, repeat));
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a comma followed by the given string repeated a specified number of times to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param condition If true, the string will be appended after a comma; otherwise, no action is taken.
+     * @param str       The text to append after the comma if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j beginningCommaIf(boolean condition, String str, int repeat) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.beginningComma(String4j.repeat(str, repeat));
+        }
+        return this;
     }
 
     /**
