@@ -100,17 +100,6 @@ public class Text4j {
     }
 
     /**
-     * Appends a string repeated a specified number of times followed by a space.
-     *
-     * @param str    The string to repeat and append.
-     * @param repeat The number of times to repeat the string.
-     * @return The current instance of Text4j.
-     */
-    public Text4j append(String str, int repeat) {
-        return this.append(String4j.repeat(str, repeat));
-    }
-
-    /**
      * Appends a non-null object's string representation (or its JSON if not a primitive) followed by a space.
      *
      * @param o The object to append.
@@ -121,6 +110,17 @@ public class Text4j {
             return this.append(Json4j.marshall(o));
         }
         return this;
+    }
+
+    /**
+     * Appends a string repeated a specified number of times followed by a space.
+     *
+     * @param str    The string to repeat and append.
+     * @param repeat The number of times to repeat the string.
+     * @return The current instance of Text4j.
+     */
+    public Text4j append(String str, int repeat) {
+        return this.append(String4j.repeat(str, repeat));
     }
 
     /**
@@ -316,14 +316,14 @@ public class Text4j {
      * Appends the string representation of the given object enclosed in vertical bars.
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
-     * @param value The object to enclose in vertical bars.
+     * @param o The object to enclose in vertical bars.
      * @return The current instance of Text4j.
      */
-    public Text4j vertical(Object value) {
-        if (value == null) {
+    public Text4j vertical(Object o) {
+        if (o == null) {
             return this;
         }
-        return this.vertical(Json4j.marshall(value));
+        return this.vertical(Json4j.marshall(o));
     }
 
     /**
