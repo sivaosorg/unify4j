@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.unify4j.common.Json4j;
+import org.unify4j.common.StringBuilder4j;
+import org.unify4j.common.Time4j;
 
 import java.io.Serializable;
 
@@ -56,6 +58,23 @@ public class IDecisionRequest implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("IDecision request { label: '%s', enabled: %s, value: %s }", label, enabled, Json4j.toJson(value));
+        return StringBuilder4j.create()
+                .append("IDecision Inquiry")
+                .appendColon()
+                .appendSpace()
+                .appendLBrace()
+                .appendSpace()
+                .appendIf(label != null, "label: ")
+                .appendIf(label != null, label)
+                .appendIf(label != null, ", ")
+                .append("enabled: ")
+                .append(enabled)
+                .appendComma()
+                .appendSpace()
+                .append("value: ")
+                .append(Json4j.toJson(value))
+                .appendSpace()
+                .appendRBrace()
+                .build();
     }
 }
