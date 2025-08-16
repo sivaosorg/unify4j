@@ -451,6 +451,68 @@ public class Text4j {
     }
 
     /**
+     * Appends a comma followed by the given string to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param str The string to append after the comma.
+     * @return The current instance of Text4j.
+     */
+    public Text4j beginningComma(String str) {
+        if (String4j.isEmpty(str)) {
+            return this;
+        }
+        String f = String.format("%s %s",
+                Ascii.Punctuation.COMMA,
+                str);
+        return this.append(f);
+    }
+
+    /**
+     * Appends a comma followed by the string representation of the given object to the message.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param o The object to append after the comma.
+     * @return The current instance of Text4j.
+     */
+    public Text4j beginningComma(Object o) {
+        if (o == null) {
+            return this;
+        }
+        return this.beginningComma(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+    }
+
+    /**
+     * Appends a comma followed by the given string to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param str The string to append after the comma.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingComma(String str) {
+        if (String4j.isEmpty(str)) {
+            return this;
+        }
+        String f = String.format("%s%s",
+                str,
+                Ascii.Punctuation.COMMA);
+        return this.append(f);
+    }
+
+    /**
+     * Appends a comma followed by the string representation of the given object to the message.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param o The object to append after the comma.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingComma(Object o) {
+        if (o == null) {
+            return this;
+        }
+        return this.endingComma(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+    }
+
+    /**
      * Appends a semicolon to the message.
      *
      * @return The current instance of Text4j.
