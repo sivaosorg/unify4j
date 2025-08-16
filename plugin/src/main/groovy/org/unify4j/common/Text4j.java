@@ -359,14 +359,13 @@ public class Text4j {
      * Conditionally appends the given text enclosed in vertical bars repeated a specified number of times based on the provided condition.
      *
      * @param condition If true, the text will be appended; otherwise, no action is taken.
-     * @param value     The text to enclose in vertical bars if the condition is true.
+     * @param o         The text to enclose in vertical bars if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j verticalIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            String str = Json4j.marshall(value);
-            return this.vertical(String4j.repeat(str, repeat));
+    public Text4j verticalIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.vertical(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -435,14 +434,13 @@ public class Text4j {
      * Conditionally appends the given string enclosed in parentheses repeated a specified number of times based on the provided condition.
      *
      * @param condition If true, the string will be appended; otherwise, no action is taken.
-     * @param value     The text to enclose in parentheses if the condition is true.
+     * @param o         The text to enclose in parentheses if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j parenthesisIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            String str = Json4j.marshall(value);
-            return this.parenthesis(String4j.repeat(str, repeat));
+    public Text4j parenthesisIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.parenthesis(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -526,14 +524,13 @@ public class Text4j {
      * Conditionally appends the given string enclosed in square brackets repeated a specified number of times based on the provided condition.
      *
      * @param condition If true, the string will be appended; otherwise, no action is taken.
-     * @param value     The text to enclose in square brackets if the condition is true.
+     * @param o         The text to enclose in square brackets if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j bracketIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            String str = Json4j.marshall(value);
-            return this.bracket(String4j.repeat(str, repeat));
+    public Text4j bracketIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.bracket(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -617,14 +614,13 @@ public class Text4j {
      * Conditionally appends the given string enclosed in curly brackets repeated a specified number of times based on the provided condition.
      *
      * @param condition If true, the string will be appended; otherwise, no action is taken.
-     * @param value     The text to enclose in curly brackets if the condition is true.
+     * @param o         The text to enclose in curly brackets if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j curlyBracketIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            String str = Json4j.marshall(value);
-            return this.curlyBracket(String4j.repeat(str, repeat));
+    public Text4j curlyBracketIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.curlyBracket(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -708,14 +704,13 @@ public class Text4j {
      * Conditionally appends the given string enclosed in quotation marks repeated a specified number of times based on the provided condition.
      *
      * @param condition If true, the string will be appended; otherwise, no action is taken.
-     * @param value     The text to enclose in quotation marks if the condition is true.
+     * @param o         The text to enclose in quotation marks if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j quotationIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            String str = Json4j.marshall(value);
-            return this.quotation(String4j.repeat(str, repeat));
+    public Text4j quotationIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.quotation(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -798,14 +793,13 @@ public class Text4j {
      * Conditionally appends the given string prefixed with a hyphen-minus repeated a specified number of times based on the provided condition.
      *
      * @param condition If true, the string will be appended; otherwise, no action is taken.
-     * @param value     The text to prefix with a hyphen-minus if the condition is true.
+     * @param o         The text to prefix with a hyphen-minus if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j hyphenMinusIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            String str = Json4j.marshall(value);
-            return this.hyphenMinus(String4j.repeat(str, repeat));
+    public Text4j hyphenMinusIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.hyphenMinus(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -888,14 +882,13 @@ public class Text4j {
      * Conditionally appends the given string prefixed with an equals sign repeated a specified number of times based on the provided condition.
      *
      * @param condition If true, the string will be appended; otherwise, no action is taken.
-     * @param value     The text to prefix with an equals sign if the condition is true.
+     * @param o         The text to prefix with an equals sign if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j equalIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            String str = Json4j.marshall(value);
-            return this.equal(String4j.repeat(str, repeat));
+    public Text4j equalIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.equal(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -978,14 +971,13 @@ public class Text4j {
      * Conditionally appends the given string suffixed with an equals sign repeated a specified number of times based on the provided condition.
      *
      * @param condition If true, the string will be appended; otherwise, no action is taken.
-     * @param value     The text to suffix with an equals sign if the condition is true.
+     * @param o         The text to suffix with an equals sign if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j endingEqualIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            String str = Json4j.marshall(value);
-            return this.endingEqual(String4j.repeat(str, repeat));
+    public Text4j endingEqualIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.endingEqual(String4j.repeat(o, repeat));
         }
         return this;
     }
@@ -1138,13 +1130,13 @@ public class Text4j {
      * If the string is empty, no action is taken.
      *
      * @param condition If true, the string will be appended followed by a comma; otherwise, no action is taken.
-     * @param value     The text to append followed by a comma if the condition is true.
+     * @param o         The text to append followed by a comma if the condition is true.
      * @param repeat    The number of times to repeat the text.
      * @return The current instance of Text4j.
      */
-    public Text4j commaIf(boolean condition, Object value, int repeat) {
-        if (condition && value != null) {
-            return this.append(String4j.repeat(value, repeat)).comma();
+    public Text4j commaIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            return this.append(String4j.repeat(o, repeat)).comma();
         }
         return this;
     }
