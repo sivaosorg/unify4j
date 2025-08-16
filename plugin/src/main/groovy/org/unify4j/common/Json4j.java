@@ -96,6 +96,19 @@ public class Json4j {
     }
 
     /**
+     * Converts the specified object to a JSON string or its string representation if it is a primitive type.
+     *
+     * @param o the object to convert
+     * @return a JSON string or the string representation of the object
+     */
+    public static String marshall(Object o) {
+        if (o == null) {
+            return "";
+        }
+        return Class4j.isPrimitive(o.getClass()) ? o.toString() : toJson(o);
+    }
+
+    /**
      * Converts the specified object to a Map<String, ?> using the default ObjectMapper instance.
      *
      * @param data the object to convert to a map
