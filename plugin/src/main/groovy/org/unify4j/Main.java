@@ -2,10 +2,7 @@ package org.unify4j;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.unify4j.common.Time4j;
-import org.unify4j.common.TimeBuilder4j;
-import org.unify4j.common.TimeDecorator4j;
-import org.unify4j.common.TimeExtensions4j;
+import org.unify4j.common.*;
 import org.unify4j.model.enums.TimezoneType;
 import org.unify4j.model.request.IDecisionRequest;
 import org.unify4j.model.request.TimeframeRequest;
@@ -29,5 +26,7 @@ public class Main {
         decision.setValue(1234);
         decision.setLabel("Sample Decision Label");
         System.out.println(decision);
+        String text = new Text4j().appendSkippedSpace("TZ").colon().timestamp().endingColon("text").toString();
+        System.out.println(text);
     }
 }

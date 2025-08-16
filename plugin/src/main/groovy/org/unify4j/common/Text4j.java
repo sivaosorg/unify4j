@@ -42,6 +42,21 @@ public class Text4j {
     }
 
     /**
+     * Appends a formatted string using the specified format and arguments, followed by a space.
+     *
+     * @param format The format string.
+     * @param args   The arguments to format.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendSkippedSpace(String format, Object... args) {
+        if (String4j.isEmpty(format) || Array4j.isEmpty(args)) {
+            return this;
+        }
+        String formatted = String.format(format, args);
+        return this.appendSkippedSpace(formatted);
+    }
+
+    /**
      * Appends a string repeated a specified number of times followed by a space.
      *
      * @param str    The string to repeat and append.
@@ -436,6 +451,77 @@ public class Text4j {
     }
 
     /**
+     * Appends a semicolon to the message.
+     *
+     * @return The current instance of Text4j.
+     */
+    public Text4j colon() {
+        return this.append(Ascii.Punctuation.COLON);
+    }
+
+    /**
+     * Appends a colon followed by the given string to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param str The string to append after the colon.
+     * @return The current instance of Text4j.
+     */
+    public Text4j beginningColon(String str) {
+        if (String4j.isEmpty(str)) {
+            return this;
+        }
+        String f = String.format("%s %s",
+                Ascii.Punctuation.COLON,
+                str);
+        return this.append(f);
+    }
+
+    /**
+     * Appends a colon followed by the string representation of the given object to the message.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param o The object to append after the colon.
+     * @return The current instance of Text4j.
+     */
+    public Text4j beginningColon(Object o) {
+        if (o == null) {
+            return this;
+        }
+        return this.beginningColon(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+    }
+
+    /**
+     * Appends a colon followed by the given string to the message.
+     * If the string is empty, no action is taken.
+     *
+     * @param str The string to append after the colon.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingColon(String str) {
+        if (String4j.isEmpty(str)) {
+            return this;
+        }
+        String f = String.format("%s%s",
+                str,
+                Ascii.Punctuation.COLON);
+        return this.append(f);
+    }
+
+    /**
+     * Appends a colon followed by the string representation of the given object to the message.
+     * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
+     *
+     * @param o The object to append after the colon.
+     * @return The current instance of Text4j.
+     */
+    public Text4j endingColon(Object o) {
+        if (o == null) {
+            return this;
+        }
+        return this.endingColon(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+    }
+
+    /**
      * Appends a space to the message.
      *
      * @return The current instance of Text4j.
@@ -453,6 +539,93 @@ public class Text4j {
      */
     public Text4j space(int repeat) {
         message.append(String4j.repeat(Ascii.Punctuation.SPACE, repeat));
+        return this;
+    }
+
+    /**
+     * Conditionally appends a space to the message based on the provided condition.
+     *
+     * @param condition If true, a space will be appended; otherwise, no action is taken.
+     * @return The current instance of Text4j.
+     */
+    public Text4j spaceIf(boolean condition) {
+        if (condition) {
+            return this.space();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a space repeated a specified number of times to the message based on the provided condition.
+     *
+     * @param condition If true, a space will be appended; otherwise, no action is taken.
+     * @param repeat    The number of times to repeat the space if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j spaceIf(boolean condition, int repeat) {
+        if (condition) {
+            return this.space(repeat);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a space followed by a string to the message based on the provided condition.
+     *
+     * @param condition If true, a space followed by the string will be appended; otherwise, no action is taken.
+     * @param str       The string to append after the space if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j spaceIf(boolean condition, String str) {
+        if (condition) {
+            return this.appendSkippedSpace(str).space();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a space followed by a formatted string to the message based on the provided condition.
+     *
+     * @param condition If true, a space followed by the formatted string will be appended; otherwise, no action is taken.
+     * @param format    The format string.
+     * @param args      The arguments to format.
+     * @return The current instance of Text4j.
+     */
+    public Text4j spaceIf(boolean condition, String format, Object... args) {
+        if (condition) {
+            return this.appendSkippedSpace(format, args).space();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a space followed by an object's string representation to the message based on the provided condition.
+     *
+     * @param condition If true, a space followed by the object's string representation will be appended; otherwise, no action is taken.
+     * @param o         The object to append after the space if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j spaceIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.appendSkippedSpace(o).space();
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a space followed by an object's string representation repeated a specified number of times to the message
+     * based on the provided condition.
+     *
+     * @param condition If true, a space followed by the object's string representation repeated will be appended; otherwise, no action is taken.
+     * @param o         The object to append after the space if the condition is true.
+     * @param repeat    The number of times to repeat the object's string representation.
+     * @return The current instance of Text4j.
+     */
+    public Text4j spaceIf(boolean condition, Object o, int repeat) {
+        if (condition && o != null) {
+            String value = Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o);
+            return this.append(String4j.repeat(value, repeat)).space();
+        }
         return this;
     }
 
