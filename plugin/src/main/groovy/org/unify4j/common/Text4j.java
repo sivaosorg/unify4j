@@ -450,6 +450,21 @@ public class Text4j {
     }
 
     /**
+     * Conditionally appends the given string enclosed in parentheses repeated a specified number of times based on the provided condition.
+     *
+     * @param condition If true, the string will be appended; otherwise, no action is taken.
+     * @param str       The text to enclose in parentheses if the condition is true.
+     * @param repeat    The number of times to repeat the text.
+     * @return The current instance of Text4j.
+     */
+    public Text4j parenthesisIf(boolean condition, String str, int repeat) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.parenthesis(String4j.repeat(str, repeat));
+        }
+        return this;
+    }
+
+    /**
      * Appends the given string enclosed in square brackets.
      *
      * @param str The string to enclose in square brackets.
