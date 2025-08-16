@@ -26,7 +26,7 @@ public class Main {
         decision.setValue(1234);
         decision.setLabel("Sample Decision Label");
         System.out.println(decision);
-        String text = new Text4j().appendSkippedSpace("TZ").colon().timestamp().endingColon("text").toString();
+        String text = new Text4j().appendCompact("TZ").colon().timestamp().endingColon("text").toString();
         System.out.println(text);
     }
 }

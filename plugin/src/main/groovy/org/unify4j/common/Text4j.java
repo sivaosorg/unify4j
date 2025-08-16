@@ -16,25 +16,12 @@ public class Text4j {
     }
 
     /**
-     * Appends a non-empty string followed by a space to the message.
-     *
-     * @param str The string to append.
-     * @return The current instance of Text4j.
-     */
-    public Text4j append(String str) {
-        if (String4j.isNotEmpty(str)) {
-            message.append(str);
-        }
-        return this.space();
-    }
-
-    /**
      * Appends a non-empty string to the message.
      *
      * @param str The string to append.
      * @return The current instance of Text4j.
      */
-    public Text4j appendSkippedSpace(String str) {
+    public Text4j appendCompact(String str) {
         if (String4j.isNotEmpty(str)) {
             message.append(str);
         }
@@ -48,12 +35,68 @@ public class Text4j {
      * @param args   The arguments to format.
      * @return The current instance of Text4j.
      */
-    public Text4j appendSkippedSpace(String format, Object... args) {
+    public Text4j appendCompact(String format, Object... args) {
         if (String4j.isEmpty(format) || Array4j.isEmpty(args)) {
             return this;
         }
         String formatted = String.format(format, args);
-        return this.appendSkippedSpace(formatted);
+        return this.appendCompact(formatted);
+    }
+
+    /**
+     * Appends a non-null object's string representation (or its JSON if not a primitive).
+     *
+     * @param o The object to append.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendCompact(Object o) {
+        if (o != null) {
+            return this.appendCompact(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a non-empty string followed by a space to the message.
+     *
+     * @param condition If true, the string will be appended; otherwise, no action is taken.
+     * @param str       The string to append if the condition is true.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendCompactIf(boolean condition, String str) {
+        if (condition && String4j.isNotEmpty(str)) {
+            return this.appendCompact(str);
+        }
+        return this;
+    }
+
+    /**
+     * Conditionally appends a formatted string using the specified format and arguments followed by a space.
+     *
+     * @param condition If true, the formatted string will be appended; otherwise, no action is taken.
+     * @param format    The format string.
+     * @param args      The arguments to format.
+     * @return The current instance of Text4j.
+     */
+    public Text4j appendCompactIf(boolean condition, String format, Object... args) {
+        if (condition && !String4j.isEmpty(format) && !Array4j.isEmpty(args)) {
+            String formatted = String.format(format, args);
+            return this.appendCompact(formatted);
+        }
+        return this;
+    }
+
+    /**
+     * Appends a non-empty string followed by a space to the message.
+     *
+     * @param str The string to append.
+     * @return The current instance of Text4j.
+     */
+    public Text4j append(String str) {
+        if (String4j.isNotEmpty(str)) {
+            message.append(str);
+        }
+        return this.space();
     }
 
     /**
@@ -76,19 +119,6 @@ public class Text4j {
     public Text4j append(Object o) {
         if (o != null) {
             return this.append(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
-        }
-        return this;
-    }
-
-    /**
-     * Appends a non-null object's string representation (or its JSON if not a primitive).
-     *
-     * @param o The object to append.
-     * @return The current instance of Text4j.
-     */
-    public Text4j appendSkippedSpace(Object o) {
-        if (o != null) {
-            return this.appendSkippedSpace(Class4j.isPrimitive(o.getClass()) ? o.toString() : Json4j.toJson(o));
         }
         return this;
     }
@@ -670,7 +700,7 @@ public class Text4j {
      */
     public Text4j spaceIf(boolean condition, String str) {
         if (condition) {
-            return this.appendSkippedSpace(str).space();
+            return this.appendCompact(str).space();
         }
         return this;
     }
@@ -685,7 +715,7 @@ public class Text4j {
      */
     public Text4j spaceIf(boolean condition, String format, Object... args) {
         if (condition) {
-            return this.appendSkippedSpace(format, args).space();
+            return this.appendCompact(format, args).space();
         }
         return this;
     }
@@ -699,7 +729,7 @@ public class Text4j {
      */
     public Text4j spaceIf(boolean condition, Object o) {
         if (condition && o != null) {
-            return this.appendSkippedSpace(o).space();
+            return this.appendCompact(o).space();
         }
         return this;
     }
