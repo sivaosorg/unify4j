@@ -661,14 +661,14 @@ public class Text4j {
      * Appends the string representation of the given object enclosed in quotation marks.
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
-     * @param value The object to enclose in quotation marks.
+     * @param o The object to enclose in quotation marks.
      * @return The current instance of Text4j.
      */
-    public Text4j quotation(Object value) {
-        if (value == null) {
+    public Text4j quotation(Object o) {
+        if (o == null) {
             return this;
         }
-        return this.quotation(Json4j.marshall(value));
+        return this.quotation(Json4j.marshall(o));
     }
 
     /**
@@ -690,12 +690,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
-     * @param value     The object to enclose in quotation marks if the condition is true.
+     * @param o         The object to enclose in quotation marks if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j quotationIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.quotation(Json4j.marshall(value));
+    public Text4j quotationIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.quotation(o);
         }
         return this;
     }
@@ -750,14 +750,14 @@ public class Text4j {
      * Appends the string representation of the given object prefixed with a hyphen-minus.
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
-     * @param value The object to prefix with a hyphen-minus.
+     * @param o The object to prefix with a hyphen-minus.
      * @return The current instance of Text4j.
      */
-    public Text4j hyphenMinus(Object value) {
-        if (value == null) {
+    public Text4j hyphenMinus(Object o) {
+        if (o == null) {
             return this;
         }
-        return this.hyphenMinus(Json4j.marshall(value));
+        return this.hyphenMinus(Json4j.marshall(o));
     }
 
     /**
@@ -779,12 +779,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
-     * @param value     The object to prefix with a hyphen-minus if the condition is true.
+     * @param o         The object to prefix with a hyphen-minus if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j hyphenMinusIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.hyphenMinus(Json4j.marshall(value));
+    public Text4j hyphenMinusIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.hyphenMinus(o);
         }
         return this;
     }
@@ -839,14 +839,14 @@ public class Text4j {
      * Appends the string representation of the given object prefixed with an equals sign.
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
-     * @param value The object to prefix with an equals sign.
+     * @param o The object to prefix with an equals sign.
      * @return The current instance of Text4j.
      */
-    public Text4j equal(Object value) {
-        if (value == null) {
+    public Text4j equal(Object o) {
+        if (o == null) {
             return this;
         }
-        return this.equal(Json4j.marshall(value));
+        return this.equal(Json4j.marshall(o));
     }
 
     /**
@@ -868,12 +868,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
-     * @param value     The object to prefix with an equals sign if the condition is true.
+     * @param o         The object to prefix with an equals sign if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j equalIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.equal(Json4j.marshall(value));
+    public Text4j equalIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.equal(o);
         }
         return this;
     }
@@ -928,14 +928,14 @@ public class Text4j {
      * Appends the string representation of the given object suffixed with an equals sign.
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
-     * @param value The object to suffix with an equals sign.
+     * @param o The object to suffix with an equals sign.
      * @return The current instance of Text4j.
      */
-    public Text4j endingEqual(Object value) {
-        if (value == null) {
+    public Text4j endingEqual(Object o) {
+        if (o == null) {
             return this;
         }
-        return this.endingEqual(Json4j.marshall(value));
+        return this.endingEqual(Json4j.marshall(o));
     }
 
     /**
@@ -957,12 +957,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended; otherwise, no action is taken.
-     * @param value     The object to suffix with an equals sign if the condition is true.
+     * @param o         The object to suffix with an equals sign if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j endingEqualIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.endingEqual(value);
+    public Text4j endingEqualIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.endingEqual(o);
         }
         return this;
     }
@@ -1063,12 +1063,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended followed by a new line; otherwise, no action is taken.
-     * @param value     The object to append followed by a new line if the condition is true.
+     * @param o         The object to append followed by a new line if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j lineIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.append(value).line();
+    public Text4j lineIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.append(o).line();
         }
         return this;
     }
@@ -1115,12 +1115,12 @@ public class Text4j {
      * If the object is a primitive, its string value is used. Otherwise, its JSON representation is used.
      *
      * @param condition If true, the object's string representation will be appended followed by a comma; otherwise, no action is taken.
-     * @param value     The object to append followed by a comma if the condition is true.
+     * @param o         The object to append followed by a comma if the condition is true.
      * @return The current instance of Text4j.
      */
-    public Text4j commaIf(boolean condition, Object value) {
-        if (condition && value != null) {
-            return this.append(value).comma();
+    public Text4j commaIf(boolean condition, Object o) {
+        if (condition && o != null) {
+            return this.append(o).comma();
         }
         return this;
     }
@@ -1136,7 +1136,7 @@ public class Text4j {
      */
     public Text4j commaIf(boolean condition, Object o, int repeat) {
         if (condition && o != null) {
-            return this.append(String4j.repeat(o, repeat)).comma();
+            return this.append(o, repeat).comma();
         }
         return this;
     }
@@ -1152,7 +1152,7 @@ public class Text4j {
      */
     public Text4j commaIf(boolean condition, String str, int repeat) {
         if (condition && String4j.isNotEmpty(str)) {
-            return this.append(String4j.repeat(str, repeat)).comma();
+            return this.append(str, repeat).comma();
         }
         return this;
     }
@@ -1406,7 +1406,7 @@ public class Text4j {
      */
     public Text4j colonIf(boolean condition, Object o, int repeat) {
         if (condition && o != null) {
-            return this.append(String4j.repeat(o, repeat)).colon();
+            return this.append(o, repeat).colon();
         }
         return this;
     }
@@ -1422,7 +1422,7 @@ public class Text4j {
      */
     public Text4j colonIf(boolean condition, String str, int repeat) {
         if (condition && String4j.isNotEmpty(str)) {
-            return this.append(String4j.repeat(str, repeat)).colon();
+            return this.append(str, repeat).colon();
         }
         return this;
     }
@@ -1715,7 +1715,7 @@ public class Text4j {
      */
     public Text4j spaceIf(boolean condition, Object o, int repeat) {
         if (condition && o != null) {
-            return this.append(String4j.repeat(o, repeat)).space();
+            return this.append(o, repeat).space();
         }
         return this;
     }
