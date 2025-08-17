@@ -201,6 +201,14 @@ public class Collection4j {
         }
     }
 
+    /**
+     * Computes the difference between two lists.
+     *
+     * @param list1 the first list
+     * @param list2 the second list
+     * @param <T>   the type of elements in the lists
+     * @return a list containing the elements that are present in one list but not the other
+     */
     public static <T> List<T> difference(List<T> list1, List<T> list2) {
         if (isEmpty(list1) && isEmpty(list2)) {
             return Collections.emptyList();
