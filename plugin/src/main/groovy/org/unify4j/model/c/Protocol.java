@@ -3,6 +3,7 @@ package org.unify4j.model.c;
 import org.unify4j.common.String4j;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 @SuppressWarnings({"SpellCheckingInspection"})
 public class Protocol implements Serializable {
@@ -123,48 +124,49 @@ public class Protocol implements Serializable {
      * @param name The scheme name.
      * @return The associated protocol.
      */
-    public static Protocol valueOf(String name) {
-        Protocol result = null;
-        if (String4j.isNotEmpty(name)) {
-            if (name.equalsIgnoreCase(AJP.getSchemeName())) {
-                result = AJP;
-            } else if (name.equalsIgnoreCase(CLAP.getSchemeName())) {
-                result = CLAP;
-            } else if (name.equalsIgnoreCase(FILE.getSchemeName())) {
-                result = FILE;
-            } else if (name.equalsIgnoreCase(FTP.getSchemeName())) {
-                result = FTP;
-            } else if (name.equalsIgnoreCase(HTTP.getSchemeName())) {
-                result = HTTP;
-            } else if (name.equalsIgnoreCase(HTTPS.getSchemeName())) {
-                result = HTTPS;
-            } else if (name.equalsIgnoreCase(JAR.getSchemeName())) {
-                result = JAR;
-            } else if (name.equalsIgnoreCase(JDBC.getSchemeName())) {
-                result = JDBC;
-            } else if (name.equalsIgnoreCase(POP.getSchemeName())) {
-                result = POP;
-            } else if (name.equalsIgnoreCase(POPS.getSchemeName())) {
-                result = POPS;
-            } else if (name.equalsIgnoreCase(RIAP.getSchemeName())) {
-                result = RIAP;
-            } else if (name.equalsIgnoreCase(SMTP.getSchemeName())) {
-                result = SMTP;
-            } else if (name.equalsIgnoreCase(SMTPS.getSchemeName())) {
-                result = SMTPS;
-            } else if (name.equalsIgnoreCase(SIP.getSchemeName())) {
-                result = SIP;
-            } else if (name.equalsIgnoreCase(SIPS.getSchemeName())) {
-                result = SIPS;
-            } else if (name.equalsIgnoreCase(WAR.getSchemeName())) {
-                result = WAR;
-            } else if (name.equalsIgnoreCase(ZIP.getSchemeName())) {
-                result = ZIP;
-            } else {
-                result = new Protocol(name);
-            }
+    public static Optional<Protocol> valueOf(String name) {
+        if (String4j.isEmpty(name)) {
+            return Optional.empty();
         }
-        return result;
+        Protocol result;
+        if (name.equalsIgnoreCase(AJP.getSchemeName())) {
+            result = AJP;
+        } else if (name.equalsIgnoreCase(CLAP.getSchemeName())) {
+            result = CLAP;
+        } else if (name.equalsIgnoreCase(FILE.getSchemeName())) {
+            result = FILE;
+        } else if (name.equalsIgnoreCase(FTP.getSchemeName())) {
+            result = FTP;
+        } else if (name.equalsIgnoreCase(HTTP.getSchemeName())) {
+            result = HTTP;
+        } else if (name.equalsIgnoreCase(HTTPS.getSchemeName())) {
+            result = HTTPS;
+        } else if (name.equalsIgnoreCase(JAR.getSchemeName())) {
+            result = JAR;
+        } else if (name.equalsIgnoreCase(JDBC.getSchemeName())) {
+            result = JDBC;
+        } else if (name.equalsIgnoreCase(POP.getSchemeName())) {
+            result = POP;
+        } else if (name.equalsIgnoreCase(POPS.getSchemeName())) {
+            result = POPS;
+        } else if (name.equalsIgnoreCase(RIAP.getSchemeName())) {
+            result = RIAP;
+        } else if (name.equalsIgnoreCase(SMTP.getSchemeName())) {
+            result = SMTP;
+        } else if (name.equalsIgnoreCase(SMTPS.getSchemeName())) {
+            result = SMTPS;
+        } else if (name.equalsIgnoreCase(SIP.getSchemeName())) {
+            result = SIP;
+        } else if (name.equalsIgnoreCase(SIPS.getSchemeName())) {
+            result = SIPS;
+        } else if (name.equalsIgnoreCase(WAR.getSchemeName())) {
+            result = WAR;
+        } else if (name.equalsIgnoreCase(ZIP.getSchemeName())) {
+            result = ZIP;
+        } else {
+            result = new Protocol(name);
+        }
+        return Optional.of(result);
     }
 
     /**
