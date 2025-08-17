@@ -461,7 +461,8 @@ public class MediaType extends Metadata {
     }
 
     /**
-     * Returns the main type.
+     * Returns the main type of this media type, i.e. the part before the first
+     * slash or semicolon.
      *
      * @return The main type.
      */
@@ -482,6 +483,9 @@ public class MediaType extends Metadata {
     }
 
     /**
+     * Returns the subtype of this media type, i.e. the part after the first
+     * slash or semicolon.
+     *
      * @return The subtype.
      */
     public String getSubType() {
