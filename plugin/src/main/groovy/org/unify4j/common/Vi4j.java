@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.validation.*;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class Vi4j {
     protected static final Logger logger = LoggerFactory.getLogger(Vi4j.class);
@@ -269,5 +270,25 @@ public class Vi4j {
         if (!logic) {
             throw new IllegalStateException(message);
         }
+    }
+
+    /**
+     * Generic validator using functional approach with custom predicate and converter.
+     *
+     * @param <T>       the type of the number
+     * @param value     the value to validate
+     * @param validator predicate to validate the value
+     * @param typeName  name of the type for error message
+     * @return the validated value
+     * @throws IllegalStateException if validation fails
+     */
+    public static <T extends Number> T requirePositive(T value, Predicate<T> validator, String typeName) {
+        if (value == null) {
+            throw new IllegalStateException(String.format("%s value must not be null", typeName));
+        }
+        if (!validator.test(value)) {
+            throw new IllegalStateException(String.format("%s value must be non-negative, but was: %s", typeName, value));
+        }
+        return value;
     }
 }

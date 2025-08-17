@@ -323,4 +323,96 @@ public class Numeric4j {
             }
         }
     }
+
+    /**
+     * Validates Double wrapper and returns primitive double.
+     *
+     * @param value Double wrapper value to validate
+     * @return validated primitive double value
+     * @throws IllegalStateException if value is null or negative
+     */
+    public static double safeDouble(Double value) {
+        value = Vi4j.requirePositive(value, d -> d >= 0.0, "Double");
+        return value;
+    }
+
+    /**
+     * Validates Long wrapper and returns primitive long.
+     *
+     * @param value Long wrapper value to validate
+     * @return validated primitive long value
+     * @throws IllegalStateException if value is null or negative
+     */
+    public static long safeLong(Long value) {
+        value = Vi4j.requirePositive(value, l -> l >= 0L, "Long");
+        return value;
+    }
+
+    /**
+     * Validates Integer wrapper and returns primitive int.
+     *
+     * @param value Integer wrapper value to validate
+     * @return validated primitive int value
+     * @throws IllegalStateException if value is null or negative
+     */
+    public static int safeInt(Integer value) {
+        value = Vi4j.requirePositive(value, i -> i >= 0, "Integer");
+        return value;
+    }
+
+    /**
+     * Validates Float wrapper and returns primitive float.
+     *
+     * @param value Float wrapper value to validate
+     * @return validated primitive float value
+     * @throws IllegalStateException if value is null or negative
+     */
+    public static float safeFloat(Float value) {
+        value = Vi4j.requirePositive(value, f -> f >= 0.0f, "Float");
+        return value;
+    }
+
+    /**
+     * Validates Double wrapper and returns Double wrapper.
+     *
+     * @param value Double wrapper value to validate
+     * @return validated Double wrapper value
+     * @throws IllegalStateException if value is null or negative
+     */
+    public static Double safeDoubleWrapper(Double value) {
+        return Vi4j.requirePositive(value, d -> d >= 0.0, "Double");
+    }
+
+    /**
+     * Validates Long wrapper and returns Long wrapper.
+     *
+     * @param value Long wrapper value to validate
+     * @return validated Long wrapper value
+     * @throws IllegalStateException if value is null or negative
+     */
+    public static Long safeLongWrapper(Long value) {
+        return Vi4j.requirePositive(value, l -> l >= 0L, "Long");
+    }
+
+    /**
+     * Validates Integer wrapper and returns Integer wrapper.
+     *
+     * @param value Integer wrapper value to validate
+     * @return validated Integer wrapper value
+     * @throws IllegalStateException if value is null or negative
+     */
+    public static Integer safeIntWrapper(Integer value) {
+        return Vi4j.requirePositive(value, i -> i >= 0, "Integer");
+    }
+
+    /**
+     * Validates Float wrapper and returns Float wrapper.
+     *
+     * @param value Float wrapper value to validate
+     * @return validated Float wrapper value
+     * @throws IllegalStateException if value is null or negative
+     */
+    public static Float safeFloatWrapper(Float value) {
+        return Vi4j.requirePositive(value, f -> f >= 0.0f, "Float");
+    }
 }
