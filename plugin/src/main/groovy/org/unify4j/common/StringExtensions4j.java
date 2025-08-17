@@ -387,12 +387,12 @@ public class StringExtensions4j {
 
         for (String word : words) {
             if (lines.length() + word.length() + 1 <= lineLength) {
-                if (!lines.isEmpty()) {
+                if (String4j.isNotEmpty(lines)) {
                     lines.append(" ");
                 }
                 lines.append(word);
             } else {
-                if (!lines.isEmpty()) {
+                if (String4j.isNotEmpty(lines)) {
                     builder.append(lines.toString());
                     lines.setLength(0);
                 }
@@ -409,7 +409,7 @@ public class StringExtensions4j {
             }
         }
 
-        if (!lines.isEmpty()) {
+        if (String4j.isNotEmpty(lines)) {
             builder.append(lines.toString());
         }
 

@@ -901,19 +901,19 @@ public class StringBuilder4j {
         if (predicate != null) {
             String content = buffer.toString();
             String[] parts = content.split(separator);
-            StringBuilder result = new StringBuilder();
+            StringBuilder lines = new StringBuilder();
 
             for (String part : parts) {
                 if (!predicate.test(part)) {
-                    if (!result.isEmpty()) {
-                        result.append(separator);
+                    if (String4j.isNotEmpty(lines)) {
+                        lines.append(separator);
                     }
-                    result.append(part);
+                    lines.append(part);
                 }
             }
 
             buffer.setLength(0);
-            buffer.append(result);
+            buffer.append(lines);
         }
         return this;
     }
@@ -1002,7 +1002,7 @@ public class StringBuilder4j {
      * @return true if the builder is empty, false otherwise
      */
     public boolean isEmpty() {
-        return buffer.isEmpty();
+        return String4j.isEmpty(buffer);
     }
 
     /**
@@ -1011,7 +1011,7 @@ public class StringBuilder4j {
      * @return true if the builder is not empty, false otherwise
      */
     public boolean isNotEmpty() {
-        return !buffer.isEmpty();
+        return !this.isEmpty();
     }
 
     /**
@@ -1105,7 +1105,7 @@ public class StringBuilder4j {
             return false;
         }
         int additionalLength = str.length();
-        if (!buffer.isEmpty() && String4j.isNotEmpty(separator)) {
+        if (this.isNotEmpty() && String4j.isNotEmpty(separator)) {
             additionalLength += separator.length();
         }
         return buffer.length() + additionalLength > maxLength;

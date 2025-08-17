@@ -136,13 +136,31 @@ public class TimeExtensions4j {
         if (startDate == null || endDate == null || startDate.after(endDate)) {
             return new ArrayList<>();
         }
+        List<Date> intervals = new ArrayList<>();
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
 
-        LocalDate start = Time4j.transformLocal(startDate);
-        LocalDate end = Time4j.transformLocal(endDate);
+        start.setTime(startDate);
+        end.setTime(endDate);
 
-        return start.datesUntil(end.plusDays(1))
-                .map(Time4j::transform)
-                .collect(Collectors.toList());
+        // Reset time components to ensure we're working with dates only
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 0);
+        start.set(Calendar.SECOND, 0);
+        start.set(Calendar.MILLISECOND, 0);
+
+        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.MINUTE, 0);
+        end.set(Calendar.SECOND, 0);
+        end.set(Calendar.MILLISECOND, 0);
+
+        // Iterate through each day and add to the list
+        while (!start.after(end)) {
+            intervals.add(start.getTime());
+            start.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return intervals;
     }
 
     /**
