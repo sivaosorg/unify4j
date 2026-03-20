@@ -1229,4 +1229,46 @@ public class String4j {
         String str = Json4j.marshall(o);
         return repeat(str, cnt, separator);
     }
+
+    /**
+     * Checks if a string ends with a specified suffix, ignoring case considerations.
+     *
+     * @param str    the string to check, may be null
+     * @param suffix the suffix to look for, may be null
+     * @return {@code true} if the string ends with the specified suffix (case-insensitive), or {@code false} otherwise
+     * <p>
+     * This method first checks if either the input string or the suffix is empty. If either of them is empty, it returns {@code false}.
+     * Then, it checks if the length of the input string is greater than or equal to the length of the suffix.
+     * If this condition is satisfied, it uses the {@code regionMatches} method to compare the end of the input string with the suffix,
+     * ignoring case differences. The result of this comparison determines whether the method returns {@code true} or {@code false}.
+     */
+    public static boolean endsWithIgnoreCase(String str, String suffix) {
+        if (isEmpty(str) || isEmpty(suffix)) {
+            return false;
+        }
+        return (str.length() >= suffix.length() && str.regionMatches(true, str.length() - suffix.length(), suffix, 0, suffix.length()));
+    }
+
+    /**
+     * Removes a suffix from the end of the given string.
+     * <p>
+     * This method removes the specified suffix from the end of the input string,
+     * if the string is not empty and ends with the given suffix (case-insensitive).
+     *
+     * @param text   the string from which to remove the suffix, may be null or empty
+     * @param suffix the suffix to be removed, may be null or empty
+     * @return the modified string with the suffix removed, or the original string if the suffix is not found
+     * <p>
+     * This method first checks if the input string is not empty and if it ends with the given suffix
+     * (ignoring case) using the {@code endsWithIgnoreCase} method.
+     * If both conditions are satisfied, it extracts a substring from the beginning of the input string
+     * up to the index where the suffix starts, effectively removing the suffix.
+     * If the suffix is not found or the string is empty, it returns the original string as it is.
+     */
+    public static String removeLastSuffix(String text, String suffix) {
+        if (isNotEmpty(text) && endsWithIgnoreCase(text, suffix)) {
+            return text.substring(0, text.length() - suffix.length());
+        }
+        return text;
+    }
 }
