@@ -21,7 +21,9 @@ public class Main {
 
     public static void main(String[] args) {
 
+    }
 
+    public static void testGenerateLabel() {
         String request = SoapXmlBuilder.create("soap:Envelope")
                 .attr("xmlns:soap", "http://www.w3.org/2003/05/soap-envelope")
                 .attr("xmlns:tem", "http://tempuri.org/")
@@ -37,7 +39,7 @@ public class Main {
 
                 .child("soap:Body")
                 .child("tem:GenerarGuiaSticker")
-                .child("tem:num_Guia", "226939568533")
+                .child("tem:num_Guia", "2269395685")
                 .child("tem:num_GuiaFinal", "2269395685")
                 .child("tem:ide_CodFacturacion", "SER408")
                 .child("tem:sFormatoImpresionGuia", "4")
@@ -74,7 +76,6 @@ public class Main {
         Map<String, String> ns = new HashMap<>();
         ns.put("soap", "http://www.w3.org/2003/05/soap-envelope");
         ns.put("ns", "http://tempuri.org/");
-        // SoapXmlNsBuilder xml = SoapXmlNsBuilder.from(response.getBody(), ns);
         SoapXmlPathBuilder xml = SoapXmlPathBuilder.auto(response.getBody());
 
         // String success = xml.get("//ns:GenerarGuiaStickerResult");
