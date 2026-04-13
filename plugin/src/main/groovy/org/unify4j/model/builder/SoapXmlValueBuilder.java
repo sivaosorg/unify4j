@@ -5,15 +5,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.*;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
- * Utility class for extracting values from XML using XPath expressions.
- * Designed to work fluently with SOAP XML responses.
+ * Utility class for extracting values from XML using XPath with namespace support.
+ * Designed for SOAP XML processing.
  */
 public class SoapXmlValueBuilder {
 
@@ -21,65 +22,93 @@ public class SoapXmlValueBuilder {
     private final XPath xpath;
 
     /**
-     * Private constructor to initialize XML Document and XPath engine.
+     * Private constructor.
      *
-     * @param xml the raw XML string
+     * @param xml          raw XML string
+     * @param namespaceMap prefix -> namespace URI mapping
      */
-    private SoapXmlValueBuilder(String xml) {
+    protected SoapXmlValueBuilder(String xml, Map<String, String> namespaceMap) {
         try {
-            this.document = DocumentBuilderFactory.newInstance()
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            this.document = factory
                     .newDocumentBuilder()
                     .parse(new InputSource(new StringReader(xml)));
 
             this.xpath = XPathFactory.newInstance().newXPath();
+
+            if (namespaceMap != null && !namespaceMap.isEmpty()) {
+                this.xpath.setNamespaceContext(new SimpleNamespaceContext(namespaceMap));
+            }
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse XML", e);
         }
     }
 
     /**
-     * Creates a new instance from XML string.
-     *
-     * @param xml the raw XML response
-     * @return SoapXmlValueBuilder instance
+     * Create builder without namespace support.
      */
     public static SoapXmlValueBuilder from(String xml) {
-        return new SoapXmlValueBuilder(xml);
+        return new SoapXmlValueBuilder(xml, null);
     }
 
     /**
-     * Extracts a single string value using XPath expression.
+     * Create builder with manual namespace mapping.
+     */
+    public static SoapXmlValueBuilder from(String xml, Map<String, String> namespaces) {
+        return new SoapXmlValueBuilder(xml, namespaces);
+    }
+
+    /**
+     * Create builder with auto-detected namespace mapping.
+     */
+    public static SoapXmlValueBuilder auto(String xml) {
+        Map<String, String> ns = SoapXmlNamespaceAutoDetector.detect(xml);
+
+        // Fix default namespace (assign a usable prefix)
+        if (ns.containsKey("default")) {
+            String uri = ns.remove("default");
+            ns.put("ns", uri);
+        }
+
+        return new SoapXmlValueBuilder(xml, ns);
+    }
+
+    /**
+     * Extract a single string value using XPath.
      *
      * @param expression XPath expression
-     * @return extracted string value
+     * @return extracted value
      */
     public String get(String expression) {
         try {
             return xpath.evaluate(expression, document);
         } catch (XPathExpressionException e) {
-            throw new RuntimeException("XPath evaluation failed", e);
+            throw new RuntimeException("XPath evaluation failed: " + expression, e);
         }
     }
 
     /**
-     * Extracts a single Node using XPath expression.
+     * Extract a single node using XPath.
      *
      * @param expression XPath expression
-     * @return Node result or null if not found
+     * @return Node or null
      */
     public Node getNode(String expression) {
         try {
             return (Node) xpath.evaluate(expression, document, XPathConstants.NODE);
         } catch (XPathExpressionException e) {
-            throw new RuntimeException("XPath evaluation failed", e);
+            throw new RuntimeException("XPath evaluation failed: " + expression, e);
         }
     }
 
     /**
-     * Extracts a list of string values using XPath expression.
+     * Extract multiple string values using XPath.
      *
      * @param expression XPath expression
-     * @return list of extracted values
+     * @return list of values
      */
     public List<String> getList(String expression) {
         try {
@@ -92,29 +121,57 @@ public class SoapXmlValueBuilder {
 
             return result;
         } catch (XPathExpressionException e) {
-            throw new RuntimeException("XPath evaluation failed", e);
+            throw new RuntimeException("XPath evaluation failed: " + expression, e);
         }
     }
 
     /**
-     * Extracts an attribute value using XPath expression.
+     * Extract attribute value using XPath.
      * <p>
      * Example: //user/@id
-     *
-     * @param expression XPath expression
-     * @return attribute value
      */
     public String getAttr(String expression) {
         return get(expression);
     }
 
     /**
-     * Checks whether a node exists for the given XPath expression.
+     * Check if a node exists.
      *
      * @param expression XPath expression
-     * @return true if node exists, otherwise false
+     * @return true if exists
      */
     public boolean exists(String expression) {
         return getNode(expression) != null;
+    }
+
+    /**
+     * Internal NamespaceContext implementation.
+     */
+    protected static class SimpleNamespaceContext implements NamespaceContext {
+
+        private final Map<String, String> prefixMap;
+
+        public SimpleNamespaceContext(Map<String, String> prefixMap) {
+            this.prefixMap = prefixMap;
+        }
+
+        @Override
+        public String getNamespaceURI(String prefix) {
+            return prefixMap.getOrDefault(prefix, XMLConstants.NULL_NS_URI);
+        }
+
+        @Override
+        public String getPrefix(String namespaceURI) {
+            return prefixMap.entrySet().stream()
+                    .filter(e -> e.getValue().equals(namespaceURI))
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        @Override
+        public Iterator<String> getPrefixes(String namespaceURI) {
+            return prefixMap.keySet().iterator();
+        }
     }
 }
