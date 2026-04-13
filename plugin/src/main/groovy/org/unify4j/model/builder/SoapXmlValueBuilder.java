@@ -157,11 +157,17 @@ public class SoapXmlValueBuilder {
 
         @Override
         public String getNamespaceURI(String prefix) {
+            if (prefix == null) {
+                throw new IllegalArgumentException("Prefix cannot be null");
+            }
             return prefixMap.getOrDefault(prefix, XMLConstants.NULL_NS_URI);
         }
 
         @Override
         public String getPrefix(String namespaceURI) {
+            if (namespaceURI == null) {
+                return null;
+            }
             return prefixMap.entrySet().stream()
                     .filter(e -> e.getValue().equals(namespaceURI))
                     .map(Map.Entry::getKey)
@@ -171,7 +177,13 @@ public class SoapXmlValueBuilder {
 
         @Override
         public Iterator<String> getPrefixes(String namespaceURI) {
-            return prefixMap.keySet().iterator();
+            if (namespaceURI == null) {
+                return Collections.emptyIterator();
+            }
+            return prefixMap.entrySet().stream()
+                    .filter(e -> e.getValue().equals(namespaceURI))
+                    .map(Map.Entry::getKey)
+                    .iterator();
         }
     }
 }
