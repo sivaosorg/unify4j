@@ -37,3 +37,4 @@ out/
 .vscode/
 src/main/java/META-INF/
 *.gz
+src/main/groovy/org/unify4j/Main.java
