@@ -8,6 +8,7 @@ import org.unify4j.common.Collection4j;
 import org.unify4j.common.String4j;
 import org.unify4j.model.builder.xml.SoapXmlBuilder;
 import org.unify4j.model.builder.xml.SoapXmlNsBuilder;
+import org.unify4j.model.builder.xml.SoapXmlPathBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -36,7 +37,7 @@ public class Main {
 
                 .child("soap:Body")
                 .child("tem:GenerarGuiaSticker")
-                .child("tem:num_Guia", "2269395685")
+                .child("tem:num_Guia", "226939568533")
                 .child("tem:num_GuiaFinal", "2269395685")
                 .child("tem:ide_CodFacturacion", "SER408")
                 .child("tem:sFormatoImpresionGuia", "4")
@@ -50,8 +51,8 @@ public class Main {
 
         System.out.println("Generated SOAP XML:\n" + request);
         Unirest.config()
-                .connectTimeout(50000)
-                .socketTimeout(60000)
+                .connectTimeout(60000)
+                .socketTimeout(100000)
                 .retryAfter(true, 3)
                 .automaticRetries(true);
 
@@ -64,25 +65,30 @@ public class Main {
 
         System.out.println("HTTP Status: " + response.getStatus());
 
-        if (!response.isSuccess()) {
-            return;
-        }
+//        if (!response.isSuccess()) {
+//            return;
+//        }
 
         System.out.println("Response Body:\n" + response.getBody());
 
         Map<String, String> ns = new HashMap<>();
         ns.put("soap", "http://www.w3.org/2003/05/soap-envelope");
         ns.put("ns", "http://tempuri.org/");
-        SoapXmlNsBuilder xml = SoapXmlNsBuilder.from(response.getBody(), ns);
+        // SoapXmlNsBuilder xml = SoapXmlNsBuilder.from(response.getBody(), ns);
+        SoapXmlPathBuilder xml = SoapXmlPathBuilder.auto(response.getBody());
 
-        String success = xml.get("//ns:GenerarGuiaStickerResult");
+        // String success = xml.get("//ns:GenerarGuiaStickerResult");
+        String success = xml.get("Body.GenerarGuiaStickerResponse.GenerarGuiaStickerResult");
 
         if ("true".equalsIgnoreCase(success)) {
-            String bytesReport = xml.get("//ns:bytesReport");
+            // String bytesReport = xml.get("//ns:bytesReport");
+            String bytesReport = xml.get("Body.GenerarGuiaStickerResponse.bytesReport");
             System.out.println("Bytes Report: " + bytesReport);
         } else {
-            String code = xml.get("//soap:Fault/soap:Code/soap:Value");
-            String reason = xml.get("//soap:Fault/soap:Reason/soap:Text");
+            // String code = xml.get("//soap:Fault/soap:Code/soap:Value");
+            // String reason = xml.get("//soap:Fault/soap:Reason/soap:Text");
+            String code = xml.get("Body.Fault.Code.Value");
+            String reason = xml.get("Body.Fault.Reason.Text");
             System.out.println("Error Code: " + code);
             System.out.println("Error Reason: " + reason);
         }
