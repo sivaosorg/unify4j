@@ -1,62 +1,88 @@
 package org.unify4j;
 
+import kong.unirest.HttpResponse;
+import kong.unirest.Unirest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.unify4j.common.Collection4j;
 import org.unify4j.common.String4j;
 import org.unify4j.model.builder.SoapXmlBuilder;
+import org.unify4j.model.builder.SoapXmlValueBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"SpellCheckingInspection", "ConstantConditions"})
 public class Main {
     protected static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
 
-        String xml = SoapXmlBuilder.create("soap:Envelope")
 
-                // === Namespaces (SOAP 1.1) ===
-                .attr("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance") // XML Schema instance namespace
-                .attr("xmlns:xsd", "http://www.w3.org/2001/XMLSchema")          // XML Schema definition namespace
-                .attr("xmlns:soap", "http://schemas.xmlsoap.org/soap/envelope/")// SOAP 1.1 envelope namespace
+        String request = SoapXmlBuilder.create("soap:Envelope")
+                .attr("xmlns:soap", "http://www.w3.org/2003/05/soap-envelope")
+                .attr("xmlns:tem", "http://tempuri.org/")
 
-                // =========================
-                // BODY
-                // =========================
+                .child("soap:Header")
+                .child("tem:AuthHeader")
+                .child("tem:login", "Luis1937")
+                .child("tem:pwd", "MZR0zNqnI/KplFlYXiFk7m8/G/Iqxb3O")
+                .child("tem:Id_CodFacturacion", "SER408")
+                .child("tem:Nombre_Cargue", "AJA_GROUP")
+                .up()
+                .up()
+
                 .child("soap:Body")
-
-                .child("GenerarGuiaSticker")
-                .attr("xmlns", "http://tempuri.org/")
-                // Service namespace (default namespace for this operation)
-
-                .child("Num_GuiaInicial", "TRACKING_NUMBER")
-                // Starting tracking number (for single guide, same as final)
-
-                .child("Num_GuiaFinal", "TRACKING_NUMBER")
-                // Ending tracking number (same value = generate one label)
-
-                .child("Id_CodFacturacion", "BILLING_CODE")
-                // Billing account code provided by Servientrega
-
-                .child("sFormatoimpresionguia", "LABEL_FORMAT_ID")
-                // Label format ID (defines PDF/thermal layout)
-
-                .child("Id_ArchivoCargar", "FILE_ID_FROM_CREATION")
-                // File ID returned from previous shipment creation request
-
-                .child("imprimirSobreporte", "false")
-                // Whether to print "sobreporte" (additional label/cover sheet)
-
-                .up() // GenerarGuiaSticker
-
-                .up() // Body
+                .child("tem:GenerarGuiaSticker")
+                .child("tem:num_Guia", "2269395684")
+                .child("tem:num_GuiaFinal", "2269395684")
+                .child("tem:ide_CodFacturacion", "SER408")
+                .child("tem:sFormatoImpresionGuia", "4")
+                .child("tem:Id_ArchivoCargar", "")
+                .child("tem:interno", "false")
+                .child("tem:bytesReport", "")
+                .up()
+                .up()
 
                 .build();
 
-        System.out.println("Generated SOAP XML:\n" + xml);
+        System.out.println("Generated SOAP XML:\n" + request);
+        Unirest.config()
+                .connectTimeout(50000)
+                .socketTimeout(100000)
+                .retryAfter(true, 3)
+                .automaticRetries(true);
+
+        HttpResponse<String> response = Unirest.post(
+                        "https://developer.servientrega.com/WsSisclinetGeneraGuias/GeneracionGuias.asmx")
+                .header("Content-Type", "text/xml; charset=utf-8")
+                .header("SOAPAction", "http://tempuri.org/GenerarGuiaSticker")
+                .body(request)
+                .asString();
+
+        System.out.println("HTTP Status: " + response.getStatus());
+
+        if (!response.isSuccess()) {
+            return;
+        }
+
+        System.out.println("Response Body:\n" + response.getBody());
+
+        SoapXmlValueBuilder xml = SoapXmlValueBuilder.from(response.getBody());
+
+        String success = xml.get("//*[local-name()='GenerarGuiaStickerResult']");
+        if ("true".equalsIgnoreCase(success)) {
+            String bytesReport = xml.get("//*[local-name()='bytesReport']");
+            System.out.println("Bytes Report: " + bytesReport);
+        } else {
+            String errorCode = xml.get("//*[local-name()='Code']/*[local-name()='Value']");
+            String errorReason = xml.get("//*[local-name()='Reason']/*[local-name()='Text']");
+
+            System.out.println("Error Code: " + errorCode);
+            System.out.println("Error Reason: " + errorReason);
+        }
     }
 
     public static void test0001() {
