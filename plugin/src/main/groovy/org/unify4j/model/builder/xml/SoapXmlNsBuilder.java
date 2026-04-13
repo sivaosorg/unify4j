@@ -1,4 +1,4 @@
-package org.unify4j.model.builder;
+package org.unify4j.model.builder.xml;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -16,7 +16,7 @@ import java.util.*;
  * Utility class for extracting values from XML using XPath with namespace support.
  * Designed for SOAP XML processing.
  */
-public class SoapXmlValueBuilder {
+public class SoapXmlNsBuilder {
 
     private final Document document;
     private final XPath xpath;
@@ -27,7 +27,7 @@ public class SoapXmlValueBuilder {
      * @param xml          raw XML string
      * @param namespaceMap prefix -> namespace URI mapping
      */
-    protected SoapXmlValueBuilder(String xml, Map<String, String> namespaceMap) {
+    protected SoapXmlNsBuilder(String xml, Map<String, String> namespaceMap) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -50,21 +50,21 @@ public class SoapXmlValueBuilder {
     /**
      * Create builder without namespace support.
      */
-    public static SoapXmlValueBuilder from(String xml) {
-        return new SoapXmlValueBuilder(xml, null);
+    public static SoapXmlNsBuilder from(String xml) {
+        return new SoapXmlNsBuilder(xml, null);
     }
 
     /**
      * Create builder with manual namespace mapping.
      */
-    public static SoapXmlValueBuilder from(String xml, Map<String, String> namespaces) {
-        return new SoapXmlValueBuilder(xml, namespaces);
+    public static SoapXmlNsBuilder from(String xml, Map<String, String> namespaces) {
+        return new SoapXmlNsBuilder(xml, namespaces);
     }
 
     /**
      * Create builder with auto-detected namespace mapping.
      */
-    public static SoapXmlValueBuilder auto(String xml) {
+    public static SoapXmlNsBuilder auto(String xml) {
         Map<String, String> ns = SoapXmlNamespaceAutoDetector.detect(xml);
 
         // Fix default namespace (assign a usable prefix)
@@ -73,7 +73,7 @@ public class SoapXmlValueBuilder {
             ns.put("ns", uri);
         }
 
-        return new SoapXmlValueBuilder(xml, ns);
+        return new SoapXmlNsBuilder(xml, ns);
     }
 
     /**
