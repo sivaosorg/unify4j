@@ -36,8 +36,8 @@ public class Main {
 
                 .child("soap:Body")
                 .child("tem:GenerarGuiaSticker")
-                .child("tem:num_Guia", "2269395684")
-                .child("tem:num_GuiaFinal", "2269395684")
+                .child("tem:num_Guia", "2269395685")
+                .child("tem:num_GuiaFinal", "2269395685")
                 .child("tem:ide_CodFacturacion", "SER408")
                 .child("tem:sFormatoImpresionGuia", "4")
                 .child("tem:Id_ArchivoCargar", "")
@@ -51,7 +51,7 @@ public class Main {
         System.out.println("Generated SOAP XML:\n" + request);
         Unirest.config()
                 .connectTimeout(50000)
-                .socketTimeout(100000)
+                .socketTimeout(60000)
                 .retryAfter(true, 3)
                 .automaticRetries(true);
 
@@ -70,18 +70,21 @@ public class Main {
 
         System.out.println("Response Body:\n" + response.getBody());
 
-        SoapXmlValueBuilder xml = SoapXmlValueBuilder.from(response.getBody());
+        Map<String, String> ns = new HashMap<>();
+        ns.put("soap", "http://www.w3.org/2003/05/soap-envelope");
+        ns.put("ns", "http://tempuri.org/");
+        SoapXmlValueBuilder xml = SoapXmlValueBuilder.from(response.getBody(), ns);
 
-        String success = xml.get("//*[local-name()='GenerarGuiaStickerResult']");
+        String success = xml.get("//ns:GenerarGuiaStickerResult");
+
         if ("true".equalsIgnoreCase(success)) {
-            String bytesReport = xml.get("//*[local-name()='bytesReport']");
+            String bytesReport = xml.get("//ns:bytesReport");
             System.out.println("Bytes Report: " + bytesReport);
         } else {
-            String errorCode = xml.get("//*[local-name()='Code']/*[local-name()='Value']");
-            String errorReason = xml.get("//*[local-name()='Reason']/*[local-name()='Text']");
-
-            System.out.println("Error Code: " + errorCode);
-            System.out.println("Error Reason: " + errorReason);
+            String code = xml.get("//soap:Fault/soap:Code/soap:Value");
+            String reason = xml.get("//soap:Fault/soap:Reason/soap:Text");
+            System.out.println("Error Code: " + code);
+            System.out.println("Error Reason: " + reason);
         }
     }
 
