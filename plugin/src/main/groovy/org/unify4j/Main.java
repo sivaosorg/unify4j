@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.unify4j.common.Collection4j;
 import org.unify4j.common.String4j;
 import org.unify4j.model.builder.xml.SoapXmlBuilder;
-import org.unify4j.model.builder.xml.SoapXmlValueBuilder;
+import org.unify4j.model.builder.xml.SoapXmlNsBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -73,7 +73,7 @@ public class Main {
         Map<String, String> ns = new HashMap<>();
         ns.put("soap", "http://www.w3.org/2003/05/soap-envelope");
         ns.put("ns", "http://tempuri.org/");
-        SoapXmlValueBuilder xml = SoapXmlValueBuilder.from(response.getBody(), ns);
+        SoapXmlNsBuilder xml = SoapXmlNsBuilder.from(response.getBody(), ns);
 
         String success = xml.get("//ns:GenerarGuiaStickerResult");
 
