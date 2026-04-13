@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.unify4j.common.Collection4j;
 import org.unify4j.common.String4j;
-import org.unify4j.model.builder.SoapXmlBuilder;
-import org.unify4j.model.builder.SoapXmlValueBuilder;
+import org.unify4j.model.builder.xml.SoapXmlBuilder;
+import org.unify4j.model.builder.xml.SoapXmlValueBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -1,4 +1,4 @@
-package org.unify4j.model.builder;
+package org.unify4j.model.builder.xml;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
