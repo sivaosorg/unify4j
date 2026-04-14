@@ -108,12 +108,10 @@ public class SoapXmlPathBuilder {
      */
     private String compile(String path) {
         String[] parts = path.split("\\.");
-        StringBuilder xpath = new StringBuilder("//");
+        StringBuilder xpath = new StringBuilder("//*");
 
-        for (int i = 0; i < parts.length; i++) {
-            if (i > 0) xpath.append("/");
-
-            xpath.append(buildSegment(parts[i]));
+        for (String part : parts) {
+            xpath.append("/*[local-name()='").append(part).append("']");
         }
 
         return xpath.toString();

@@ -20,7 +20,125 @@ public class Main {
     protected static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
+        String body = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n" +
+                "    <soap:Body>\n" +
+                "        <CargueMasivoExternoResponse xmlns=\"http://tempuri.org/\">\n" +
+                "            <CargueMasivoExternoResult>false</CargueMasivoExternoResult>\n" +
+                "            <envios>\n" +
+                "                <CargueMasivoExternoDTO>\n" +
+                "                    <objEnvios>\n" +
+                "                        <EnviosExterno>\n" +
+                "                            <Num_Guia>0</Num_Guia>\n" +
+                "                            <Num_Sobreporte>0</Num_Sobreporte>\n" +
+                "                            <Num_SobreCajaPorte>0</Num_SobreCajaPorte>\n" +
+                "                            <Fec_TiempoEntrega>1</Fec_TiempoEntrega>\n" +
+                "                            <Doc_Relacionado>EKW2026041400000035</Doc_Relacionado>\n" +
+                "                            <Num_Piezas>1</Num_Piezas>\n" +
+                "                            <Des_TipoTrayecto>0</Des_TipoTrayecto>\n" +
+                "                            <Ide_Producto>2</Ide_Producto>\n" +
+                "                            <Ide_Destinatarios>00000000-0000-0000-0000-000000000000</Ide_Destinatarios>\n" +
+                "                            <Ide_CodFacturacion>SER408</Ide_CodFacturacion>\n" +
+                "                            <Ide_Manifiesto>00000000-0000-0000-0000-000000000000</Ide_Manifiesto>\n" +
+                "                            <Des_FormaPago>2</Des_FormaPago>\n" +
+                "                            <Des_MedioTransporte>1</Des_MedioTransporte>\n" +
+                "                            <Num_PesoTotal>3</Num_PesoTotal>\n" +
+                "                            <Num_ValorDeclaradoTotal>100</Num_ValorDeclaradoTotal>\n" +
+                "                            <Num_VolumenTotal>0</Num_VolumenTotal>\n" +
+                "                            <Num_BolsaSeguridad>0</Num_BolsaSeguridad>\n" +
+                "                            <Num_Precinto>0</Num_Precinto>\n" +
+                "                            <Des_TipoDuracionTrayecto>1</Des_TipoDuracionTrayecto>\n" +
+                "                            <Des_Telefono>57 3134079955</Des_Telefono>\n" +
+                "                            <Des_Ciudad>15469000</Des_Ciudad>\n" +
+                "                            <Des_Direccion>MONIQUIRA. BOYACA.15469000</Des_Direccion>\n" +
+                "                            <Nom_Contacto>Ures Ar</Nom_Contacto>\n" +
+                "                            <Des_VlrCampoPersonalizado1 />\n" +
+                "                            <Num_ValorLiquidado>0</Num_ValorLiquidado>\n" +
+                "                            <Des_DiceContener>VARIOS PAPELES</Des_DiceContener>\n" +
+                "                            <Des_TipoGuia>2</Des_TipoGuia>\n" +
+                "                            <Des_CiudadRemitente>11001000</Des_CiudadRemitente>\n" +
+                "                            <Num_VlrSobreflete>0</Num_VlrSobreflete>\n" +
+                "                            <Num_VlrFlete>0</Num_VlrFlete>\n" +
+                "                            <Num_Descuento>0</Num_Descuento>\n" +
+                "                            <Des_DireccionRecogida />\n" +
+                "                            <Des_TelefonoRecogida>?</Des_TelefonoRecogida>\n" +
+                "                            <Des_CiudadRecogida>?</Des_CiudadRecogida>\n" +
+                "                            <idePaisOrigen>0</idePaisOrigen>\n" +
+                "                            <idePaisDestino>0</idePaisDestino>\n" +
+                "                            <Des_IdArchivoOrigen />\n" +
+                "                            <Ide_Num_Identific_Dest>0</Ide_Num_Identific_Dest>\n" +
+                "                            <Ide_Num_Referencia_Dest>35</Ide_Num_Referencia_Dest>\n" +
+                "                            <Des_DireccionRemitente>NA</Des_DireccionRemitente>\n" +
+                "                            <Num_PesoFacturado>0</Num_PesoFacturado>\n" +
+                "                            <Nom_TipoTrayecto>1</Nom_TipoTrayecto>\n" +
+                "                            <Est_CanalMayorista>false</Est_CanalMayorista>\n" +
+                "                            <Nom_Remitente>?</Nom_Remitente>\n" +
+                "                            <Num_IdentiRemitente />\n" +
+                "                            <Num_TelefonoRemitente>3175111230</Num_TelefonoRemitente>\n" +
+                "                            <Num_Alto>5</Num_Alto>\n" +
+                "                            <Num_Ancho>5</Num_Ancho>\n" +
+                "                            <Num_Largo>5</Num_Largo>\n" +
+                "                            <Des_CiudadOrigen>0</Des_CiudadOrigen>\n" +
+                "                            <Des_DiceContenerSobre>?</Des_DiceContenerSobre>\n" +
+                "                            <Des_DepartamentoDestino>BOYACA</Des_DepartamentoDestino>\n" +
+                "                            <Des_DepartamentoOrigen>11001000</Des_DepartamentoOrigen>\n" +
+                "                            <Gen_Cajaporte>false</Gen_Cajaporte>\n" +
+                "                            <Gen_Sobreporte>false</Gen_Sobreporte>\n" +
+                "                            <Nom_UnidadEmpaque>GENERICO</Nom_UnidadEmpaque>\n" +
+                "                            <Nom_RemitenteCanal />\n" +
+                "                            <Num_ValorDeclaradoSobreTotal>0</Num_ValorDeclaradoSobreTotal>\n" +
+                "                            <Num_Factura>EKW2026041400000035</Num_Factura>\n" +
+                "                            <Des_CorreoElectronico>hernando.brochero@servientrega.com</Des_CorreoElectronico>\n" +
+                "                            <Num_Celular>57+3134079955</Num_Celular>\n" +
+                "                            <Id_ArchivoCargar>M/zJ0hlonUU=</Id_ArchivoCargar>\n" +
+                "                            <Num_Recaudo>0</Num_Recaudo>\n" +
+                "                            <objEnviosUnidadEmpaqueCargue>\n" +
+                "                                <EnviosUnidadEmpaqueCargue>\n" +
+                "                                    <Num_Alto>10</Num_Alto>\n" +
+                "                                    <Num_Distribuidor>0</Num_Distribuidor>\n" +
+                "                                    <Num_Ancho>10</Num_Ancho>\n" +
+                "                                    <Num_Cantidad>1</Num_Cantidad>\n" +
+                "                                    <Des_DiceContener>CELULAR</Des_DiceContener>\n" +
+                "                                    <Des_IdArchivoOrigen>0</Des_IdArchivoOrigen>\n" +
+                "                                    <Num_Largo>10</Num_Largo>\n" +
+                "                                    <Nom_UnidadEmpaque>GENERICO</Nom_UnidadEmpaque>\n" +
+                "                                    <Num_Peso>100</Num_Peso>\n" +
+                "                                    <Des_UnidadLongitud>?</Des_UnidadLongitud>\n" +
+                "                                    <Des_UnidadPeso>?</Des_UnidadPeso>\n" +
+                "                                    <Ide_UnidadEmpaque>00000000-0000-0000-0000-000000000000</Ide_UnidadEmpaque>\n" +
+                "                                    <Ide_Envio>00000000-0000-0000-0000-000000000000</Ide_Envio>\n" +
+                "                                    <Num_Volumen>?</Num_Volumen>\n" +
+                "                                    <Fec_Actualizacion xsi:nil=\"true\" />\n" +
+                "                                    <Num_Consecutivo>0</Num_Consecutivo>\n" +
+                "                                    <Cod_Facturacion>?</Cod_Facturacion>\n" +
+                "                                    <Num_ValorDeclarado>100</Num_ValorDeclarado>\n" +
+                "                                    <Indicador>1</Indicador>\n" +
+                "                                    <NumeroDeCaja>?</NumeroDeCaja>\n" +
+                "                                    <Id_archivo>?</Id_archivo>\n" +
+                "                                </EnviosUnidadEmpaqueCargue>\n" +
+                "                            </objEnviosUnidadEmpaqueCargue>\n" +
+                "                            <Est_EnviarCorreo>false</Est_EnviarCorreo>\n" +
+                "                            <nombrecontacto_remitente>usuario de pruebas</nombrecontacto_remitente>\n" +
+                "                            <celular_remitente>3175111230</celular_remitente>\n" +
+                "                            <correo_remitente>hernando.brochero@servientrega.com</correo_remitente>\n" +
+                "                            <Retorno_Digital>0</Retorno_Digital>\n" +
+                "                        </EnviosExterno>\n" +
+                "                    </objEnvios>\n" +
+                "                </CargueMasivoExternoDTO>\n" +
+                "            </envios>\n" +
+                "            <arrayGuias>\n" +
+                "                <string> El valor declarado del envio debe ser mayor a 5000 y menor a 600000000</string>\n" +
+                "            </arrayGuias>\n" +
+                "        </CargueMasivoExternoResponse>\n" +
+                "    </soap:Body>\n" +
+                "</soap:Envelope>";
 
+        SoapXmlPathBuilder xml = SoapXmlPathBuilder.auto(body);
+        String success = xml.get("Body.CargueMasivoExternoResponse.CargueMasivoExternoResult");
+        List<String> errors = xml.getList("Body.CargueMasivoExternoResponse.arrayGuias.string");
+        String reason = String.join(";", errors);
+        System.out.println("Success: " + success);
+        System.out.println("Reason: " + reason);
     }
 
     public static void testGenerateLabel() {
