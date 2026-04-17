@@ -107,16 +107,6 @@ public class SoapXmlPathBuilder {
      * Compile DSL path to XPath.
      */
     private String compile(String path) {
-//        String[] parts = path.split("\\.");
-//        StringBuilder xpath = new StringBuilder("//");
-//
-//        for (int i = 0; i < parts.length; i++) {
-//            if (i > 0) xpath.append("/");
-//
-//            xpath.append(buildSegment(parts[i]));
-//        }
-//
-//        return xpath.toString();
         String[] parts = path.split("\\.");
         StringBuilder xpath = new StringBuilder("//*");
 
