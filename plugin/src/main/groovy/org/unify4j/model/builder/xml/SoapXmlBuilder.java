@@ -124,4 +124,8 @@ public class SoapXmlBuilder {
             throw new RuntimeException(e);
         }
     }
+
+    public String build() {
+        return build(false);
+    }
 }
