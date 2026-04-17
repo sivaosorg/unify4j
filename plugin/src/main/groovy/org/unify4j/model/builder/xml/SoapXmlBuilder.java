@@ -108,10 +108,13 @@ public class SoapXmlBuilder {
      * @return the XML document as a string
      * @throws RuntimeException if an error occurs during the transformation
      */
-    public String build() {
+    public String build(boolean pretty) {
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            transformer.setOutputProperty(OutputKeys.INDENT, pretty ? "yes" : "no");
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
